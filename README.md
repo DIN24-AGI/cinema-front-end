@@ -14,8 +14,8 @@
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd cinema-front-end
+git clone https://github.com/DIN24-AGI/cinema-front-end.git
+cd cinema-front
 ```
 
 2. Install dependencies:
