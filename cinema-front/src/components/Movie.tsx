@@ -18,21 +18,30 @@ const Movie = ({
 	cinemaTheater,
 }: MovieProps) => {
 	return (
-		<div style={{ display: "flex", gap: "1rem", alignItems: "center", padding: "0.5rem" }}>
-			<span>
-				<strong>{movieTitle}</strong>
-			</span>
-			<span>|</span>
-			<span>{date}</span>
-			<span>{screeningTime}</span>
-			<span>|</span>
-			<span>Hall {cinemaHallNumber}</span>
-			<span>|</span>
-			<span>{length}</span>
-			<span>|</span>
-			<span>${ticketPrice.toFixed(2)}</span>
-			<span>|</span>
-			<span>{cinemaTheater}</span>
+		<div className="card">
+			<div className="card-body">
+				<h5 className="card-title">{movieTitle}</h5>
+				<div className="d-flex flex-wrap gap-3 align-items-center text-muted">
+					<span>
+						<i className="bi bi-calendar me-1"></i>
+						{date}
+					</span>
+					<span>
+						<i className="bi bi-clock me-1"></i>
+						{screeningTime}
+					</span>
+					<span>
+						<i className="bi bi-door-open me-1"></i>
+						Hall {cinemaHallNumber}
+					</span>
+					<span>
+						<i className="bi bi-hourglass-split me-1"></i>
+						{length}
+					</span>
+					<span className="badge bg-primary">${ticketPrice.toFixed(2)}</span>
+					<span className="ms-auto fw-semibold">{cinemaTheater}</span>
+				</div>
+			</div>
 		</div>
 	);
 };

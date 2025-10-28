@@ -1,18 +1,16 @@
+import { useState } from "react";
 import Movie from "../components/Movie";
 import dummyData from "../data/dummy_data.json";
-import { useState } from "react";
 
 const MovieList = () => {
 	const [selectedLocation, setSelectedLocation] = useState<string>("all");
 	const [selectedDate, setSelectedDate] = useState<string>("all");
 	const [selectedMovie, setSelectedMovie] = useState<string>("all");
 
-	// Get unique values for dropdowns
 	const locations = ["all", ...Array.from(new Set(dummyData.map((movie) => movie.cinemaTheater)))];
 	const dates = ["all", ...Array.from(new Set(dummyData.map((movie) => movie.date)))].sort();
 	const movieTitles = ["all", ...Array.from(new Set(dummyData.map((movie) => movie.movieTitle)))].sort();
 
-	// Filter movies based on selected values
 	const filteredMovies = dummyData.filter((movie) => {
 		const locationMatch = selectedLocation === "all" || movie.cinemaTheater === selectedLocation;
 		const dateMatch = selectedDate === "all" || movie.date === selectedDate;
@@ -21,37 +19,37 @@ const MovieList = () => {
 	});
 
 	return (
-		<div style={{ padding: "1rem", paddingTop: "0" }}>
-			<h1 style={{ marginTop: "1rem" }}>Movie Screenings</h1>
+		<div className="container py-4">
+			<h1 className="mb-4">Movie Screenings</h1>
 
-			<div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem", marginTop: "1rem" }}>
-				<div>
-					<label htmlFor="location" style={{ marginRight: "0.5rem" }}>
+			<div className="row g-3 mb-4">
+				<div className="col-md-4">
+					<label htmlFor="location" className="form-label">
 						Location:
 					</label>
 					<select
 						id="location"
+						className="form-select"
 						value={selectedLocation}
 						onChange={(e) => setSelectedLocation(e.target.value)}
-						style={{ padding: "0.25rem" }}
 					>
-						{locations.map((location) => (
-							<option key={location} value={location}>
-								{location === "all" ? "All Locations" : location}
+						{locations.map((loc) => (
+							<option key={loc} value={loc}>
+								{loc === "all" ? "All Locations" : loc}
 							</option>
 						))}
 					</select>
 				</div>
 
-				<div>
-					<label htmlFor="date" style={{ marginRight: "0.5rem" }}>
+				<div className="col-md-4">
+					<label htmlFor="date" className="form-label">
 						Date:
 					</label>
 					<select
 						id="date"
+						className="form-select"
 						value={selectedDate}
 						onChange={(e) => setSelectedDate(e.target.value)}
-						style={{ padding: "0.25rem" }}
 					>
 						{dates.map((date) => (
 							<option key={date} value={date}>
@@ -61,15 +59,15 @@ const MovieList = () => {
 					</select>
 				</div>
 
-				<div>
-					<label htmlFor="movie" style={{ marginRight: "0.5rem" }}>
+				<div className="col-md-4">
+					<label htmlFor="movie" className="form-label">
 						Movie:
 					</label>
 					<select
 						id="movie"
+						className="form-select"
 						value={selectedMovie}
 						onChange={(e) => setSelectedMovie(e.target.value)}
-						style={{ padding: "0.25rem" }}
 					>
 						{movieTitles.map((title) => (
 							<option key={title} value={title}>
@@ -80,7 +78,7 @@ const MovieList = () => {
 				</div>
 			</div>
 
-			<div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+			<div className="d-flex flex-column gap-2">
 				{filteredMovies.map((movie, index) => (
 					<Movie
 						key={index}
