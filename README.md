@@ -1,6 +1,14 @@
-# cinema-front-end
+# Front end for Advanced WEB Project course.
 
-## Front end for Advanced WEB Project course.
+## Link to the deployed app
+
+[https://lively-moss-05fbe2703.3.azurestaticapps.net/](https://lively-moss-05fbe2703.3.azurestaticapps.net/)
+
+## Team
+
+- Alicja Williams
+- Gleb Bulygin
+- Igor Bologov
 
 ## Getting Started
 
@@ -46,7 +54,3 @@ pnpm dev
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
-
-## Team
-
-This project is developed by a cross-platform team (Windows & Linux).
