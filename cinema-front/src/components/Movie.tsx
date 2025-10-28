@@ -1,5 +1,3 @@
-import React from "react";
-
 interface MovieProps {
 	movieTitle: string;
 	date: string;
@@ -10,7 +8,15 @@ interface MovieProps {
 	cinemaTheater: string;
 }
 
-const Movie = ({ movieTitle, date, screeningTime, cinemaHallNumber, length, ticketPrice, cinemaTheater }: MovieProps) => {
+const Movie = ({
+	movieTitle,
+	date,
+	screeningTime,
+	cinemaHallNumber,
+	length,
+	ticketPrice,
+	cinemaTheater,
+}: MovieProps) => {
 	return (
 		<div style={{ display: "flex", gap: "1rem", alignItems: "center", padding: "0.5rem" }}>
 			<span>

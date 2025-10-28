@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Movie from "../components/Movie";
 import dummyData from "../data/dummy_data.json";
 
