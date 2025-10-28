@@ -1,5 +1,6 @@
 import Movie from "../components/Movie";
 import dummyData from "../data/dummy_data.json";
+import { useState } from "react";
 
 const MovieList = () => {
 	const [selectedLocation, setSelectedLocation] = useState<string>("all");
