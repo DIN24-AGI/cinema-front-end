@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { API_ENDPOINTS } from '../../util/baseURL';
 
 interface ProtectedResourceProps {
   token: string | null;
   setToken: (token: string | null) => void;
 }
 
-const API_URL = 'http://localhost:3000';
 
 const ProtectedResource: React.FC<ProtectedResourceProps> = ({ token, setToken }) => {
   const [data, setData] = useState<string | null>(null);
@@ -23,7 +23,7 @@ const ProtectedResource: React.FC<ProtectedResourceProps> = ({ token, setToken }
       }
 
       try {
-        const response = await fetch(`${API_URL}/protected-resource`, {
+        const response = await fetch(API_ENDPOINTS.protectedDashboard, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

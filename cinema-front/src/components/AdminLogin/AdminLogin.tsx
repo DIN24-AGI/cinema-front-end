@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
+import { API_ENDPOINTS } from '../../util/baseURL';
 
 interface AdminLoginProps {
   setToken: (token: string | null) => void;
@@ -15,7 +16,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:3000/auth/login', {
+      const res = await fetch(API_ENDPOINTS.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

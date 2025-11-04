@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { API_ENDPOINTS } from '../util/baseURL';
 
 
 interface RegisterProps {
@@ -22,7 +23,7 @@ const Register: React.FC<RegisterProps> = ({ setToken }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/auth/register', {
+      const res = await fetch(API_ENDPOINTS.register, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
