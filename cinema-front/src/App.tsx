@@ -1,13 +1,11 @@
-import MovieList from "./pages/MovieList";
+import React, { useState } from 'react';
+import AppRoutes from './routes/AppRoutes';
+import './index.css';
 
-function App() {
-	return (
-		<div className="container-fluid d-flex justify-content-center">
-			<div className="w-100" style={{ maxWidth: "1200px" }}>
-				<MovieList />
-			</div>
-		</div>
-	);
-}
+const App: React.FC = () => {
+  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+
+  return <AppRoutes token={token} setToken={setToken} />;
+};
 
 export default App;
