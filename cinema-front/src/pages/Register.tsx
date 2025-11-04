@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { API_ENDPOINTS } from '../util/baseURL';
+import FormInput from '../components/FormInput/FormInput';
 
 
 interface RegisterProps {
@@ -46,26 +47,24 @@ const Register: React.FC<RegisterProps> = ({ setToken }) => {
     <div>
       <h2>Register New Admin</h2>
       <form onSubmit={handleRegister}>
-        <input
+        <FormInput
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
-        <input
+        <FormInput
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
-        <input
+        <FormInput
           type="password"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          required
+
         />
         <button type="submit">Register</button>
       </form>

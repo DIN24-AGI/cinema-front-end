@@ -1,5 +1,5 @@
 import React from 'react';
-import ProtectedResource from '../components/ProtectedResource/ProtectedResource';
+import Navbar from '../components/NavBar/NavBar';
 
 interface AdminDashboardProps {
   token: string | null;
@@ -7,7 +7,19 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, setToken }) => {
-  return <ProtectedResource token={token} setToken={setToken} />;
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem('token');
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <h2>Admin Dashboard</h2>
+      <p>Welcome, admin!</p>
+      <button onClick={handleLogout}>Logout</button>
+    </div>
+  );
 };
 
 export default AdminDashboard;
