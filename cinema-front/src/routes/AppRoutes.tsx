@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
 import AdminLogin from '../pages/AdminLogin';
 import AdminDashboard from '../pages/AdminDashboard';
-import Register from '../pages/Register'
+import ChangePassword from '../pages/ChangePassword'
 
 interface AppRoutesProps {
   token: string | null;
@@ -20,7 +20,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
     <Router>
       <Routes>
         <Route path="/admin/login" element={<AdminLogin setToken={setToken} />} />
-        <Route path="admin/register" element={<Register setToken={setToken}/>}/>
+        <Route path="admin/change-password" element={<ChangePassword setToken={setToken}/>}/>
         <Route
           path="/admin/dashboard"
           element={

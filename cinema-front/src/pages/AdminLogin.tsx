@@ -55,7 +55,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
       </form>
       {error && <p>{error}</p>}
       <p>
-        Don't have an account? <Link to="/admin/register">Register</Link>
+        First time logging in? <Link to="/admin/change-password">Change password</Link>
       </p>
     </div>
   );
