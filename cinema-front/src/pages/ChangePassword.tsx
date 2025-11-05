@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { API_ENDPOINTS } from "../util/baseURL";
 
-interface ChangePasswordProps {
+export interface ChangePasswordProps {
 	token: string | null;
+	setToken: (token: string | null) => void;
 }
 
-const ChangePassword: React.FC<ChangePasswordProps> = ({ token }) => {
+const ChangePassword: React.FC<ChangePasswordProps> = ({ token, setToken }) => {
 	const [email, setEmail] = useState("");
 	const [oldPassword, setOldPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
@@ -56,6 +57,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ token }) => {
 			setOldPassword("");
 			setNewPassword("");
 			setConfirmPassword("");
+			setToken(null);
 		} catch (err) {
 			console.error(err);
 			setError("Failed to change password. Please check your credentials.");
