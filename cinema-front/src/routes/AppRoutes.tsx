@@ -1,37 +1,91 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
-import AdminLogin from '../pages/AdminLogin';
-import AdminDashboard from '../pages/AdminDashboard';
-import ChangePassword from '../pages/ChangePassword'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
+import AdminLogin from "../pages/AdminLogin";
+import AdminDashboard from "../pages/AdminDashboard";
+import ChangePassword from "../pages/ChangePassword";
+import MovieList from "../pages/MovieList";
+import Navbar from "../components/NavBar/NavBar";
 
 interface AppRoutesProps {
-  token: string | null;
-  setToken: (token: string | null) => void;
+	token: string | null;
+	setToken: (token: string | null) => void;
 }
 
-
-const ProtectedResource: React.FC<{ token: string | null; children: JSX.Element }> = ({ token, children }) => {
-  if (!token) return <Navigate to="/admin/login" replace />;
-  return children;
+const ProtectedResource: React.FC<{ token: string | null; children: React.ReactNode }> = ({ token, children }) => {
+	if (!token) return <Navigate to="/admin/login" replace />;
+	return <>{children}</>;
 };
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/admin/login" element={<AdminLogin setToken={setToken} />} />
-        <Route path="admin/change-password" element={<ChangePassword setToken={setToken}/>}/>
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedResource token={token}>
-              <AdminDashboard token={token} setToken={setToken} />
-            </ProtectedResource>
-  }
-        />
-      </Routes>
-    </Router>
-  );
+	const handleLogout = () => {
+		setToken(null);
+		localStorage.removeItem("token");
+	};
+
+	return (
+		<Router>
+			{/* Show navbar on all pages except login */}
+			{token && <Navbar onLogout={handleLogout} />}
+
+			<div className="container-fluid d-flex justify-content-center">
+				<div className="w-100" style={{ maxWidth: "1200px" }}>
+					<Routes>
+						<Route path="/" element={<Navigate to="/admin/login" replace />} />
+						<Route path="/movie-list" element={<MovieList />} />
+						<Route path="/admin/login" element={<AdminLogin setToken={setToken} />} />
+						<Route
+							path="/admin/change-password"
+							element={
+								<ProtectedResource token={token}>
+									<ChangePassword token={token} setToken={setToken} />
+								</ProtectedResource>
+							}
+						/>
+						<Route
+							path="/admin/dashboard"
+							element={
+								<ProtectedResource token={token}>
+									<AdminDashboard token={token} setToken={setToken} />
+								</ProtectedResource>
+							}
+						/>
+						<Route
+							path="/admin/movies"
+							element={
+								<ProtectedResource token={token}>
+									<div>Add Movies Page</div>
+								</ProtectedResource>
+							}
+						/>
+						<Route
+							path="/admin/theaters"
+							element={
+								<ProtectedResource token={token}>
+									<div>Manage Theaters Page</div>
+								</ProtectedResource>
+							}
+						/>
+						<Route
+							path="/admin/halls"
+							element={
+								<ProtectedResource token={token}>
+									<div>Manage Halls Page</div>
+								</ProtectedResource>
+							}
+						/>
+						<Route
+							path="/admin/data"
+							element={
+								<ProtectedResource token={token}>
+									<div>See Data Page</div>
+								</ProtectedResource>
+							}
+						/>
+					</Routes>
+				</div>
+			</div>
+		</Router>
+	);
 };
 
 export default AppRoutes;
