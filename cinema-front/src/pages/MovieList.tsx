@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Movie from "../components/Movie";
 import dummyData from "../data/dummy_data.json";
-import ApiStatus from "../components/ApiStatus";
-import { API_ENDPOINTS } from "../util/baseURL";
 
 const MovieList = () => {
 	const [selectedLocation, setSelectedLocation] = useState<string>("all");

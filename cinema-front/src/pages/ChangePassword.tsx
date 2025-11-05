@@ -3,10 +3,9 @@ import { API_ENDPOINTS } from "../util/baseURL";
 
 interface ChangePasswordProps {
 	token: string | null;
-	setToken: (token: string | null) => void;
 }
 
-const ChangePassword: React.FC<ChangePasswordProps> = ({ token, setToken }) => {
+const ChangePassword: React.FC<ChangePasswordProps> = ({ token }) => {
 	const [email, setEmail] = useState("");
 	const [oldPassword, setOldPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");

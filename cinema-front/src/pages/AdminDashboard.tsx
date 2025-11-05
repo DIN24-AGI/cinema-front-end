@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/NavBar/NavBar";
 import ApiStatus from "../components/ApiStatus";
 import { API_ENDPOINTS } from "../util/baseURL";
 
@@ -8,7 +7,7 @@ interface AdminDashboardProps {
 	setToken: (token: string | null) => void;
 }
 
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, setToken }) => {
+const AdminDashboard: React.FC<AdminDashboardProps> = ({ setToken }) => {
 	const handleLogout = () => {
 		setToken(null);
 		localStorage.removeItem("token");
