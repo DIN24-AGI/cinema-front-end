@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Movie from "../components/Movie";
 import dummyData from "../data/dummy_data.json";
-import ApiStatus from "../components/ApiStatus";
-import { API_ENDPOINTS } from "../util/baseURL";
 
 const MovieList = () => {
 	const [selectedLocation, setSelectedLocation] = useState<string>("all");
@@ -22,14 +20,6 @@ const MovieList = () => {
 
 	return (
 		<div className="container py-4">
-			<div className="row g-3 mb-4">
-				<div className="col-md-6">
-					<ApiStatus endpoint={API_ENDPOINTS.test} title="Backend Test" />
-				</div>
-				<div className="col-md-6">
-					<ApiStatus endpoint={API_ENDPOINTS.dbHealth} title="Database Health" />
-				</div>
-			</div>
 			<h1 className="mb-4">Movie Screenings</h1>
 
 			<div className="row g-3 mb-4">
