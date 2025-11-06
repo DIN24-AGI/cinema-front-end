@@ -7,8 +7,9 @@ interface TheaterCardProps {
   auditoriumsCount: number;
   active: boolean;
   onToggleActive: (id: string) => void;
-  onManageAuditoriums: (id: string) => void;
+  onViewDetails:  (id: string) => void;
 }
+
 
 const TheaterCard: React.FC<TheaterCardProps> = ({
   id,
@@ -18,7 +19,7 @@ const TheaterCard: React.FC<TheaterCardProps> = ({
   auditoriumsCount,
   active,
   onToggleActive,
-  onManageAuditoriums,
+  onViewDetails
 }) => {
   return (
     <div>
@@ -27,12 +28,15 @@ const TheaterCard: React.FC<TheaterCardProps> = ({
       <p>{phone}</p>
       <p>Auditoriums: {auditoriumsCount}</p>
       <div>
+         <button
+            onClick={() => onViewDetails(id)}
+            >
+            View Details
+        </button>
         <button onClick={() => onToggleActive(id)}>
           {active ? "Deactivate" : "Activate"}
-        </button>
-        <button onClick={() => onManageAuditoriums(id)}>
-          Manage Auditoriums
-        </button>
+        </button>   
+
       </div>
     </div>
   );

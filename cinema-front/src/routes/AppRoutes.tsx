@@ -5,6 +5,9 @@ import AdminDashboard from "../pages/AdminDashboard";
 import ChangePassword from "../pages/ChangePassword";
 import MovieList from "../pages/MovieList";
 import Navbar from "../components/NavBar/NavBar";
+import ManageTheaters from "../pages/ManageTheaters";
+import AddTheater from "../pages/AddTheater";
+import TheaterDetails from "../pages/TheaterDetails"
 
 interface AppRoutesProps {
 	token: string | null;
@@ -12,7 +15,7 @@ interface AppRoutesProps {
 }
 
 const ProtectedResource: React.FC<{ token: string | null; children: React.ReactNode }> = ({ token, children }) => {
-	if (!token) return <Navigate to="/admin/login" replace />;
+	//if (!token) return <Navigate to="/admin/login" replace />;
 	return <>{children}</>;
 };
 
@@ -61,10 +64,26 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							path="/admin/theaters"
 							element={
 								<ProtectedResource token={token}>
-									<div>Manage Theaters Page</div>
+									<ManageTheaters token={token} setToken={setToken}/>
 								</ProtectedResource>
 							}
 						/>
+            <Route
+              path="/admin/add-theater"
+              element={
+                <ProtectedResource token={token}>
+                  <AddTheater />
+                </ProtectedResource>
+              }   
+            />
+            <Route
+              path="/admin/theaters/${id}"
+              element={
+                <ProtectedResource token={token}>
+                  <TheaterDetails />
+                </ProtectedResource>
+              }
+            />
 						<Route
 							path="/admin/halls"
 							element={

@@ -6,4 +6,5 @@ export const API_ENDPOINTS = {
 	changePassword: `${API_BASE_URL}/auth/change-password`,
   login: `${API_BASE_URL}/auth/login`,
   protectedDashboard: `${API_BASE_URL}/admin/dashboard`,
+	theaters: `${API_BASE_URL}/theaters`
 };
