@@ -20,7 +20,7 @@ const ManageCinemas: React.FC = () => {
         t.id === id ? { ...t, active: !t.active } : t
       )
     );
-    // later call backend /cinema/:id/activate
+    // later call to backend /cinema/:id/activate
   };
 
   const handleAddCinema = () => {

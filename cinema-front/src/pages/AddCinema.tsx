@@ -1,22 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-
-
-interface Hall {
-  id: string;
-  name: string;
-  seats: number;
-  active: boolean;
-}
-
-interface Cinema {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  active: boolean;
-  halls: Hall[];
-}
+import type {Cinema, Hall} from "../types/cinemaTypes"
 
 interface AddCinemaProps {
   onAddCinema: (newCinema: Cinema) => void;
@@ -144,7 +128,7 @@ const AddCinema: React.FC<AddCinemaProps> = ({ onAddCinema }) => {
           ))}
         </ul>
 
-        {/* <button type="submit">Add Cinema</button> */}
+        <button type="submit">Add Cinema</button>
         <button type="button" onClick={handleCancel} style={{ marginLeft: "10px" }}>
           Cancel
         </button>
