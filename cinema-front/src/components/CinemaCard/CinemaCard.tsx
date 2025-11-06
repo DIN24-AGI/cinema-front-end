@@ -1,22 +1,22 @@
 import React from "react";
-interface TheaterCardProps {
+interface CinemaCardProps {
   id: string;
   name: string;
   address: string;
   phone: string;
-  auditoriumsCount: number;
+  hallsCount: number;
   active: boolean;
   onToggleActive: (id: string) => void;
   onViewDetails:  (id: string) => void;
 }
 
 
-const TheaterCard: React.FC<TheaterCardProps> = ({
+const CinemaCard: React.FC<CinemaCardProps> = ({
   id,
   name,
   address,
   phone,
-  auditoriumsCount,
+  hallsCount,
   active,
   onToggleActive,
   onViewDetails
@@ -26,7 +26,7 @@ const TheaterCard: React.FC<TheaterCardProps> = ({
       <h3>{name}</h3>
       <p>{address}</p>
       <p>{phone}</p>
-      <p>Auditoriums: {auditoriumsCount}</p>
+      <p>Auditoriums: {hallsCount}</p>
       <div>
          <button
             onClick={() => onViewDetails(id)}
@@ -42,4 +42,4 @@ const TheaterCard: React.FC<TheaterCardProps> = ({
   );
 };
 
-export default TheaterCard;
+export default CinemaCard;

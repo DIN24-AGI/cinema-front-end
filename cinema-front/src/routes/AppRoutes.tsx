@@ -5,9 +5,9 @@ import AdminDashboard from "../pages/AdminDashboard";
 import ChangePassword from "../pages/ChangePassword";
 import MovieList from "../pages/MovieList";
 import Navbar from "../components/NavBar/NavBar";
-import ManageTheaters from "../pages/ManageTheaters";
-import AddTheater from "../pages/AddTheater";
-import TheaterDetails from "../pages/TheaterDetails"
+import ManageTheaters from "../pages/ManageCinemas";
+import AddCinema from "../pages/AddCinema";
+import CinemaDetails from "../pages/CinemaDetails"
 
 interface AppRoutesProps {
 	token: string | null;
@@ -61,7 +61,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							}
 						/>
 						<Route
-							path="/admin/theaters"
+							path="/admin/cinemas"
 							element={
 								<ProtectedResource token={token}>
 									<ManageTheaters token={token} setToken={setToken}/>
@@ -69,18 +69,18 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							}
 						/>
             <Route
-              path="/admin/add-theater"
+              path="/admin/add-cinema"
               element={
                 <ProtectedResource token={token}>
-                  <AddTheater />
+                  <AddCinema />
                 </ProtectedResource>
               }   
             />
             <Route
-              path="/admin/theaters/${id}"
+              path="/admin/cinemas/:id"
               element={
                 <ProtectedResource token={token}>
-                  <TheaterDetails />
+                  <CinemaDetails />
                 </ProtectedResource>
               }
             />

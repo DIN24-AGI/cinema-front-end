@@ -2,39 +2,39 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
 
-interface Auditorium {
+interface Hall {
   id: string;
   name: string;
   seats: number;
   active: boolean;
 }
 
-interface Theater {
+interface Cinema {
   id: string;
   name: string;
   address: string;
   phone: string;
   active: boolean;
-  auditoriums: Auditorium[];
+  halls: Hall[];
 }
 
-interface AddTheaterProps {
-  onAddTheater: (newTheater: Theater) => void;
+interface AddCinemaProps {
+  onAddCinema: (newCinema: Cinema) => void;
 }
 
-const AddTheater: React.FC<AddTheaterProps> = ({ onAddTheater }) => {
+const AddCinema: React.FC<AddCinemaProps> = ({ onAddCinema }) => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [auditoriums, setAuditoriums] = useState<Auditorium[]>([]);
+  const [halls, setHalls] = useState<Hall[]>([]);
   const [audName, setAudName] = useState("");
   const [audSeats, setAudSeats] = useState<number>(0);
   const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
 
-  const handleAddAuditorium = () => {
+  const handleAddHall = () => {
     if (!audName || audSeats <= 0) return;
-    setAuditoriums((prev) => [
+    setHalls((prev) => [
       ...prev,
       {
         id: `${prev.length + 1}`,
@@ -47,40 +47,43 @@ const AddTheater: React.FC<AddTheaterProps> = ({ onAddTheater }) => {
     setAudSeats(0);
   };
 
-  const handleDeleteAuditorium = (id: string) => {
-    setAuditoriums((prev) => prev.filter((a) => a.id !== id));
+  const handleDeleteHall = (id: string) => {
+    setHalls((prev) => prev.filter((a) => a.id !== id));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newTheater: Theater = {
+    const newCinema: Cinema = {
       id: Date.now().toString(),
       name,
       address,
       phone,
       active: true,
-      auditoriums,
+      halls,
     };
 
-    onAddTheater(newTheater);
-    setSuccessMsg("Theater added successfully!");
+    setSuccessMsg("Cinema added successfully!");
     setTimeout(() => {
       setSuccessMsg("");
-      navigate("/admin/theaters");
+      navigate("/admin/cinemas");
     }, 2000);
+      console.log(newCinema)
+
   };
 
+
+
   const handleCancel = () => {
-    navigate("/admin/theaters");
+    navigate("/admin/cinemas");
   };
 
   return (
     <div>
-      <h2>Add New Theater</h2>
+      <h2>Add New Cinema</h2>
       {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Theater Name:</label>
+          <label>Cinema Name:</label>
           <input
             type="text"
             value={name}
@@ -107,7 +110,7 @@ const AddTheater: React.FC<AddTheaterProps> = ({ onAddTheater }) => {
           />
         </div>
 
-        <h3>Auditoriums (optional)</h3>
+        <h3>Halls</h3>
         <div>
           <label>Name:</label>
           <input
@@ -121,19 +124,19 @@ const AddTheater: React.FC<AddTheaterProps> = ({ onAddTheater }) => {
             value={audSeats}
             onChange={(e) => setAudSeats(parseInt(e.target.value))}
           />
-          <button type="button" onClick={handleAddAuditorium}>
-            + Add Auditorium
+          <button type="button" onClick={handleAddHall}>
+            + Add Hall
           </button>
         </div>
 
         <ul>
-          {auditoriums.map((a) => (
+          {halls.map((a) => (
             <li key={a.id}>
               {a.name} - {a.seats} seats
               <button
                 type="button"
                 style={{ marginLeft: "10px" }}
-                onClick={() => handleDeleteAuditorium(a.id)}
+                onClick={() => handleDeleteHall(a.id)}
               >
                 Delete
               </button>
@@ -141,7 +144,7 @@ const AddTheater: React.FC<AddTheaterProps> = ({ onAddTheater }) => {
           ))}
         </ul>
 
-        <button type="submit">Add Theater</button>
+        {/* <button type="submit">Add Cinema</button> */}
         <button type="button" onClick={handleCancel} style={{ marginLeft: "10px" }}>
           Cancel
         </button>
@@ -150,4 +153,4 @@ const AddTheater: React.FC<AddTheaterProps> = ({ onAddTheater }) => {
   );
 };
 
-export default AddTheater;
+export default AddCinema;
