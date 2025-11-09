@@ -6,7 +6,7 @@ interface CinemaCardProps {
   phone: string;
   hallsCount: number;
   active: boolean;
-  onToggleActive: (id: string) => void;
+  onToggleActive: (id: string, active: boolean) => void;
   onViewDetails:  (id: string) => void;
 }
 
@@ -27,13 +27,14 @@ const CinemaCard: React.FC<CinemaCardProps> = ({
       <p><strong>Address: </strong>{address}</p>
       <p><strong>Phone: </strong>{phone}</p>
       <p><strong>Auditoriums: </strong>{hallsCount}</p>
+      <p><strong>Status: </strong>{active ? "Active" : "Not active"}</p>
       <div>
          <button
             onClick={() => onViewDetails(id)}
             >
             View Details
         </button>
-        <button onClick={() => onToggleActive(id)}>
+        <button onClick={() => onToggleActive(id, active)}>
           {active ? "Deactivate" : "Activate"}
         </button>   
 

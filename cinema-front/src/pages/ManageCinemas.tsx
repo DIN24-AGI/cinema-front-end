@@ -39,9 +39,14 @@ const ManageCinemas: React.FC = () => {
 
   const handleToggleActive = async (cinemaId: string, currentState: boolean) => {
     try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error ("No token found. Please log in.")
       const res = await fetch(`${API_ENDPOINTS.cinemas}/${cinemaId}/activate`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+         },
         body: JSON.stringify({ active: !currentState }),
       });
 
