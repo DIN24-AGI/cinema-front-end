@@ -14,11 +14,11 @@ const CinemaDetails: React.FC = () => {
   const [ cinemaData, setCinemaData] = useState<Cinema | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchCinema = async () => {
       if (!cinema_uid) return;
-      const token = localStorage.getItem("token");
       if (!token) {
         setError("No token found. Please log in.");
         setLoading(false);
@@ -58,6 +58,41 @@ const CinemaDetails: React.FC = () => {
     navigate("/admin/cinemas");
   };
 
+ 
+  const handleDelete = async () => {
+    if (!cinema) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this cinema? This cannot be undone."
+    );
+    if (!confirmed) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No token found. Please log in.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_ENDPOINTS.cinemas}/${cinema.uid}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to delete cinema");
+
+      alert("Cinema deleted successfully!");
+      navigate("/admin/cinemas");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Failed to delete cinema");
+    }
+  };
+  
+
   if (loading) return <p>Loading cinema details...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!cinema) return <p>Cinema not found.</p>;
@@ -85,6 +120,11 @@ const CinemaDetails: React.FC = () => {
       <button onClick={handleBack}>Back</button>
       <button onClick={handleEdit} style={{ marginLeft: "10px" }}>
         Edit
+      </button>
+      <button
+        onClick={handleDelete}
+        style={{ marginLeft: "10px", color: "white", backgroundColor: "red" }}>
+        Delete Cinema
       </button>
     </div>
   );
