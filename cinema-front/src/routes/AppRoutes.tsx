@@ -8,6 +8,9 @@ import Navbar from "../components/NavBar/NavBar";
 import ManageTheaters from "../pages/ManageCinemas";
 import AddCinema from "../pages/AddCinema";
 import CinemaDetails from "../pages/CinemaDetails"
+import ManageHalls from "../pages/ManageHalls"
+import HallDetails from "../pages/HallDetails";
+import AddHall from "../pages/AddHall";
 
 interface AppRoutesProps {
 	token: string | null;
@@ -88,7 +91,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							path="/admin/halls"
 							element={
 								<ProtectedResource token={token}>
-									<div>Manage Halls Page</div>
+									<ManageHalls />
 								</ProtectedResource>
 							}
 						/>
@@ -99,10 +102,22 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 									<div>See Data Page</div>
 								</ProtectedResource>
 							}
-						/>
-					</Routes>
-				</div>
-			</div>
+              />
+            <Route path="/admin/halls/add" 
+              element={
+                <ProtectedResource token={token}>
+                  <AddHall /> 
+                </ProtectedResource>} 
+              />
+            <Route path="/admin/halls/:hallUid" 
+              element={
+                <ProtectedResource token={token}>
+                  <HallDetails />
+                </ProtectedResource>}
+              />
+          </Routes>		
+        </div>
+      </div>
 		</Router>
 	);
 };

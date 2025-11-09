@@ -7,5 +7,9 @@ export const API_ENDPOINTS = {
   login: `${API_BASE_URL}/auth/login`,
   protectedDashboard: `${API_BASE_URL}/admin/dashboard`,
 	cinemas: `${API_BASE_URL}/admin/cinemas`,
-	
+	cities: `${API_BASE_URL}/admin/cities`,
+  cinemasByCity: (cityUid: string) => `${API_BASE_URL}/admin/cinemas?city_uid=${cityUid}`,
+  hallsByCinema: (cinemaUid: string) => `${API_BASE_URL}/admin/halls/${cinemaUid}`,
+  addHall: `${API_BASE_URL}/admin/halls`,
+  hallDetails: (hallUid: string) => `${API_BASE_URL}/admin/halls/${hallUid}`, 
 };
