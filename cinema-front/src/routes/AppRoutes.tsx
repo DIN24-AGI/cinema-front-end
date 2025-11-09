@@ -15,7 +15,7 @@ interface AppRoutesProps {
 }
 
 const ProtectedResource: React.FC<{ token: string | null; children: React.ReactNode }> = ({ token, children }) => {
-	//if (!token) return <Navigate to="/admin/login" replace />;
+	if (!token) return <Navigate to="/admin/login" replace />;
 	return <>{children}</>;
 };
 

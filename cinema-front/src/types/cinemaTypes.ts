@@ -6,7 +6,7 @@ export interface Hall {
 }
 
 export interface Cinema {
-  id: string;
+  uid: string;
   name: string;
   address: string;
   phone: string;

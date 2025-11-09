@@ -2,53 +2,84 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import CinemaCard from "../components/CinemaCard/CinemaCard";
-import theatersData from "../data/dummy_theaters.json"; 
-import type { Cinema } from "../types/cinemaTypes"
-
+import { API_ENDPOINTS } from "../util/baseURL";
+import type { Cinema } from "../types/cinemaTypes";
 
 const ManageCinemas: React.FC = () => {
-  const [cinema, setCinema] = useState<Cinema[]>([]);
+  const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCinema(theatersData as Cinema[]);
-  }, []);
+  const fetchCinemas = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
 
-  const handleToggleActive = (id: string) => {
-    setCinema((prev) =>
-      prev.map((t) =>
-        t.id === id ? { ...t, active: !t.active } : t
-      )
-    );
-    // later call to backend /cinema/:id/activate
+    try {
+      const res = await fetch(API_ENDPOINTS.cinemas, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch cinemas");
+
+      const data: Cinema[] = await res.json();
+      setCinemas(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchCinemas();
+}, []); 
+
+  const handleToggleActive = async (cinemaId: string, currentState: boolean) => {
+    try {
+      const res = await fetch(`${API_ENDPOINTS.cinemas}/${cinemaId}/activate`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: !currentState }),
+      });
+
+      if (!res.ok) throw new Error("Failed to toggle cinema active state");
+      const updatedCinema = await res.json();
+
+      setCinemas((prev) =>
+        prev.map((c) => (c.uid === cinemaId ? updatedCinema : c))
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleAddCinema = () => {
     navigate("/admin/add-cinema");
   };
 
-  const handleViewDetails = (id: string) => {
-    navigate(`/admin/cinemas/${id}`);
+  const handleViewDetails = (cinema: Cinema) => {
+    navigate(`/admin/cinemas/${cinema.uid}`, {state: { cinema }});
   };
-
-
 
   return (
     <div>
       <h2>Manage Cinemas</h2>
       <button onClick={handleAddCinema}>+ Add New Cinema</button>
       <div style={{ marginTop: "20px" }}>
-        {cinema.map((theater) => (
+        {cinemas.map((cinema) => (
           <CinemaCard
-            key={theater.id}
-            id={theater.id}
-            name={theater.name}
-            address={theater.address}
-            phone={theater.phone}
-            hallsCount={theater.halls?.length || 0}
-            active={theater.active}
-            onToggleActive={handleToggleActive}
-            onViewDetails={handleViewDetails}
+            key={cinema.uid}
+            id={cinema.uid}
+            name={cinema.name}
+            address={cinema.address}
+            phone={cinema.phone}
+            hallsCount={cinema.halls?.length || 0}
+            active={cinema.active}
+            onToggleActive={() => handleToggleActive(cinema.uid, cinema.active)}
+            onViewDetails={() => handleViewDetails(cinema)}
           />
         ))}
       </div>
