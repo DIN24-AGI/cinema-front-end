@@ -1,135 +1,93 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
-import type {Cinema, Hall} from "../types/cinemaTypes"
+import { useNavigate, useLocation } from "react-router";
+import type { Cinema } from "../types/cinemaTypes";
+import { API_ENDPOINTS } from "../util/baseURL";
 
-interface AddCinemaProps {
-  onAddCinema: (newCinema: Cinema) => void;
-}
-
-const AddCinema: React.FC<AddCinemaProps> = ({ onAddCinema }) => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [halls, setHalls] = useState<Hall[]>([]);
-  const [audName, setAudName] = useState("");
-  const [audSeats, setAudSeats] = useState<number>(0);
-  const [successMsg, setSuccessMsg] = useState("");
+const AddCinema: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const existingCinema = location.state?.cinema as Cinema | undefined;
 
-  const handleAddHall = () => {
-    if (!audName || audSeats <= 0) return;
-    setHalls((prev) => [
-      ...prev,
-      {
-        id: `${prev.length + 1}`,
-        name: audName,
-        seats: audSeats,
-        active: true,
-      },
-    ]);
-    setAudName("");
-    setAudSeats(0);
-  };
+  const [name, setName] = useState(existingCinema?.name || "");
+  const [address, setAddress] = useState(existingCinema?.address || "");
+  const [phone, setPhone] = useState(existingCinema?.phone || "");
+  const [cityUid, setCityUid] = useState(existingCinema?.cityUid || "")
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleDeleteHall = (id: string) => {
-    setHalls((prev) => prev.filter((a) => a.id !== id));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newCinema: Cinema = {
-      id: Date.now().toString(),
-      name,
-      address,
-      phone,
-      active: true,
-      halls,
-    };
+    setError("");
+    setLoading(true);
 
-    setSuccessMsg("Cinema added successfully!");
-    setTimeout(() => {
-      setSuccessMsg("");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("No token found. Please log in.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const body = { city_uid: cityUid, name, address, phone };
+
+      const res = await fetch(existingCinema ? `${API_ENDPOINTS.cinemas}/${existingCinema.uid}` : API_ENDPOINTS.cinemas, {
+        method: existingCinema ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.msg || "Failed to save cinema");
+      }
+
+      const savedCinema = await res.json();
+      console.log("Saved cinema:", savedCinema);
+
       navigate("/admin/cinemas");
-    }, 2000);
-      console.log(newCinema)
-
-  };
-
-
-
-  const handleCancel = () => {
-    navigate("/admin/cinemas");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div>
-      <h2>Add New Cinema</h2>
-      {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
+      <h2>{existingCinema ? "Edit Cinema" : "Add New Cinema"}</h2>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Cinema Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <select value={cityUid} onChange={e => setCityUid(e.target.value)} required>
+            <option value="">Select a city</option>
+            <option value="6a86f3e6-117c-47f2-9004-18938dae1214">Helsinki</option>
+          </select>
         </div>
-        <div>
-          <label>Address:</label>
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Phone:</label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </div>
-
-        <h3>Halls</h3>
         <div>
           <label>Name:</label>
-          <input
-            type="text"
-            value={audName}
-            onChange={(e) => setAudName(e.target.value)}
-          />
-          <label>Seats:</label>
-          <input
-            type="number"
-            value={audSeats}
-            onChange={(e) => setAudSeats(parseInt(e.target.value))}
-          />
-          <button type="button" onClick={handleAddHall}>
-            + Add Hall
-          </button>
+          <input value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
 
-        <ul>
-          {halls.map((a) => (
-            <li key={a.id}>
-              {a.name} - {a.seats} seats
-              <button
-                type="button"
-                style={{ marginLeft: "10px" }}
-                onClick={() => handleDeleteHall(a.id)}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <label>Address:</label>
+          <input value={address} onChange={(e) => setAddress(e.target.value)} />
+        </div>
 
-        <button type="submit">Add Cinema</button>
-        <button type="button" onClick={handleCancel} style={{ marginLeft: "10px" }}>
+        <div>
+          <label>Phone:</label>
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+        </div>
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Saving..." : existingCinema ? "Update Cinema" : "Add Cinema"}
+        </button>
+        <button type="button" onClick={() => navigate("/admin/cinemas")} style={{ marginLeft: "10px" }}>
           Cancel
         </button>
       </form>

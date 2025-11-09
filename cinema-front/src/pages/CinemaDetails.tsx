@@ -8,7 +8,6 @@ import { API_ENDPOINTS } from "../util/baseURL";
 const CinemaDetails: React.FC = () => {
   const location = useLocation();
   const cinema = location.state?.cinema;
-  console.log(cinema)
 
   const navigate = useNavigate();
   const { id: cinema_uid } = useParams<{ id: string }>();
@@ -37,7 +36,6 @@ const CinemaDetails: React.FC = () => {
         if (!res.ok) throw new Error("Failed to fetch cinema");
 
         const data: Cinema = await res.json();
-        console.log(data)
         setCinemaData(data);
       } catch (err: any) {
         console.error(err);

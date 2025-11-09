@@ -7,6 +7,7 @@ export interface Hall {
 
 export interface Cinema {
   uid: string;
+  cityUid: string,
   name: string;
   address: string;
   phone: string;

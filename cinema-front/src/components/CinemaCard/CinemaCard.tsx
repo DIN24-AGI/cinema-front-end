@@ -24,9 +24,9 @@ const CinemaCard: React.FC<CinemaCardProps> = ({
   return (
     <div>
       <h3>{name}</h3>
-      <p>{address}</p>
-      <p>{phone}</p>
-      <p>Auditoriums: {hallsCount}</p>
+      <p><strong>Address: </strong>{address}</p>
+      <p><strong>Phone: </strong>{phone}</p>
+      <p><strong>Auditoriums: </strong>{hallsCount}</p>
       <div>
          <button
             onClick={() => onViewDetails(id)}
