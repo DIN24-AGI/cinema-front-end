@@ -30,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 					</NavLink>
 				</li>
 				<li>
-					<NavLink to="/admin/theaters" className={({ isActive }) => (isActive ? styles.active : "")}>
+					<NavLink to="/admin/cinemas" className={({ isActive }) => (isActive ? styles.active : "")}>
 						Manage Theaters
 					</NavLink>
 				</li>

@@ -5,6 +5,12 @@ import AdminDashboard from "../pages/AdminDashboard";
 import ChangePassword from "../pages/ChangePassword";
 import MovieList from "../pages/MovieList";
 import Navbar from "../components/NavBar/NavBar";
+import ManageTheaters from "../pages/ManageCinemas";
+import AddCinema from "../pages/AddCinema";
+import CinemaDetails from "../pages/CinemaDetails"
+import ManageHalls from "../pages/ManageHalls"
+import HallDetails from "../pages/HallDetails";
+import AddHall from "../pages/AddHall";
 
 interface AppRoutesProps {
 	token: string | null;
@@ -58,18 +64,34 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							}
 						/>
 						<Route
-							path="/admin/theaters"
+							path="/admin/cinemas"
 							element={
 								<ProtectedResource token={token}>
-									<div>Manage Theaters Page</div>
+									<ManageTheaters token={token} setToken={setToken}/>
 								</ProtectedResource>
 							}
 						/>
+            <Route
+              path="/admin/add-cinema"
+              element={
+                <ProtectedResource token={token}>
+                  <AddCinema />
+                </ProtectedResource>
+              }   
+            />
+            <Route
+              path="/admin/cinemas/:id"
+              element={
+                <ProtectedResource token={token}>
+                  <CinemaDetails />
+                </ProtectedResource>
+              }
+            />
 						<Route
 							path="/admin/halls"
 							element={
 								<ProtectedResource token={token}>
-									<div>Manage Halls Page</div>
+									<ManageHalls />
 								</ProtectedResource>
 							}
 						/>
@@ -80,10 +102,22 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 									<div>See Data Page</div>
 								</ProtectedResource>
 							}
-						/>
-					</Routes>
-				</div>
-			</div>
+              />
+            <Route path="/admin/halls/add" 
+              element={
+                <ProtectedResource token={token}>
+                  <AddHall /> 
+                </ProtectedResource>} 
+              />
+            <Route path="/admin/halls/:hallUid" 
+              element={
+                <ProtectedResource token={token}>
+                  <HallDetails />
+                </ProtectedResource>}
+              />
+          </Routes>		
+        </div>
+      </div>
 		</Router>
 	);
 };
