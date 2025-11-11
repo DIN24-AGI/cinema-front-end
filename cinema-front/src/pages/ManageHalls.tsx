@@ -13,7 +13,7 @@ const ManageHalls: React.FC = () => {
 	const [selectedCity, setSelectedCity] = useState<City | null>(null);
 	const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
+	const [error, setError] = useState(""); //unused
 	const navigate = useNavigate();
 
 	const token = () => localStorage.getItem("token");
@@ -31,6 +31,8 @@ const ManageHalls: React.FC = () => {
 			} catch (err: any) {
 				console.error(err);
 				setError(err.message || t("halls.genericError"));
+				// added to evoid unused var warning
+				console.log(error);
 			} finally {
 				setLoading(false);
 			}
