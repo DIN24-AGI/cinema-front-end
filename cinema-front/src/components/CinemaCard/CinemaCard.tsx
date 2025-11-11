@@ -1,46 +1,66 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+
 interface CinemaCardProps {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  hallsCount: number;
-  active: boolean;
-  onToggleActive: (id: string, active: boolean) => void;
-  onViewDetails:  (id: string) => void;
+	id: string;
+	name: string;
+	address: string;
+	phone: string;
+	hallsCount: number;
+	active: boolean;
+	onToggleActive: (id: string, active: boolean) => void;
+	onViewDetails: (id: string) => void;
 }
 
-
 const CinemaCard: React.FC<CinemaCardProps> = ({
-  id,
-  name,
-  address,
-  phone,
-  hallsCount,
-  active,
-  onToggleActive,
-  onViewDetails
+	id,
+	name,
+	address,
+	phone,
+	hallsCount,
+	active,
+	onToggleActive,
+	onViewDetails,
 }) => {
-  return (
-    <div>
-      <h3>{name}</h3>
-      <p><strong>Address: </strong>{address}</p>
-      <p><strong>Phone: </strong>{phone}</p>
-      <p><strong>Auditoriums: </strong>{hallsCount}</p>
-      <p><strong>Status: </strong>{active ? "Active" : "Not active"}</p>
-      <div>
-         <button
-            onClick={() => onViewDetails(id)}
-            >
-            View Details
-        </button>
-        <button onClick={() => onToggleActive(id, active)}>
-          {active ? "Deactivate" : "Activate"}
-        </button>   
-
-      </div>
-    </div>
-  );
+	const { t } = useTranslation();
+	return (
+		<div className="card mb-3 shadow-sm">
+			<div className="card-body">
+				<h5 className="card-title d-flex justify-content-between align-items-start">
+					<span>{name}</span>
+					<span className={`badge ${active ? "bg-success" : "bg-secondary"}`}>
+						{active ? t("util.active") : t("util.inactive")}
+					</span>
+				</h5>
+				<ul className="list-group list-group-flush mb-3">
+					<li className="list-group-item px-0">
+						<strong>{t("cinemaCard.address")}: </strong>
+						{address}
+					</li>
+					<li className="list-group-item px-0">
+						<strong>{t("cinemaCard.Phone")}: </strong>
+						{phone}
+					</li>
+					<li className="list-group-item px-0">
+						<strong>{t("cinemaCard.halls")}: </strong>
+						{hallsCount}
+					</li>
+				</ul>
+				<div className="d-flex gap-2">
+					<button type="button" className="btn btn-outline-primary btn-sm" onClick={() => onViewDetails(id)}>
+						{t("util.viewDetails")}
+					</button>
+					<button
+						type="button"
+						className={`btn btn-sm ${active ? "btn-warning" : "btn-success"}`}
+						onClick={() => onToggleActive(id, active)}
+					>
+						{active ? t("util.deactivate") : t("util.activate")}
+					</button>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default CinemaCard;

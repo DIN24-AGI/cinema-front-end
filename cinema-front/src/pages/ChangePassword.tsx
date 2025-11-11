@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 export interface ChangePasswordProps {
 	token: string | null;
@@ -7,6 +8,7 @@ export interface ChangePasswordProps {
 }
 
 const ChangePassword: React.FC<ChangePasswordProps> = ({ token, setToken }) => {
+	const { t } = useTranslation();
 	const [email, setEmail] = useState("");
 	const [oldPassword, setOldPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
@@ -70,73 +72,61 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ token, setToken }) => {
 				<div className="col-md-6">
 					<div className="card">
 						<div className="card-body">
-							<h2 className="card-title mb-4">Change Password</h2>
+							<h2 className="card-title mb-4">{t("changePassword.title")}</h2>
 							<form onSubmit={handleSubmit}>
-								<div className="mb-3">
-									<label htmlFor="email" className="form-label">
-										Email
-									</label>
+								<div className="form-floating mb-3">
 									<input
-										type="email"
 										id="email"
+										type="email"
 										className="form-control"
-										placeholder="Email"
+										placeholder={t("changePassword.email")}
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										required
 									/>
+									<label htmlFor="email">{t("changePassword.email")}</label>
 								</div>
 
-								<div className="mb-3">
-									<label htmlFor="oldPassword" className="form-label">
-										Old Password
-									</label>
+								<div className="form-floating mb-3">
 									<input
-										type="password"
 										id="oldPassword"
+										type="password"
 										className="form-control"
-										placeholder="Old Password"
+										placeholder={t("changePassword.oldPassword")}
 										value={oldPassword}
 										onChange={(e) => setOldPassword(e.target.value)}
-										required
 									/>
+									<label htmlFor="oldPassword">{t("changePassword.oldPassword")}</label>
 								</div>
 
-								<div className="mb-3">
-									<label htmlFor="newPassword" className="form-label">
-										New Password
-									</label>
+								<div className="form-floating mb-3">
 									<input
-										type="password"
 										id="newPassword"
+										type="password"
 										className="form-control"
-										placeholder="New Password"
+										placeholder={t("changePassword.newPassword")}
 										value={newPassword}
 										onChange={(e) => setNewPassword(e.target.value)}
-										required
 									/>
+									<label htmlFor="newPassword">{t("changePassword.newPassword")}</label>
 								</div>
 
-								<div className="mb-3">
-									<label htmlFor="confirmPassword" className="form-label">
-										Confirm New Password
-									</label>
+								<div className="form-floating mb-4">
 									<input
-										type="password"
 										id="confirmPassword"
+										type="password"
 										className="form-control"
-										placeholder="Confirm New Password"
+										placeholder={t("changePassword.confirmPassword")}
 										value={confirmPassword}
 										onChange={(e) => setConfirmPassword(e.target.value)}
-										required
 									/>
+									<label htmlFor="confirmPassword">{t("changePassword.confirmPassword")}</label>
 								</div>
 
 								{error && <div className="alert alert-danger">{error}</div>}
 								{success && <div className="alert alert-success">{success}</div>}
 
 								<button type="submit" className="btn btn-primary w-100">
-									Change Password
+									{t("changePassword.button")}
 								</button>
 							</form>
 						</div>
