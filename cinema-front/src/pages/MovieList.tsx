@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Movie from "../components/Movie";
 import dummyData from "../data/dummy_data.json";
+import { useTranslation } from "react-i18next";
 
 const MovieList = () => {
+	const { t } = useTranslation();
 	const [selectedLocation, setSelectedLocation] = useState<string>("all");
 	const [selectedDate, setSelectedDate] = useState<string>("all");
 	const [selectedMovie, setSelectedMovie] = useState<string>("all");
@@ -20,12 +22,12 @@ const MovieList = () => {
 
 	return (
 		<div className="container py-4">
-			<h1 className="mb-4">Movie Screenings</h1>
+			<h1 className="mb-4">{t("movieList.title")}</h1>
 
 			<div className="row g-3 mb-4">
 				<div className="col-md-4">
 					<label htmlFor="location" className="form-label">
-						Location:
+						{t("movieList.location")}:
 					</label>
 					<select
 						id="location"
@@ -35,7 +37,7 @@ const MovieList = () => {
 					>
 						{locations.map((loc) => (
 							<option key={loc} value={loc}>
-								{loc === "all" ? "All Locations" : loc}
+								{loc === "all" ? t("movieList.allLocations") : loc}
 							</option>
 						))}
 					</select>
@@ -43,7 +45,7 @@ const MovieList = () => {
 
 				<div className="col-md-4">
 					<label htmlFor="date" className="form-label">
-						Date:
+						{t("movieList.date")}:
 					</label>
 					<select
 						id="date"
@@ -53,7 +55,7 @@ const MovieList = () => {
 					>
 						{dates.map((date) => (
 							<option key={date} value={date}>
-								{date === "all" ? "All Dates" : date}
+								{date === "all" ? t("movieList.allDates") : date}
 							</option>
 						))}
 					</select>
@@ -61,7 +63,7 @@ const MovieList = () => {
 
 				<div className="col-md-4">
 					<label htmlFor="movie" className="form-label">
-						Movie:
+						{t("movieList.movie")}:
 					</label>
 					<select
 						id="movie"
@@ -71,7 +73,7 @@ const MovieList = () => {
 					>
 						{movieTitles.map((title) => (
 							<option key={title} value={title}>
-								{title === "all" ? "All Movies" : title}
+								{title === "all" ? t("movieList.allMovies") : title}
 							</option>
 						))}
 					</select>

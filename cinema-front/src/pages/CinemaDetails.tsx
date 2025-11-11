@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router";
 import type { Cinema, Hall } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 const CinemaDetails: React.FC = () => {
+	const { t } = useTranslation();
 	const location = useLocation();
 	const cinema = location.state?.cinema;
 
@@ -92,38 +94,53 @@ const CinemaDetails: React.FC = () => {
 	if (!cinema) return <p>Cinema not found.</p>;
 
 	return (
-		<div>
-			<h2>Cinema Details</h2>
-			<p>
-				<strong>Name:</strong> {cinema.name}
-			</p>
-			<p>
-				<strong>Address:</strong> {cinema.address || "Add the address"}
-			</p>
-			<p>
-				<strong>Phone:</strong> {cinema.phone || "Add the phone number"}
-			</p>
+		<div className="container py-4">
+			<div className="card shadow-sm">
+				<div className="card-header">
+					<h2 className="mb-0">Cinema Details</h2>
+				</div>
 
-			<h3>Halls</h3>
-			{cinema.halls && cinema.halls.length > 0 ? (
-				<ul>
-					{cinema.halls.map((aud: Hall) => (
-						<li key={aud.uid}>
-							{aud.name} - {aud.seats} seats
-						</li>
-					))}
-				</ul>
-			) : (
-				<p>No halls added.</p>
-			)}
+				<div className="card-body">
+					<div className="row mb-2">
+						<div className="col-sm-3 text-muted fw-semibold">{t("cinemas.name")}:</div>
+						<div className="col-sm-9">{cinema.name}</div>
+					</div>
+					<div className="row mb-2">
+						<div className="col-sm-3 text-muted fw-semibold">{t("cinemas.address")}:</div>
+						<div className="col-sm-9">{cinema.address || "Add the address"}</div>
+					</div>
+					<div className="row mb-3">
+						<div className="col-sm-3 text-muted fw-semibold">{t("cinemas.phone")}:</div>
+						<div className="col-sm-9">{cinema.phone || "Add the phone number"}</div>
+					</div>
 
-			<button onClick={handleBack}>Back</button>
-			<button onClick={handleEdit} style={{ marginLeft: "10px" }}>
-				Edit
-			</button>
-			<button onClick={handleDelete} style={{ marginLeft: "10px", color: "white", backgroundColor: "red" }}>
-				Delete Cinema
-			</button>
+					<h5 className="mt-3">{t("cinemas.halls")}</h5>
+					{cinema.halls && cinema.halls.length > 0 ? (
+						<ul className="list-group">
+							{cinema.halls.map((aud: Hall) => (
+								<li key={aud.uid} className="list-group-item d-flex justify-content-between align-items-center">
+									<span>{aud.name}</span>
+									<span className="badge text-bg-secondary">{aud.seats} seats</span>
+								</li>
+							))}
+						</ul>
+					) : (
+						<div className="alert alert-info mt-2 mb-0">{t("cinemas.noHallsAdded")}</div>
+					)}
+				</div>
+
+				<div className="card-footer d-flex gap-2">
+					<button type="button" className="btn btn-outline-secondary" onClick={handleBack}>
+						{t("util.back")}
+					</button>
+					<button type="button" className="btn btn-primary" onClick={handleEdit}>
+						{t("cinemas.editCinema")}
+					</button>
+					<button type="button" className="btn btn-danger ms-auto" onClick={handleDelete}>
+						{t("cinemas.deleteCinema")}
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 };
