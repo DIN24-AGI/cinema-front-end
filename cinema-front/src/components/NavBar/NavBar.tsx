@@ -1,12 +1,15 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router";
 import styles from "./NavBar.module.css";
+import LanguageSwitcher from "../LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 interface NavbarProps {
 	onLogout?: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
@@ -21,42 +24,45 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 			<ul className={styles.navLinks}>
 				<li>
 					<NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? styles.active : "")}>
-						Home
+						{t("nav.home")}
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to="/admin/movies" className={({ isActive }) => (isActive ? styles.active : "")}>
-						Add Movies
+						{t("nav.movies")}
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to="/admin/cinemas" className={({ isActive }) => (isActive ? styles.active : "")}>
-						Manage Theaters
+						{t("nav.cinemas")}
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to="/admin/halls" className={({ isActive }) => (isActive ? styles.active : "")}>
-						Manage Halls
+						{t("nav.halls")}
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to="/admin/data" className={({ isActive }) => (isActive ? styles.active : "")}>
-						See Data
+						{t("nav.data")}
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to="/movie-list" className={({ isActive }) => (isActive ? styles.active : "")}>
-						Movie List
+						{t("nav.movieList")}
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to="/admin/change-password" className={({ isActive }) => (isActive ? styles.active : "")}>
-						Change Password
+						{t("nav.changePassword")}
 					</NavLink>
+				</li>
+				<li>
+					<LanguageSwitcher />
 				</li>
 			</ul>
 			<button className={styles.logoutBtn} onClick={handleLogout}>
-				Logout
+				{t("nav.logout")}
 			</button>
 		</nav>
 	);

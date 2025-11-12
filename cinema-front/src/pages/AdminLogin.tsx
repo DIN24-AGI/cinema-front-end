@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { API_ENDPOINTS } from "../util/baseURL.ts";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../components/LanguageSwitcher.tsx";
 
 interface AdminLoginProps {
 	setToken: (token: string | null) => void;
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
+	const { t } = useTranslation();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
@@ -42,8 +45,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
 					<div className="card shadow">
 						<div className="card-body p-4">
 							<div className="text-center mb-4">
-								<h1 className="h3 mb-3 fw-normal">🎬 Admin Login</h1>
-								<p className="text-muted">Sign in to your account</p>
+								<h1 className="h3 mb-3 fw-normal">🎬 {t("login.title")}</h1>
+								<p className="text-muted">{t("login.subtitle")}</p>
 							</div>
 
 							<form onSubmit={handleLogin}>
@@ -52,11 +55,11 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
 										type="email"
 										className="form-control"
 										id="email"
-										placeholder="Email"
+										placeholder={t("login.email")}
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 									/>
-									<label htmlFor="email">Email</label>
+									<label htmlFor="email">{t("login.email")}</label>
 								</div>
 
 								<div className="mb-3 form-floating">
@@ -64,11 +67,11 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
 										type="password"
 										className="form-control"
 										id="password"
-										placeholder="Password"
+										placeholder={t("login.password")}
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
 									/>
-									<label htmlFor="password">Password</label>
+									<label htmlFor="password">{t("login.password")}</label>
 								</div>
 
 								{error && (
@@ -78,17 +81,20 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ setToken }) => {
 								)}
 
 								<button type="submit" className="btn btn-primary w-100 mb-3">
-									Login
+									{t("login.button")}
 								</button>
 							</form>
 
 							<div className="text-center">
 								<p className="text-muted mb-0">
-									First time logging in?{" "}
+									{t("login.firstTime")}{" "}
 									<Link to="/admin/change-password" className="text-decoration-none">
-										Change password
+										{t("login.changePassword")}
 									</Link>
 								</p>
+								<div className="mt-2">
+									<LanguageSwitcher />
+								</div>
 							</div>
 						</div>
 					</div>
