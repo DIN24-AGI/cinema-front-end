@@ -1,13 +1,15 @@
 // src/pages/ManageHalls/HallDetails.tsx
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import type { Hall } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
 
 const HallDetails: React.FC = () => {
 	const { t } = useTranslation();
-	const { hallUid } = useParams<{ hallUid: string }>();
+	const { hallUid: paramHallUid } = useParams<{ hallUid: string }>();
+	const loc = useLocation();
+	const hallUid = paramHallUid || (loc.state as any)?.hallUid;
 	const nav = useNavigate();
 	const [hall, setHall] = useState<Hall | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -18,24 +20,32 @@ const HallDetails: React.FC = () => {
 	const token = localStorage.getItem("token");
 
 	useEffect(() => {
-		if (!hallUid) return;
-		(async () => {
-			setLoading(true);
-			try {
-				const res = await fetch(API_ENDPOINTS.hallDetails(hallUid), {
-					headers: { Authorization: `Bearer ${token}` },
-				});
-				if (!res.ok) throw new Error("Failed to load hall");
-				const data = await res.json();
-				setHall(data);
-				setName(data.name);
-				setSeats(data.seats);
-			} catch (err) {
-				console.error(err);
-			} finally {
-				setLoading(false);
-			}
-		})();
+    if (!hallUid) {
+        console.error("No hall UID provided!");
+        return;
+    }
+		console.log("Fetching hall with UID:", hallUid);
+
+    const fetchHall = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(API_ENDPOINTS.hallDetails(hallUid), {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error("Failed to load hall");
+            const data = await res.json();
+						console.log(data)
+            setHall(data);
+            setName(data.name);
+            setSeats(data.seats);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchHall();
 	}, [hallUid]);
 
 	const handleSave = async () => {

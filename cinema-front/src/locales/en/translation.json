@@ -49,7 +49,9 @@
 		"noCinemas": "No cinemas found.",
 		"city": "City",
 		"noHallsAdded": "No halls added",
-		"editCinema": "Edit Cinema"
+		"editCinema": "Edit Cinema",
+		"cityCannotBeChanged": "City cannot be changed after cinema creation."
+
 	},
 	"changePassword": {
 		"title": "Change Password",

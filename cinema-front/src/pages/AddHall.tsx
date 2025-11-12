@@ -15,6 +15,11 @@ const AddHall: React.FC = () => {
 	const [seats, setSeats] = useState<number>(50);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
+	const [rows, setRows] = useState<number>(5);
+	const seatsPerRow = 10;
+	const cols = Math.ceil(seats / rows);
+
+
 
 	const token = localStorage.getItem("token");
 
@@ -24,12 +29,21 @@ const AddHall: React.FC = () => {
 			setError("No cinema selected");
 			return;
 		}
+		if (rows < 1 || seats < 1) {
+    	setError("Rows and total seats must be at least 1");
+    	return;
+  	}
+
 		setLoading(true);
 		try {
 			const res = await fetch(API_ENDPOINTS.addHall, {
 				method: "POST",
 				headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-				body: JSON.stringify({ cinema_uid: cinemaUid, name, seats }),
+				body: JSON.stringify({ 
+					cinema_uid: cinemaUid, 
+					name, 
+					rows,
+					cols }),
 			});
 			if (!res.ok) {
 				const d = await res.json().catch(() => ({}));
@@ -37,7 +51,7 @@ const AddHall: React.FC = () => {
 			}
 			const created: Hall = await res.json();
 			console.log(created);
-			nav("/admin/halls"); // or navigate back to manage halls and refresh
+			nav("/admin/halls");
 		} catch (err: any) {
 			console.error(err);
 			setError(err.message || "Error");
@@ -66,6 +80,18 @@ const AddHall: React.FC = () => {
 						required
 					/>
 				</div>
+				<div className="mb-3">
+					<label className="form-label">{t("halls.rowsNumber")}</label>
+					<input
+						type="number"
+						className="form-control"
+						value={rows}
+						onChange={(e) => setRows(Number(e.target.value))}
+						min={1}
+						required
+					/>
+				</div>
+
 				<div className="d-flex">
 					<button type="submit" className="btn btn-primary" disabled={loading}>
 						{loading ? "Saving..." : t("halls.createHall")}

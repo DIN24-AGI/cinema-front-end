@@ -31,7 +31,6 @@ const ManageHalls: React.FC = () => {
 			} catch (err: any) {
 				console.error(err);
 				setError(err.message || t("halls.genericError"));
-				// added to evoid unused var warning
 				console.log(error);
 			} finally {
 				setLoading(false);
@@ -41,24 +40,29 @@ const ManageHalls: React.FC = () => {
 	}, [t]);
 
 	const onSelectCity = async (city: City) => {
-		setSelectedCity(city);
-		setSelectedCinema(null);
-		setHalls([]);
-		try {
-			setLoading(true);
-			const res = await fetch(API_ENDPOINTS.cinemasByCity(city.uid), {
-				headers: { Authorization: `Bearer ${token()}` },
-			});
-			if (!res.ok) throw new Error(t("halls.errorLoadCinemas"));
-			const data: Cinema[] = await res.json();
-			setCinemas(data);
-		} catch (err: any) {
-			console.error(err);
-			setError(err.message || t("halls.genericError"));
-		} finally {
-			setLoading(false);
-		}
-	};
+	setSelectedCity(city);
+	setSelectedCinema(null);
+	setHalls([]);
+	try {
+		setLoading(true);
+		const res = await fetch(API_ENDPOINTS.cinemasByCity(city.uid), {
+			headers: { Authorization: `Bearer ${token()}` },
+		});
+		if (!res.ok) throw new Error(t("halls.errorLoadCinemas"));
+		const data: Cinema[] = await res.json();
+
+		// Filter cinemas by city UID
+		const filteredCinemas = data.filter(cn => cn.city_uid === city.uid);
+
+		setCinemas(filteredCinemas);
+	} catch (err: any) {
+		console.error(err);
+		setError(err.message || t("halls.genericError"));
+	} finally {
+		setLoading(false);
+	}
+};
+
 
 	const onSelectCinema = async (cinema: Cinema) => {
 		setSelectedCinema(cinema);
@@ -110,6 +114,7 @@ const ManageHalls: React.FC = () => {
 				<h3 style={{ minHeight: 24 }}>
 					{selectedCity ? t("halls.chooseCinema", { city: selectedCity.name }) : "\u00A0"}
 				</h3>
+
 				<div
 					style={{
 						display: "flex",
@@ -119,34 +124,40 @@ const ManageHalls: React.FC = () => {
 						alignItems: cinemas.length === 0 ? "center" : "flex-start",
 					}}
 				>
-					{selectedCity &&
-						cinemas.map((cn) => (
-							<div
-								key={cn.uid}
-								onClick={() => onSelectCinema(cn)}
-								style={{
-									padding: 12,
-									width: 180,
-									borderRadius: 8,
-									border: selectedCinema?.uid === cn.uid ? "2px solid #0d6efd" : "1px solid #ddd",
-									background: "#fff",
-									cursor: "pointer",
-									boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-									transition: "border-color .15s",
-								}}
-							>
-								<strong style={{ fontSize: 14 }}>{cn.name}</strong>
-								<div style={{ fontSize: 11, color: "#666" }}>{cn.address}</div>
-							</div>
-						))}
-
-					{selectedCity && cinemas.length === 0 && !loading && (
-						<div style={{ color: "#666" }}>{t("halls.noCinemas")}</div>
-					)}
-
-					{selectedCity && loading && cinemas.length === 0 && <div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>}
+					{selectedCity ? (
+						cinemas.length > 0 ? (
+							// Show cinema cards
+							cinemas.map((cn) => (
+								<div
+									key={cn.uid}
+									onClick={() => onSelectCinema(cn)}
+									style={{
+										padding: 12,
+										width: 180,
+										borderRadius: 8,
+										border: selectedCinema?.uid === cn.uid ? "2px solid #0d6efd" : "1px solid #ddd",
+										background: "#fff",
+										cursor: "pointer",
+										boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+										transition: "border-color .15s",
+									}}
+								>
+									<strong style={{ fontSize: 14 }}>{cn.name}</strong>
+									<div style={{ fontSize: 11, color: "#666" }}>{cn.address}</div>
+								</div>
+							))
+						) : !loading ? (
+							// Show "no cinemas" message only if a city is selected and not loading
+							<div style={{ color: "#666" }}>No cinemas in {selectedCity.name} yet</div>
+						) : (
+							// Loading indicator while fetching
+							<div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>
+						)
+					) : null /* No message if no city is selected */}
 				</div>
 			</section>
+
+
 
 			{/* Halls area kept mounted */}
 			<section style={{ marginTop: 24 }}>
@@ -172,63 +183,95 @@ const ManageHalls: React.FC = () => {
 						gap: 12,
 					}}
 				>
-					{selectedCinema &&
-						halls.map((h) => (
-							<div
-								key={h.uid}
-								style={{
-									border: "1px solid #e2e2e2",
-									borderRadius: 6,
-									padding: "10px 12px",
-									background: "#fff",
-									display: "flex",
-									justifyContent: "space-between",
-									alignItems: "center",
-								}}
-							>
-								<div>
-									<strong>{h.name}</strong>
-									<div style={{ fontSize: 12, color: "#666" }}>
-										{(h as any).seats ? t("halls.seats", { count: (h as any).seats }) : ""}
-										{" • "}
-										{(h as any).active ? t("halls.active") : t("halls.inactive")}
-									</div>
-								</div>
-								<div style={{ display: "flex", gap: 8 }}>
-									<button
-										className="btn btn-sm btn-outline-secondary"
-										onClick={() => navigate(`/admin/halls/${h.uid}`)}
-									>
-										{t("halls.view")}
-									</button>
-									<button
-										className="btn btn-sm btn-outline-danger"
-										onClick={async () => {
-											if (!confirm(t("halls.deleteConfirm"))) return;
-											try {
-												const res = await fetch(API_ENDPOINTS.hallDetails(h.uid), {
-													method: "DELETE",
-													headers: {
-														Authorization: `Bearer ${token()}`,
-														"Content-Type": "application/json",
-													},
-												});
-												if (!res.ok) throw new Error(t("halls.deleteFailed"));
-												setHalls((prev) => prev.filter((x) => x.uid !== h.uid));
-											} catch (err) {
-												console.error(err);
-												alert(t("halls.deleteFailed"));
-											}
-										}}
-									>
-										{t("halls.delete")}
-									</button>
-								</div>
-							</div>
-						))}
+{selectedCinema &&
+  halls.map((h) => (
+    <div
+      key={h.uid}
+      style={{
+        border: "1px solid #e2e2e2",
+        borderRadius: 6,
+        padding: "10px 12px",
+        background: "#fff",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <div>
+        <strong>{h.name}</strong>
+        <div style={{ fontSize: 12, color: "#666" }}>
+          {h.seats ? t("halls.seats", { count: h.seats }) : ""}
+          {" • "}
+          {h.active ? t("halls.active") : t("halls.inactive")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8 }}>
+        {/* Toggle button */}
+        <button
+          className={`btn btn-sm ${h.active ? "btn-outline-danger" : "btn-outline-success"}`}
+          onClick={async () => {
+            const newStatus = !h.active;
+            try {
+              const res = await fetch(`${API_ENDPOINTS.hallDetails(h.uid)}/activate`, {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token()}`,
+                },
+                body: JSON.stringify({ active: newStatus }),
+              });
+              if (!res.ok) throw new Error(t("halls.toggleFailed"));
+
+              setHalls((prev) =>
+                prev.map((hall) => (hall.uid === h.uid ? { ...hall, active: newStatus } : hall))
+              );
+            } catch (err) {
+              console.error(err);
+              alert(t("halls.toggleFailed"));
+            }
+          }}
+        >
+          {h.active ? t("Deactivate") : t("Activate")}
+        </button>
+
+        {/* View / Delete buttons */}
+        <button
+          className="btn btn-sm btn-outline-secondary"
+          onClick={() => navigate(`/admin/halls/${h.uid}`)}
+        >
+          {t("halls.view")}
+        </button>
+        <button
+          className="btn btn-sm btn-outline-danger"
+          onClick={async () => {
+            if (!confirm(t("halls.deleteConfirm"))) return;
+            try {
+              const res = await fetch(API_ENDPOINTS.hallDetails(h.uid), {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${token()}`,
+                  "Content-Type": "application/json",
+                },
+              });
+              if (!res.ok) throw new Error(t("halls.deleteFailed"));
+              setHalls((prev) => prev.filter((x) => x.uid !== h.uid));
+            } catch (err) {
+              console.error(err);
+              alert(t("halls.deleteFailed"));
+            }
+          }}
+        >
+          {t("halls.delete")}
+        </button>
+      </div>
+    </div>
+  ))
+}
+
 
 					{selectedCinema && halls.length === 0 && !loading && (
-						<div style={{ color: "#666" }}>{t("halls.noHalls")}</div>
+						<div style={{ color: "rgba(102, 102, 102, 1)" }}>{t("halls.noHalls")}</div>
 					)}
 
 					{selectedCinema && loading && halls.length === 0 && <div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>}

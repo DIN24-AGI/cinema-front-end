@@ -49,7 +49,8 @@
 		"noCinemas": "Ei teattereita.",
 		"city": "Kaupunki",
 		"noHallsAdded": "Ei saleja lisätty",
-		"editCinema": "Muokkaa teatteria"
+		"editCinema": "Muokkaa teatteria",
+		"cityCannotBeChanged": "Kaupunkia ei voi muuttaa elokuvateatterin luonnin jälkeen."
 	},
 	"changePassword": {
 		"title": "Vaihda salasana",
