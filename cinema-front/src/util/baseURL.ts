@@ -12,4 +12,6 @@ export const API_ENDPOINTS = {
   hallsByCinema: (cinemaUid: string) => `${API_BASE_URL}/admin/halls/${cinemaUid}`,
   addHall: `${API_BASE_URL}/admin/halls`,
   hallDetails: (hallUid: string) => `${API_BASE_URL}/admin/hall/${hallUid}`, 
+  halls: `${API_BASE_URL}/admin/halls`,
+
 };

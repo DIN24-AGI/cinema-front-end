@@ -93,7 +93,10 @@
 		"createHall": "Luo sali",
 		"hallDetails": "Sali tiedot",
 		"rowsNumber": "Rivien määrä",
-		"colNumber": "Sarakkeiden määrä"
+		"colNumber": "Sarakkeiden määrä",
+		"deleteHall": "Poista sali",
+		"editHall": "Muokkaa halli",
+		"updateHall": "Päivittää salia"
 	},
 	"cinemaCard": {
 		"address": "Osoite",

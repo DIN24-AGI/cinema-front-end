@@ -9,14 +9,16 @@ const AddHall: React.FC = () => {
 	const { t } = useTranslation();
 	const nav = useNavigate();
 	const loc = useLocation();
-	const cinemaUid = (loc.state as any)?.cinemaUid as string | undefined;
 
-	const [name, setName] = useState("");
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const [rows, setRows] = useState<number>(0);
-	const [cols, setCols] = useState<number>(0)
+	const existingHall = (loc.state as any)?.hall as Hall | undefined;
+  const cinemaUidFromState = (loc.state as any)?.cinemaUid as string | undefined;
 
+  const [name, setName] = useState(existingHall?.name || "");
+  const [rows, setRows] = useState<number>(existingHall?.rows || 0);
+  const [cols, setCols] = useState<number>(existingHall?.cols || 0);
+  const [cinemaUid, setCinemaUid] = useState<string>(existingHall?.cinema_uid || cinemaUidFromState || "");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
 
 	const token = localStorage.getItem("token");
@@ -31,42 +33,53 @@ const AddHall: React.FC = () => {
     	setError("Rows and columns must be at least 1");
     	return;
   	}
-
 		setLoading(true);
-		try {
-			const res = await fetch(API_ENDPOINTS.addHall, {
-				method: "POST",
-				headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-				body: JSON.stringify({ 
-					cinema_uid: cinemaUid, 
-					name, 
-					rows,
-					cols }),
-			});
-			if (!res.ok) {
-				const d = await res.json().catch(() => ({}));
-				throw new Error(d.msg || "Failed to create hall");
-			}
-			const created: Hall = await res.json();
-			console.log(created);
-			nav("/admin/halls");
-		} catch (err: any) {
-			console.error(err);
-			setError(err.message || "Error");
-		} finally {
-			setLoading(false);
-		}
-	};
+
+   try {
+      const body = { cinema_uid: cinemaUid, name, rows, cols };
+
+      const url = existingHall 
+        ? `${API_ENDPOINTS.hallDetails(existingHall.uid)}` 
+        : API_ENDPOINTS.addHall;
+
+      const method = existingHall ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.msg || (existingHall ? "Failed to update hall" : "Failed to create hall"));
+      }
+
+      const savedHall: Hall = await res.json();
+      console.log("Saved hall:", savedHall);
+
+      nav("/admin/halls", { replace: true });
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 	return (
 		<div className="container mt-4">
-			<h2 className="mb-4">{t("halls.addHall")}</h2>
+      <h2 className="mb-4">{existingHall ? t("halls.editHall") : t("halls.addHall")}</h2>
+
 			{error && <div className="alert alert-danger">{error}</div>}
+
 			<form onSubmit={handleSubmit} className="card p-4 shadow-sm">
+
 				<div className="mb-3">
 					<label className="form-label">{t("halls.name")}</label>
 					<input className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
 				</div>
+
 				<div className="mb-3">
 					<label className="form-label">{t("halls.colNumber")}</label>
 					<input
@@ -89,10 +102,10 @@ const AddHall: React.FC = () => {
 						required
 					/>
 				</div>
-
+				
 				<div className="d-flex">
 					<button type="submit" className="btn btn-primary" disabled={loading}>
-						{loading ? "Saving..." : t("halls.createHall")}
+						{loading ? t("util.saving") : existingHall ?  t("halls.updateHall") : t("halls.createHall")}
 					</button>
 					<button type="button" className="btn btn-secondary ms-2" onClick={() => nav(-1)}>
 						{t("util.cancel")}

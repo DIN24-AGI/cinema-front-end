@@ -81,6 +81,30 @@ const ManageHalls: React.FC = () => {
 			setLoading(false);
 		}
 	};
+const handleToggleActive = async (h: Hall) => {
+  const newStatus = !h.active;
+  try {
+    const res = await fetch(`${API_ENDPOINTS.halls}/${h.uid}/activate`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token()}`,
+      },
+      body: JSON.stringify({ active: newStatus }),
+    });
+
+    if (!res.ok) throw new Error(t("halls.toggleFailed"));
+
+    setHalls(prev =>
+      prev.map(hall => (hall.uid === h.uid ? { ...hall, active: newStatus } : hall))
+    );
+  } catch (err) {
+    console.error(err);
+    alert(t("halls.toggleFailed"));
+  }
+};
+
+        
 
 	return (
 		<div style={{ paddingBottom: 40 }}>
@@ -200,9 +224,12 @@ const ManageHalls: React.FC = () => {
       <div>
         <strong>{h.name}</strong>
         <div style={{ fontSize: 12, color: "#666" }}>
-          {h.seats ? t("halls.seats", { count: h.seats }) : ""}
+          {h.rows && h.cols ? t("halls.seats", { count: h.rows * h.cols }) : ""}
+
           {" • "}
-          {h.active ? t("halls.active") : t("halls.inactive")}
+          <span className={`badge ${h.active ? "bg-success" : "bg-secondary"}`}>
+                {h.active ? t("util.active") : t("util.inactive")}
+              </span>
         </div>
       </div>
 
@@ -210,27 +237,7 @@ const ManageHalls: React.FC = () => {
         {/* Toggle button */}
         <button
           className={`btn btn-sm ${h.active ? "btn-outline-danger" : "btn-outline-success"}`}
-          onClick={async () => {
-            const newStatus = !h.active;
-            try {
-              const res = await fetch(`${API_ENDPOINTS.hallDetails(h.uid)}/activate`, {
-                method: "PATCH",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token()}`,
-                },
-                body: JSON.stringify({ active: newStatus }),
-              });
-              if (!res.ok) throw new Error(t("halls.toggleFailed"));
-
-              setHalls((prev) =>
-                prev.map((hall) => (hall.uid === h.uid ? { ...hall, active: newStatus } : hall))
-              );
-            } catch (err) {
-              console.error(err);
-              alert(t("halls.toggleFailed"));
-            }
-          }}
+          onClick={()=>handleToggleActive(h)}
         >
           {h.active ? t("Deactivate") : t("Activate")}
         </button>

@@ -94,7 +94,10 @@
 		"createHall": "Create Hall",
 		"hallDetails": "Hall Details",
 		"rowsNumber": "Number Of Rows",
-		"colNumber": "Number Of Columns"
+		"colNumber": "Number Of Columns",
+		"deleteHall": "Delete Hall",
+		"editHall": "Edit Hall",
+		"updateHall": "Update Hall"
 	},
 	"cinemaCard": {
 		"address": "Address",

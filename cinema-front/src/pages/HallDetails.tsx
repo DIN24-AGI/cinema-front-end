@@ -43,7 +43,7 @@ useEffect(() => {
 }, [hallUid]);
 
   const handleEdit = () => {
-    if (hall) navigate(`/admin/halls/edit/${hall.uid}`, { state: { hall } });
+    if (hall) navigate(`/admin/halls/add`, { state: { hall } });
   };
 
   const handleDelete = async () => {
@@ -81,7 +81,7 @@ useEffect(() => {
           </div>
           <div className="row mb-2">
             <div className="col-sm-3 text-muted fw-semibold">{t("halls.seatsNumber")}:</div>
-            <div className="col-sm-9">{hall.seats}</div>
+            <div className="col-sm-9">{hall.rows * hall.cols}</div>
           </div>
           <div className="row mb-3">
             <div className="col-sm-3 text-muted fw-semibold">{t("util.status")}:</div>
