@@ -12,9 +12,11 @@ const CinemaDetails: React.FC = () => {
 	const navigate = useNavigate();
 	const { id: cinema_uid } = useParams<{ id: string }>();
 	const [cinemaData, setCinemaData] = useState<Cinema | null>(null);
+  const [halls, setHalls] = useState<Hall[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const token = localStorage.getItem("token");
+
 
 	useEffect(() => {
 		const fetchCinema = async () => {
@@ -47,6 +49,23 @@ const CinemaDetails: React.FC = () => {
 
 		fetchCinema();
 	}, [cinema_uid]);
+
+  const fetchHalls = async () => {
+  try {
+    const res = await fetch(API_ENDPOINTS.hallsByCinema(cinema_uid), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to fetch halls");
+    const data: Hall[] = await res.json();
+    setHalls(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+useEffect(() => {
+  if (cinema_uid) fetchHalls();
+}, [cinema_uid]);
 
 	const handleEdit = () => {
 		if (cinemaData) {
@@ -109,25 +128,26 @@ const CinemaDetails: React.FC = () => {
 						<div className="col-sm-3 text-muted fw-semibold">{t("cinemas.address")}:</div>
 						<div className="col-sm-9">{cinema.address || "Add the address"}</div>
 					</div>
-					<div className="row mb-3">
+					{/* uncomment when added to the endpoint */}
+					{/* <div className="row mb-3">
 						<div className="col-sm-3 text-muted fw-semibold">{t("cinemas.phone")}:</div>
 						<div className="col-sm-9">{cinema.phone || "Add the phone number"}</div>
-					</div>
+					</div> */}
+        </div>
+          <h5 className="mt-3">{t("cinemas.halls")}</h5>
+          {halls.length > 0 ? (
+            <ul className="list-group">
+              {halls.map((aud: Hall) => (
+                <li key={aud.uid} className="list-group-item d-flex justify-content-between align-items-center">
+                  <span>{aud.name}</span>
+                  <span className="badge text-bg-secondary">{aud.rows * aud.cols} seats</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="alert alert-info mt-2 mb-0">{t("cinemas.noHallsAdded")}</div>
+          )}
 
-					<h5 className="mt-3">{t("cinemas.halls")}</h5>
-					{cinema.halls && cinema.halls.length > 0 ? (
-						<ul className="list-group">
-							{cinema.halls.map((aud: Hall) => (
-								<li key={aud.uid} className="list-group-item d-flex justify-content-between align-items-center">
-									<span>{aud.name}</span>
-									<span className="badge text-bg-secondary">{aud.seats} seats</span>
-								</li>
-							))}
-						</ul>
-					) : (
-						<div className="alert alert-info mt-2 mb-0">{t("cinemas.noHallsAdded")}</div>
-					)}
-				</div>
 
 				<div className="card-footer d-flex gap-2">
 					<button type="button" className="btn btn-outline-secondary" onClick={handleBack}>

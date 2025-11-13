@@ -42,9 +42,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 						<Route
 							path="/admin/change-password"
 							element={
-								<ProtectedResource token={token}>
-									<ChangePassword token={token} setToken={setToken} />
-								</ProtectedResource>
+									<ChangePassword token={token} setToken={setToken}/>
 							}
 						/>
 						<Route
@@ -112,7 +110,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							}
 						/>
 						<Route
-							path="/admin/halls/:hallUid"
+							path="/admin/hall/:hallUid"
 							element={
 								<ProtectedResource token={token}>
 									<HallDetails />

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
-import type { Cinema } from "../types/cinemaTypes";
+import type { Cinema, City } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
 
@@ -13,9 +13,30 @@ const AddCinema: React.FC = () => {
 	const [name, setName] = useState(existingCinema?.name || "");
 	const [address, setAddress] = useState(existingCinema?.address || "");
 	const [phone, setPhone] = useState(existingCinema?.phone || "");
-	const [cityUid, setCityUid] = useState(existingCinema?.cityUid || "");
+	const [cityUid, setCityUid] = useState(existingCinema?.city_uid || "");
+	const [cities, setCities] = useState<City[]>([]);
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	 useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(API_ENDPOINTS.cities, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) throw new Error("Failed to load cities");
+        const data = await res.json();
+        setCities(data);
+      } catch (err) {
+        console.error(err);
+        setError("Could not load cities. Please try again.");
+      }
+    };
+
+    fetchCities();
+  }, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -69,12 +90,25 @@ const AddCinema: React.FC = () => {
 
 			<form onSubmit={handleSubmit}>
 				<div className="mb-3">
-					<label className="form-label">{t("cinemas.city")}</label>
-					<select className="form-select" value={cityUid} onChange={(e) => setCityUid(e.target.value)} required>
-						<option value="">{t("util.selectCity")}</option>
-						<option value="6a86f3e6-117c-47f2-9004-18938dae1214">Helsinki</option>
-					</select>
-				</div>
+          <label className="form-label">{t("cinemas.city")}</label>
+          <select
+            className="form-select"
+            value={cityUid}
+						disabled={!!existingCinema}
+            onChange={(e) => setCityUid(e.target.value)}
+            required
+          >
+            <option value="">{t("util.selectCity")}</option>
+            {cities.map((city) => (
+              <option key={city.uid} value={city.uid}>
+                {city.name}
+              </option>
+            ))}
+          </select>
+					  {existingCinema && (
+    			<small className="text-muted">{t("cinemas.cityCannotBeChanged")}</small>
+  				)}
+        </div>
 				<div className="mb-3">
 					<label className="form-label">{t("cinemas.name")}</label>
 					<input className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -82,13 +116,13 @@ const AddCinema: React.FC = () => {
 
 				<div className="mb-3">
 					<label className="form-label">{t("cinemas.address")}</label>
-					<input className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} />
+					<input className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} required/>
 				</div>
-
-				<div className="mb-3">
+{/* uncomment when added to the endpoint */}
+				{/* <div className="mb-3">
 					<label className="form-label">{t("cinemas.phone")}</label>
-					<input className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
-				</div>
+					<input className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
+				</div> */}
 
 				<button type="submit" className="btn btn-primary" disabled={loading}>
 					{loading ? t("util.saving") : existingCinema ? t("cinemas.updateCinema") : t("cinemas.addCinema")}

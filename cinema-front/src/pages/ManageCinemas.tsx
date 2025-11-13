@@ -3,40 +3,68 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import CinemaCard from "../components/CinemaCard/CinemaCard";
 import { API_ENDPOINTS } from "../util/baseURL";
-import type { Cinema } from "../types/cinemaTypes";
+import type { Cinema, City } from "../types/cinemaTypes";
 import { useTranslation } from "react-i18next";
 
 const ManageCinemas: React.FC = () => {
 	const { t } = useTranslation();
 	const [cinemas, setCinemas] = useState<Cinema[]>([]);
+	const [cities, setCities] = useState<City[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const fetchCinemas = async () => {
-			const token = localStorage.getItem("token");
-			if (!token) return;
-			try {
-				setLoading(true);
-				setError("");
-				const res = await fetch(API_ENDPOINTS.cinemas, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
-					},
-				});
-				if (!res.ok) throw new Error("fetchFailed");
-				const data: Cinema[] = await res.json();
-				setCinemas(data);
-			} catch (e: any) {
-				setError(e.message === "fetchFailed" ? t("cinemas.fetchError") : t("cinemas.genericError"));
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchCinemas();
-	}, [t]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        setLoading(true);
+        setError("");
+
+        const [citiesRes, cinemasRes] = await Promise.all([
+          fetch(`${API_ENDPOINTS.cities}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+          fetch(`${API_ENDPOINTS.cinemas}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ]);
+
+        if (!citiesRes.ok || !cinemasRes.ok) throw new Error("fetchFailed");
+
+        const citiesData: City[] = await citiesRes.json();
+        const cinemasData: Cinema[] = await cinemasRes.json();
+
+    
+        const merged = cinemasData.map((cinema) => {
+          const city = citiesData.find((c) => c.uid === cinema.city_uid);
+          return { ...cinema, city_name: city ? city.name : t("util.unknownCity") };
+        });
+
+        setCities(citiesData);
+        setCinemas(merged);
+      } catch (e: any) {
+        setError(
+          e.message === "fetchFailed"
+            ? t("cinemas.fetchError")
+            : t("cinemas.genericError")
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [t]);
+
 
 	const handleToggleActive = async (cinemaId: string, currentState: boolean) => {
 		try {
@@ -91,9 +119,10 @@ const ManageCinemas: React.FC = () => {
 						<CinemaCard
 							id={cinema.uid}
 							name={cinema.name}
+							city={cinema.city_name}
 							address={cinema.address}
-							phone={cinema.phone}
-							hallsCount={cinema.halls?.length || 0}
+							/* uncomment when added to the endpoint */
+							// phone={cinema.phone}
 							active={cinema.active}
 							onToggleActive={() => handleToggleActive(cinema.uid, cinema.active)}
 							onViewDetails={() => handleViewDetails(cinema)}

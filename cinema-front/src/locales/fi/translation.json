@@ -49,7 +49,8 @@
 		"noCinemas": "Ei teattereita.",
 		"city": "Kaupunki",
 		"noHallsAdded": "Ei saleja lisätty",
-		"editCinema": "Muokkaa teatteria"
+		"editCinema": "Muokkaa teatteria",
+		"cityCannotBeChanged": "Kaupunkia ei voi muuttaa elokuvateatterin luonnin jälkeen."
 	},
 	"changePassword": {
 		"title": "Vaihda salasana",
@@ -90,12 +91,19 @@
 		"errorLoadHalls": "Salien lataus epäonnistui",
 		"genericError": "Virhe",
 		"createHall": "Luo sali",
-		"hallDetails": "Sali tiedot"
+		"hallDetails": "Sali tiedot",
+		"rowsNumber": "Rivien määrä",
+		"colNumber": "Sarakkeiden määrä",
+		"deleteHall": "Poista sali",
+		"editHall": "Muokkaa halli",
+		"updateHall": "Päivittää salia"
 	},
 	"cinemaCard": {
 		"address": "Osoite",
 		"Phone": "Puhelin",
-		"halls": "Salit"
+		"halls": "Salit",
+		"city": "Kaupunki"
+
 	},
 	"util": {
 		"load": "Lataa",
