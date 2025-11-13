@@ -92,12 +92,15 @@
 		"errorLoadHalls": "Failed to load halls",
 		"genericError": "Error",
 		"createHall": "Create Hall",
-		"hallDetails": "Hall Details"
+		"hallDetails": "Hall Details",
+		"rowsNumber": "Number Of Rows",
+		"colNumber": "Number Of Columns"
 	},
 	"cinemaCard": {
 		"address": "Address",
 		"Phone": "Phone",
-		"halls": "Halls"
+		"halls": "Halls",
+		"city": "City"
 	},
 	"util": {
 		"load": "Load",

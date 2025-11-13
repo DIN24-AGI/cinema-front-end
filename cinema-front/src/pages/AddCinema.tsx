@@ -116,13 +116,13 @@ const AddCinema: React.FC = () => {
 
 				<div className="mb-3">
 					<label className="form-label">{t("cinemas.address")}</label>
-					<input className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} />
+					<input className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} required/>
 				</div>
-
-				<div className="mb-3">
+{/* uncomment when added to the endpoint */}
+				{/* <div className="mb-3">
 					<label className="form-label">{t("cinemas.phone")}</label>
-					<input className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
-				</div>
+					<input className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
+				</div> */}
 
 				<button type="submit" className="btn btn-primary" disabled={loading}>
 					{loading ? t("util.saving") : existingCinema ? t("cinemas.updateCinema") : t("cinemas.addCinema")}

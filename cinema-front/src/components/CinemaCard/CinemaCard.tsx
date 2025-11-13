@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 interface CinemaCardProps {
 	id: string;
 	name: string;
+	city: string;
 	address: string;
-	phone: string;
-	hallsCount: number;
+	// phone: string;
 	active: boolean;
 	onToggleActive: (id: string, active: boolean) => void;
 	onViewDetails: (id: string) => void;
@@ -15,9 +15,9 @@ interface CinemaCardProps {
 const CinemaCard: React.FC<CinemaCardProps> = ({
 	id,
 	name,
+	city,
 	address,
 	phone,
-	hallsCount,
 	active,
 	onToggleActive,
 	onViewDetails,
@@ -34,17 +34,19 @@ const CinemaCard: React.FC<CinemaCardProps> = ({
 				</h5>
 				<ul className="list-group list-group-flush mb-3">
 					<li className="list-group-item px-0">
+            <strong>{t("cinemaCard.city")}: </strong>{city}
+          </li>
+					<li className="list-group-item px-0">
 						<strong>{t("cinemaCard.address")}: </strong>
 						{address}
 					</li>
-					<li className="list-group-item px-0">
+					{/* uncomment when added to the endpoint */}
+
+					{/* <li className="list-group-item px-0">
 						<strong>{t("cinemaCard.Phone")}: </strong>
 						{phone}
-					</li>
-					<li className="list-group-item px-0">
-						<strong>{t("cinemaCard.halls")}: </strong>
-						{hallsCount}
-					</li>
+					</li> */}
+
 				</ul>
 				<div className="d-flex gap-2">
 					<button type="button" className="btn btn-outline-primary btn-sm" onClick={() => onViewDetails(id)}>

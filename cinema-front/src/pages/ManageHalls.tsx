@@ -238,7 +238,7 @@ const ManageHalls: React.FC = () => {
         {/* View / Delete buttons */}
         <button
           className="btn btn-sm btn-outline-secondary"
-          onClick={() => navigate(`/admin/halls/${h.uid}`)}
+          onClick={() => navigate(`/admin/hall/${h.uid}`, { state: { h } })}
         >
           {t("halls.view")}
         </button>

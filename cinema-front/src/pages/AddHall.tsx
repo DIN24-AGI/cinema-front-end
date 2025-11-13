@@ -12,12 +12,10 @@ const AddHall: React.FC = () => {
 	const cinemaUid = (loc.state as any)?.cinemaUid as string | undefined;
 
 	const [name, setName] = useState("");
-	const [seats, setSeats] = useState<number>(50);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
-	const [rows, setRows] = useState<number>(5);
-	const seatsPerRow = 10;
-	const cols = Math.ceil(seats / rows);
+	const [rows, setRows] = useState<number>(0);
+	const [cols, setCols] = useState<number>(0)
 
 
 
@@ -29,8 +27,8 @@ const AddHall: React.FC = () => {
 			setError("No cinema selected");
 			return;
 		}
-		if (rows < 1 || seats < 1) {
-    	setError("Rows and total seats must be at least 1");
+		if (rows < 1 || cols < 1) {
+    	setError("Rows and columns must be at least 1");
     	return;
   	}
 
@@ -70,12 +68,12 @@ const AddHall: React.FC = () => {
 					<input className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
 				</div>
 				<div className="mb-3">
-					<label className="form-label">{t("halls.seatsNumber")}</label>
+					<label className="form-label">{t("halls.colNumber")}</label>
 					<input
 						type="number"
 						className="form-control"
-						value={seats}
-						onChange={(e) => setSeats(Number(e.target.value))}
+						value={cols}
+						onChange={(e) => setCols(Number(e.target.value))}
 						min={1}
 						required
 					/>
