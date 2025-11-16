@@ -3,7 +3,7 @@
 // - Provides search functionality to filter by title
 // - Read-only view without admin controls
 import { useEffect, useState, useMemo } from "react";
-import MovieCard from "../components/Movie";
+import MovieCard from "../components/MovieCard";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINTS } from "../util/baseURL";
 import type { MovieItem } from "../types/cinemaTypes";

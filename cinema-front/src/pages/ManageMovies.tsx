@@ -4,7 +4,7 @@
 // - Supports edit, delete, and activate/deactivate actions per movie
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router";
-import MovieCard from "../components/Movie.tsx";
+import MovieCard from "../components/MovieCard.tsx";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINTS } from "../util/baseURL";
 import type { MovieItem } from "../types/cinemaTypes.ts";
