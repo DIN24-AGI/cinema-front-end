@@ -110,7 +110,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
                 {t("nav.data")}
               </NavLink>
             </li>
-            {/* <li className="nav-item">
+            <li className="nav-item">
               <NavLink
                 to="/movie-list"
                 className={({ isActive }) =>
@@ -120,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
               >
                 {t("nav.movieList")}
               </NavLink>
-            </li> */}
+            </li>
             <li className="nav-item">
               <NavLink
                 to="/admin/change-password"
