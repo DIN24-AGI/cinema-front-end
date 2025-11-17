@@ -13,5 +13,6 @@ export const API_ENDPOINTS = {
   addHall: `${API_BASE_URL}/admin/halls`,
   hallDetails: (hallUid: string) => `${API_BASE_URL}/admin/hall/${hallUid}`, 
   halls: `${API_BASE_URL}/admin/halls`,
+  movies: `${API_BASE_URL}/admin/movies`,
 
 };
