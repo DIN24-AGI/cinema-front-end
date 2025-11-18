@@ -98,7 +98,7 @@
     "manageTitle": "Hallitse saleja",
     "name": "Nimi",
     "chooseCity": "Valitse kaupunki",
-    "chooseCinema": "Valitse teatteri kaupungissa: {{city}}",
+    "chooseCinema": "Valitse teatteri",
     "titleForCinema": "Salit teatterissa {{cinema}}",
     "addHall": "Lisää sali",
     "noHalls": "Ei saleja",

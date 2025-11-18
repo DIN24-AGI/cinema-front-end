@@ -10,7 +10,6 @@ const ManageHalls: React.FC = () => {
 	const [cities, setCities] = useState<City[]>([]);
 	const [cinemas, setCinemas] = useState<Cinema[]>([]);
 	const [halls, setHalls] = useState<Hall[]>([]);
-	const [selectedCity, setSelectedCity] = useState<City | null>(null);
 	const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(""); //unused
@@ -18,69 +17,58 @@ const ManageHalls: React.FC = () => {
 
 	const token = () => localStorage.getItem("token");
 
-	useEffect(() => {
-		const fetchCities = async () => {
-			try {
-				setLoading(true);
-				const res = await fetch(API_ENDPOINTS.cities, {
-					headers: { Authorization: `Bearer ${token()}` },
-				});
-				if (!res.ok) throw new Error(t("halls.errorLoadCities"));
-				const data: City[] = await res.json();
-				setCities(data);
-			} catch (err: any) {
-				console.error(err);
-				setError(err.message || t("halls.genericError"));
-				console.log(error);
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchCities();
-	}, [t]);
+	  // Fetch cities + cinemas once
+  useEffect(() => {
+    const fetchEverything = async () => {
+      try {
+        setLoading(true);
+        const tok = token();
 
-	const onSelectCity = async (city: City) => {
-	setSelectedCity(city);
-	setSelectedCinema(null);
-	setHalls([]);
-	try {
-		setLoading(true);
-		const res = await fetch(API_ENDPOINTS.cinemasByCity(city.uid), {
-			headers: { Authorization: `Bearer ${token()}` },
-		});
-		if (!res.ok) throw new Error(t("halls.errorLoadCinemas"));
-		const data: Cinema[] = await res.json();
+        const [citiesRes, cinemasRes] = await Promise.all([
+          fetch(API_ENDPOINTS.cities, { headers: { Authorization: `Bearer ${tok}` } }),
+          fetch(API_ENDPOINTS.cinemas, { headers: { Authorization: `Bearer ${tok}` } }),
+        ]);
 
-		// Filter cinemas by city UID
-		const filteredCinemas = data.filter(cn => cn.city_uid === city.uid);
+        if (!citiesRes.ok) throw new Error("Failed to load cities");
+        if (!cinemasRes.ok) throw new Error(t("cinemas.errorLoadCities"));
 
-		setCinemas(filteredCinemas);
-	} catch (err: any) {
-		console.error(err);
-		setError(err.message || t("halls.genericError"));
-	} finally {
-		setLoading(false);
-	}
+        const cityData: City[] = await citiesRes.json();
+        const cinemaData: Cinema[] = await cinemasRes.json();
+        setCities(cityData);
+        setCinemas(cinemaData);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || t("cinemas.genericError"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEverything();
+  }, [t]);
+
+
+
+const onSelectCinema = async (cinema: Cinema) => {
+  setSelectedCinema(cinema);
+  setHalls([]);
+  try {
+    setLoading(true);
+    const res = await fetch(API_ENDPOINTS.hallsByCinema(cinema.uid), {
+      headers: { Authorization: `Bearer ${token()}` },
+    });
+    if (!res.ok) throw new Error(t("halls.errorLoadHalls"));
+    const data: Hall[] = await res.json();
+    setHalls(data);
+  } catch (err: any) {
+    console.error(err);
+    setError(err.message || t("halls.genericError"));
+  } finally {
+    setLoading(false);
+  }
 };
 
 
-	const onSelectCinema = async (cinema: Cinema) => {
-		setSelectedCinema(cinema);
-		try {
-			setLoading(true);
-			const res = await fetch(API_ENDPOINTS.hallsByCinema(cinema.uid), {
-				headers: { Authorization: `Bearer ${token()}` },
-			});
-			if (!res.ok) throw new Error(t("halls.errorLoadHalls"));
-			const data: Hall[] = await res.json();
-			setHalls(data);
-		} catch (err: any) {
-			console.error(err);
-			setError(err.message || t("halls.genericError"));
-		} finally {
-			setLoading(false);
-		}
-	};
 const handleToggleActive = async (h: Hall) => {
   const newStatus = !h.active;
   try {
@@ -111,33 +99,12 @@ const handleToggleActive = async (h: Hall) => {
 			<h2>{t("halls.manageTitle")}</h2>
 
 			<section style={{ marginTop: 16 }}>
-				<h3>{t("halls.chooseCity")}</h3>
-				<div style={{ display: "flex", gap: 12, flexWrap: "wrap", minHeight: 70 }}>
-					{cities.map((c) => (
-						<button
-							key={c.uid}
-							onClick={() => onSelectCity(c)}
-							style={{
-								padding: "8px 14px",
-								borderRadius: 8,
-								border: selectedCity?.uid === c.uid ? "2px solid #0d6efd" : "1px solid #ccc",
-								background: "#fff",
-								cursor: "pointer",
-								transition: "border-color .15s",
-							}}
-						>
-							{c.name}
-						</button>
-					))}
-					{loading && cities.length === 0 && <div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>}
-				</div>
+				<h3>{t("halls.chooseCinema")}</h3>
+				
 			</section>
 
 			{/* Cinema selection area kept mounted to prevent jump */}
-			<section style={{ marginTop: 24 }}>
-				<h3 style={{ minHeight: 24 }}>
-					{selectedCity ? t("halls.chooseCinema", { city: selectedCity.name }) : "\u00A0"}
-				</h3>
+			<section>	
 
 				<div
 					style={{
@@ -148,36 +115,43 @@ const handleToggleActive = async (h: Hall) => {
 						alignItems: cinemas.length === 0 ? "center" : "flex-start",
 					}}
 				>
-					{selectedCity ? (
+					{ (
 						cinemas.length > 0 ? (
 							// Show cinema cards
 							cinemas.map((cn) => (
-								<div
-									key={cn.uid}
-									onClick={() => onSelectCinema(cn)}
-									style={{
-										padding: 12,
-										width: 180,
-										borderRadius: 8,
-										border: selectedCinema?.uid === cn.uid ? "2px solid #0d6efd" : "1px solid #ddd",
-										background: "#fff",
-										cursor: "pointer",
-										boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-										transition: "border-color .15s",
-									}}
-								>
-									<strong style={{ fontSize: 14 }}>{cn.name}</strong>
-									<div style={{ fontSize: 11, color: "#666" }}>{cn.address}</div>
+							<div
+								key={cn.uid}
+								onClick={() => onSelectCinema(cn)}
+								style={{
+									padding: 12,
+									width: 180,
+									borderRadius: 8,
+									border: selectedCinema?.uid === cn.uid ? "2px solid #0d6efd" : "1px solid #ddd",
+									background: "#fff",
+									cursor: "pointer",
+									boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+									transition: "border-color .15s",
+								}}
+							>
+
+								{/* CITY NAME */}
+								<div style={{ fontSize: 12, color: "#999", marginBottom: 4 }}>
+									{cities.find(c => c.uid === cn.city_uid)?.name || ""}
 								</div>
+
+								<strong style={{ fontSize: 14 }}>{cn.name}</strong>
+								<div style={{ fontSize: 11, color: "#666" }}>{cn.address}</div>
+							</div>
+
 							))
 						) : !loading ? (
 							// Show "no cinemas" message only if a city is selected and not loading
-							<div style={{ color: "#666" }}>No cinemas in {selectedCity.name} yet</div>
+							<div style={{ color: "#666" }}>No cinemas in  yet</div>
 						) : (
 							// Loading indicator while fetching
 							<div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>
 						)
-					) : null /* No message if no city is selected */}
+					)/* No message if no city is selected */}
 				</div>
 			</section>
 
@@ -285,7 +259,7 @@ const handleToggleActive = async (h: Hall) => {
 				</div>
 			</section>
 		</div>
-	);
-};
+	);}
+
 
 export default ManageHalls;
