@@ -4,6 +4,7 @@ import { useNavigate, useParams, useLocation } from "react-router";
 import type { Hall } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
+import MonthView from "../components/MonthView";
 
 const HallDetails: React.FC = () => {
   const { t } = useTranslation();
@@ -104,6 +105,8 @@ useEffect(() => {
           </button>
         </div>
       </div>
+      <MonthView hallUid={hall.uid} month="2025-11" />
+
     </div>
   );
 };

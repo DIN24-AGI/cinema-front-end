@@ -112,7 +112,9 @@ const AddHall: React.FC = () => {
 					</button>
 				</div>
 			</form>
+			
 		</div>
+
 	);
 };
 
