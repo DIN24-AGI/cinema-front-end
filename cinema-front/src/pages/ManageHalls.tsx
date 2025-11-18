@@ -93,10 +93,23 @@ const handleToggleActive = async (hall: Hall) => {
     alert(t("halls.toggleFailed"));
   }
 };
-
-
-
-        
+const handleDelete = async (hall: Hall) => {
+            if (!confirm(t("halls.deleteConfirm"))) return;
+            try {
+              const res = await fetch(API_ENDPOINTS.hallDetails(hall.uid), {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${token()}`,
+                  "Content-Type": "application/json",
+                },
+              });
+              if (!res.ok) throw new Error(t("halls.deleteFailed"));
+              setHalls((prev) => prev.filter((x) => x.uid !== hall.uid));
+            } catch (err) {
+              console.error(err);
+              alert(t("halls.deleteFailed"));
+            }
+          }
 
 	return (
 		<div style={{ paddingBottom: 40 }}>
@@ -234,23 +247,7 @@ const handleToggleActive = async (hall: Hall) => {
 					</button>
         <button
           className="btn btn-sm btn-outline-danger"
-          onClick={async () => {
-            if (!confirm(t("halls.deleteConfirm"))) return;
-            try {
-              const res = await fetch(API_ENDPOINTS.hallDetails(hall.uid), {
-                method: "DELETE",
-                headers: {
-                  Authorization: `Bearer ${token()}`,
-                  "Content-Type": "application/json",
-                },
-              });
-              if (!res.ok) throw new Error(t("halls.deleteFailed"));
-              setHalls((prev) => prev.filter((x) => x.uid !== hall.uid));
-            } catch (err) {
-              console.error(err);
-              alert(t("halls.deleteFailed"));
-            }
-          }}
+          onClick={()=>handleDelete(hall)}
         >
           {t("halls.delete")}
         </button>
