@@ -60,19 +60,19 @@ const onSelectCinema = async (cinema: Cinema) => {
     if (!res.ok) throw new Error(t("halls.errorLoadHalls"));
     const data: Hall[] = await res.json();
     setHalls(data);
-  } catch (err: any) {
-    console.error(err);
-    setError(err.message || t("halls.genericError"));
+  } catch (error) {
+    console.error(error);
+    setError(error.message || t("halls.genericError"));
   } finally {
     setLoading(false);
   }
 };
 
 
-const handleToggleActive = async (h: Hall) => {
-  const newStatus = !h.active;
+const handleToggleActive = async (hall: Hall) => {
+  const newStatus = !hall.active;
   try {
-    const res = await fetch(`${API_ENDPOINTS.halls}/${h.uid}/activate`, {
+    const res = await fetch(`${API_ENDPOINTS.halls}/${hall.uid}/activate`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -80,17 +80,21 @@ const handleToggleActive = async (h: Hall) => {
       },
       body: JSON.stringify({ active: newStatus }),
     });
+		const data = await res.json();
+		console.log(data);
 
     if (!res.ok) throw new Error(t("halls.toggleFailed"));
 
     setHalls(prev =>
-      prev.map(hall => (hall.uid === h.uid ? { ...hall, active: newStatus } : hall))
+      prev.map(h => (h.uid === hall.uid ? { ...h, active: newStatus } : h))
     );
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     alert(t("halls.toggleFailed"));
   }
 };
+
+
 
         
 
@@ -182,9 +186,9 @@ const handleToggleActive = async (h: Hall) => {
 					}}
 				>
 {selectedCinema &&
-  halls.map((h) => (
+  halls.map((hall) => (
     <div
-      key={h.uid}
+      key={hall.uid}
       style={{
         border: "1px solid #e2e2e2",
         borderRadius: 6,
@@ -196,13 +200,13 @@ const handleToggleActive = async (h: Hall) => {
       }}
     >
       <div>
-        <strong>{h.name}</strong>
+        <strong>{hall.name}</strong>
         <div style={{ fontSize: 12, color: "#666" }}>
-          {h.rows && h.cols ? t("halls.seats", { count: h.rows * h.cols }) : ""}
+          {hall.rows && hall.cols ? t("halls.seats", { count: hall.rows * hall.cols }) : ""}
 
           {" • "}
-          <span className={`badge ${h.active ? "bg-success" : "bg-secondary"}`}>
-                {h.active ? t("util.active") : t("util.inactive")}
+          <span className={`badge ${hall.active ? "bg-success" : "bg-secondary"}`}>
+                {hall.active ? t("util.active") : t("util.inactive")}
               </span>
         </div>
       </div>
@@ -210,25 +214,30 @@ const handleToggleActive = async (h: Hall) => {
       <div style={{ display: "flex", gap: 8 }}>
         {/* Toggle button */}
         <button
-          className={`btn btn-sm ${h.active ? "btn-outline-danger" : "btn-outline-success"}`}
-          onClick={()=>handleToggleActive(h)}
+          className={`btn btn-sm ${hall.active ? "btn-outline-danger" : "btn-outline-success"}`}
+          onClick={()=>handleToggleActive(hall)}
         >
-          {h.active ? t("Deactivate") : t("Activate")}
+          {hall.active ? t("Deactivate") : t("Activate")}
         </button>
 
         {/* View / Delete buttons */}
         <button
           className="btn btn-sm btn-outline-secondary"
-          onClick={() => navigate(`/admin/hall/${h.uid}`, { state: { h } })}
+          onClick={() => navigate(`/admin/hall/${hall.uid}`, { state: { hall }})}
         >
           {t("halls.view")}
         </button>
+				<button 
+					className="btn btn-sm btn-outline-primary"
+					onClick={()=> navigate(`/admin/halls/add`, { state: { hall }})}>
+						{t("util.edit")}
+					</button>
         <button
           className="btn btn-sm btn-outline-danger"
           onClick={async () => {
             if (!confirm(t("halls.deleteConfirm"))) return;
             try {
-              const res = await fetch(API_ENDPOINTS.hallDetails(h.uid), {
+              const res = await fetch(API_ENDPOINTS.hallDetails(hall.uid), {
                 method: "DELETE",
                 headers: {
                   Authorization: `Bearer ${token()}`,
@@ -236,7 +245,7 @@ const handleToggleActive = async (h: Hall) => {
                 },
               });
               if (!res.ok) throw new Error(t("halls.deleteFailed"));
-              setHalls((prev) => prev.filter((x) => x.uid !== h.uid));
+              setHalls((prev) => prev.filter((x) => x.uid !== hall.uid));
             } catch (err) {
               console.error(err);
               alert(t("halls.deleteFailed"));

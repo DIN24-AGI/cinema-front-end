@@ -4,7 +4,7 @@ import { useNavigate, useParams, useLocation } from "react-router";
 import type { Hall } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
-import MonthView from "../components/MonthView";
+// import MonthView from "../components/MonthView";
 
 const HallDetails: React.FC = () => {
   const { t } = useTranslation();
@@ -17,20 +17,20 @@ const HallDetails: React.FC = () => {
   const [error, setError] = useState("");
 
   const token = localStorage.getItem("token");
-console.log("Hall UID from params:", hallUid);
+  console.log("Hall UID from params:", hallUid);
 
 useEffect(() => {
   if (!hallUid) return;
   const fetchHall = async () => {
     setLoading(true);
     try {
-			console.log(API_ENDPOINTS.hallDetails(hallUid));
-      const res = await fetch(API_ENDPOINTS.hallDetails(hallUid), {
+			console.log(API_ENDPOINTS.hallDetail(hallUid));
+      const res = await fetch(API_ENDPOINTS.hallDetail(hallUid), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to load hall");
-      const data: Hall = await res.json();
-			console.log(data)
+      const data : Hall = await res.json();
+      console.log(data)
       setHall(data);
     } catch (err) {
       console.error(err);
@@ -64,7 +64,6 @@ useEffect(() => {
       alert(err.message || t("halls.deleteFailed"));
     }
   };
-
   if (loading) return <p>{t("util.loading")}</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!hall) return <p>{t("halls.notFound")}</p>;
@@ -105,7 +104,7 @@ useEffect(() => {
           </button>
         </div>
       </div>
-      <MonthView hallUid={hall.uid} month="2025-11" />
+      {/* <MonthView hallUid={hall.uid} month="2025-11" /> */}
 
     </div>
   );

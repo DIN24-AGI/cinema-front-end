@@ -17,6 +17,8 @@ const AddHall: React.FC = () => {
   const [rows, setRows] = useState<number>(existingHall?.rows || 0);
   const [cols, setCols] = useState<number>(existingHall?.cols || 0);
   const [cinemaUid, setCinemaUid] = useState<string>(existingHall?.cinema_uid || cinemaUidFromState || "");
+	const [active, setActive] = useState<boolean>(existingHall?.active || false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,7 +38,7 @@ const AddHall: React.FC = () => {
 		setLoading(true);
 
    try {
-      const body = { cinema_uid: cinemaUid, name, rows, cols };
+      const body = { cinema_uid: cinemaUid, name, rows, cols, active: !!active };
 
       const url = existingHall 
         ? `${API_ENDPOINTS.hallDetails(existingHall.uid)}` 
@@ -102,6 +104,19 @@ const AddHall: React.FC = () => {
 						required
 					/>
 				</div>
+				<div className="mb-3 form-check">
+					<input
+						type="checkbox"
+						className="form-check-input"
+						id="hallActive"
+						checked={active}
+						onChange={(e) => setActive(e.target.checked)}
+					/>
+					<label className="form-check-label" htmlFor="hallActive">
+						{t("halls.active")}
+					</label>
+				</div>
+
 				
 				<div className="d-flex">
 					<button type="submit" className="btn btn-primary" disabled={loading}>
