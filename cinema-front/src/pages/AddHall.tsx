@@ -16,7 +16,7 @@ const AddHall: React.FC = () => {
   const [name, setName] = useState(existingHall?.name || "");
   const [rows, setRows] = useState<number>(existingHall?.rows || 0);
   const [cols, setCols] = useState<number>(existingHall?.cols || 0);
-  const [cinemaUid, setCinemaUid] = useState<string>(existingHall?.cinema_uid || cinemaUidFromState || "");
+  const [cinemaUid] = useState<string>(existingHall?.cinema_uid || cinemaUidFromState || "");
 	const [active, setActive] = useState<boolean>(existingHall?.active || false);
 
   const [loading, setLoading] = useState(false);
