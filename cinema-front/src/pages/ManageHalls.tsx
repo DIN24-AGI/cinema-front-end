@@ -47,6 +47,10 @@ const ManageHalls: React.FC = () => {
     fetchEverything();
   }, [t]);
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
 
 
 const onSelectCinema = async (cinema: Cinema) => {
@@ -61,8 +65,7 @@ const onSelectCinema = async (cinema: Cinema) => {
     const data: Hall[] = await res.json();
     setHalls(data);
   } catch (error) {
-    console.error(error);
-    setError(error.message || t("halls.genericError"));
+    setError(getErrorMessage(error) || t("halls.genericError"));
   } finally {
     setLoading(false);
   }
@@ -264,6 +267,8 @@ const handleDelete = async (hall: Hall) => {
 					{selectedCinema && loading && halls.length === 0 && <div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>}
 				</div>
 			</section>
+      {error && <div className="alert alert-danger">{error}</div>}
+
 		</div>
 	);}
 
