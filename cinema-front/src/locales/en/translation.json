@@ -98,7 +98,7 @@
     "manageTitle": "Manage Halls",
     "name": "Name",
     "chooseCity": "Choose city",
-    "chooseCinema": "Choose cinema in: {{city}}",
+    "chooseCinema": "Choose cinema",
     "titleForCinema": "Halls for {{cinema}}",
     "addHall": "Add Hall",
     "noHalls": "No halls yet",
