@@ -2,17 +2,7 @@ import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard.tsx";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINTS } from "../util/baseURL";
-
-type MovieItem = {
-  title: string;
-  duration_minutes: number;
-  description: string;
-  poster_url: string;
-  release_year: number;
-  shows_allowed: number;
-  shows_left: number;
-  active: boolean;
-};
+import type { MovieItem } from "../types/cinemaTypes.ts";
 
 const AddMovies = () => {
   const { t } = useTranslation();
@@ -40,10 +30,11 @@ const AddMovies = () => {
         const data: MovieItem[] = await res.json();
         setMovies(data);
       } catch (e: any) {
+        // Use i18n translation keys instead of hard-coded strings
         setError(
           e.message === "fetchFailed"
-            ? "Failed to load movies"
-            : "Unexpected error"
+            ? t("movies.fetchError")
+            : t("cinemas.genericError")
         );
       } finally {
         setLoading(false);
@@ -54,16 +45,19 @@ const AddMovies = () => {
 
   return (
     <div className="container py-4">
-      {loading && <div className="alert alert-info">Loading movies…</div>}
+      {loading && (
+        <div className="alert alert-info">{t("cinemas.loading")}</div>
+      )}
       {error && <div className="alert alert-danger">{error}</div>}
 
       {!loading && !error && movies.length === 0 && (
-        <div className="alert alert-warning">No movies found.</div>
+        <div className="alert alert-warning">{t("cinemas.noCinemas")}</div>
       )}
 
       <div className="d-flex flex-column gap-3">
         {movies.map((m, idx) => (
           <MovieCard
+            uid={m.uid}
             key={idx}
             title={m.title}
             duration_minutes={m.duration_minutes}
