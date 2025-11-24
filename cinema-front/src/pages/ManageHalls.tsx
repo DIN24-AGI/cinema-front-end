@@ -10,7 +10,6 @@ const ManageHalls: React.FC = () => {
 	const [cities, setCities] = useState<City[]>([]);
 	const [cinemas, setCinemas] = useState<Cinema[]>([]);
 	const [halls, setHalls] = useState<Hall[]>([]);
-	const [selectedCity, setSelectedCity] = useState<City | null>(null);
 	const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(""); //unused
@@ -18,73 +17,65 @@ const ManageHalls: React.FC = () => {
 
 	const token = () => localStorage.getItem("token");
 
-	useEffect(() => {
-		const fetchCities = async () => {
-			try {
-				setLoading(true);
-				const res = await fetch(API_ENDPOINTS.cities, {
-					headers: { Authorization: `Bearer ${token()}` },
-				});
-				if (!res.ok) throw new Error(t("halls.errorLoadCities"));
-				const data: City[] = await res.json();
-				setCities(data);
-			} catch (err: any) {
-				console.error(err);
-				setError(err.message || t("halls.genericError"));
-				console.log(error);
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchCities();
-	}, [t]);
+	  // Fetch cities + cinemas once
+  useEffect(() => {
+    const fetchEverything = async () => {
+      try {
+        setLoading(true);
+        const tok = token();
 
-	const onSelectCity = async (city: City) => {
-	setSelectedCity(city);
-	setSelectedCinema(null);
-	setHalls([]);
-	try {
-		setLoading(true);
-		const res = await fetch(API_ENDPOINTS.cinemasByCity(city.uid), {
-			headers: { Authorization: `Bearer ${token()}` },
-		});
-		if (!res.ok) throw new Error(t("halls.errorLoadCinemas"));
-		const data: Cinema[] = await res.json();
+        const [citiesRes, cinemasRes] = await Promise.all([
+          fetch(API_ENDPOINTS.cities, { headers: { Authorization: `Bearer ${tok}` } }),
+          fetch(API_ENDPOINTS.cinemas, { headers: { Authorization: `Bearer ${tok}` } }),
+        ]);
 
-		// Filter cinemas by city UID
-		const filteredCinemas = data.filter(cn => cn.city_uid === city.uid);
+        if (!citiesRes.ok) throw new Error("Failed to load cities");
+        if (!cinemasRes.ok) throw new Error(t("cinemas.errorLoadCities"));
 
-		setCinemas(filteredCinemas);
-	} catch (err: any) {
-		console.error(err);
-		setError(err.message || t("halls.genericError"));
-	} finally {
-		setLoading(false);
-	}
+        const cityData: City[] = await citiesRes.json();
+        const cinemaData: Cinema[] = await cinemasRes.json();
+        setCities(cityData);
+        setCinemas(cinemaData);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || t("cinemas.genericError"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEverything();
+  }, [t]);
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+
+const onSelectCinema = async (cinema: Cinema) => {
+  setSelectedCinema(cinema);
+  setHalls([]);
+  try {
+    setLoading(true);
+    const res = await fetch(API_ENDPOINTS.hallsByCinema(cinema.uid), {
+      headers: { Authorization: `Bearer ${token()}` },
+    });
+    if (!res.ok) throw new Error(t("halls.errorLoadHalls"));
+    const data: Hall[] = await res.json();
+    setHalls(data);
+  } catch (error) {
+    setError(getErrorMessage(error) || t("halls.genericError"));
+  } finally {
+    setLoading(false);
+  }
 };
 
 
-	const onSelectCinema = async (cinema: Cinema) => {
-		setSelectedCinema(cinema);
-		try {
-			setLoading(true);
-			const res = await fetch(API_ENDPOINTS.hallsByCinema(cinema.uid), {
-				headers: { Authorization: `Bearer ${token()}` },
-			});
-			if (!res.ok) throw new Error(t("halls.errorLoadHalls"));
-			const data: Hall[] = await res.json();
-			setHalls(data);
-		} catch (err: any) {
-			console.error(err);
-			setError(err.message || t("halls.genericError"));
-		} finally {
-			setLoading(false);
-		}
-	};
-const handleToggleActive = async (h: Hall) => {
-  const newStatus = !h.active;
+const handleToggleActive = async (hall: Hall) => {
+  const newStatus = !hall.active;
   try {
-    const res = await fetch(`${API_ENDPOINTS.halls}/${h.uid}/activate`, {
+    const res = await fetch(`${API_ENDPOINTS.halls}/${hall.uid}/activate`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -92,52 +83,48 @@ const handleToggleActive = async (h: Hall) => {
       },
       body: JSON.stringify({ active: newStatus }),
     });
+		const data = await res.json();
+		console.log(data);
 
     if (!res.ok) throw new Error(t("halls.toggleFailed"));
 
     setHalls(prev =>
-      prev.map(hall => (hall.uid === h.uid ? { ...hall, active: newStatus } : hall))
+      prev.map(h => (h.uid === hall.uid ? { ...h, active: newStatus } : h))
     );
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     alert(t("halls.toggleFailed"));
   }
 };
-
-        
+const handleDelete = async (hall: Hall) => {
+            if (!confirm(t("halls.deleteConfirm"))) return;
+            try {
+              const res = await fetch(API_ENDPOINTS.hallDetails(hall.uid), {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${token()}`,
+                  "Content-Type": "application/json",
+                },
+              });
+              if (!res.ok) throw new Error(t("halls.deleteFailed"));
+              setHalls((prev) => prev.filter((x) => x.uid !== hall.uid));
+            } catch (err) {
+              console.error(err);
+              alert(t("halls.deleteFailed"));
+            }
+          }
 
 	return (
 		<div style={{ paddingBottom: 40 }}>
 			<h2>{t("halls.manageTitle")}</h2>
 
 			<section style={{ marginTop: 16 }}>
-				<h3>{t("halls.chooseCity")}</h3>
-				<div style={{ display: "flex", gap: 12, flexWrap: "wrap", minHeight: 70 }}>
-					{cities.map((c) => (
-						<button
-							key={c.uid}
-							onClick={() => onSelectCity(c)}
-							style={{
-								padding: "8px 14px",
-								borderRadius: 8,
-								border: selectedCity?.uid === c.uid ? "2px solid #0d6efd" : "1px solid #ccc",
-								background: "#fff",
-								cursor: "pointer",
-								transition: "border-color .15s",
-							}}
-						>
-							{c.name}
-						</button>
-					))}
-					{loading && cities.length === 0 && <div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>}
-				</div>
+				<h3>{t("halls.chooseCinema")}</h3>
+				
 			</section>
 
 			{/* Cinema selection area kept mounted to prevent jump */}
-			<section style={{ marginTop: 24 }}>
-				<h3 style={{ minHeight: 24 }}>
-					{selectedCity ? t("halls.chooseCinema", { city: selectedCity.name }) : "\u00A0"}
-				</h3>
+			<section>	
 
 				<div
 					style={{
@@ -148,36 +135,43 @@ const handleToggleActive = async (h: Hall) => {
 						alignItems: cinemas.length === 0 ? "center" : "flex-start",
 					}}
 				>
-					{selectedCity ? (
+					{ (
 						cinemas.length > 0 ? (
 							// Show cinema cards
 							cinemas.map((cn) => (
-								<div
-									key={cn.uid}
-									onClick={() => onSelectCinema(cn)}
-									style={{
-										padding: 12,
-										width: 180,
-										borderRadius: 8,
-										border: selectedCinema?.uid === cn.uid ? "2px solid #0d6efd" : "1px solid #ddd",
-										background: "#fff",
-										cursor: "pointer",
-										boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-										transition: "border-color .15s",
-									}}
-								>
-									<strong style={{ fontSize: 14 }}>{cn.name}</strong>
-									<div style={{ fontSize: 11, color: "#666" }}>{cn.address}</div>
+							<div
+								key={cn.uid}
+								onClick={() => onSelectCinema(cn)}
+								style={{
+									padding: 12,
+									width: 180,
+									borderRadius: 8,
+									border: selectedCinema?.uid === cn.uid ? "2px solid #0d6efd" : "1px solid #ddd",
+									background: "#fff",
+									cursor: "pointer",
+									boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+									transition: "border-color .15s",
+								}}
+							>
+
+								{/* CITY NAME */}
+								<div style={{ fontSize: 12, color: "#999", marginBottom: 4 }}>
+									{cities.find(c => c.uid === cn.city_uid)?.name || ""}
 								</div>
+
+								<strong style={{ fontSize: 14 }}>{cn.name}</strong>
+								<div style={{ fontSize: 11, color: "#666" }}>{cn.address}</div>
+							</div>
+
 							))
 						) : !loading ? (
 							// Show "no cinemas" message only if a city is selected and not loading
-							<div style={{ color: "#666" }}>No cinemas in {selectedCity.name} yet</div>
+							<div style={{ color: "#666" }}>No cinemas in  yet</div>
 						) : (
 							// Loading indicator while fetching
 							<div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>
 						)
-					) : null /* No message if no city is selected */}
+					)/* No message if no city is selected */}
 				</div>
 			</section>
 
@@ -208,9 +202,9 @@ const handleToggleActive = async (h: Hall) => {
 					}}
 				>
 {selectedCinema &&
-  halls.map((h) => (
+  halls.map((hall) => (
     <div
-      key={h.uid}
+      key={hall.uid}
       style={{
         border: "1px solid #e2e2e2",
         borderRadius: 6,
@@ -222,13 +216,13 @@ const handleToggleActive = async (h: Hall) => {
       }}
     >
       <div>
-        <strong>{h.name}</strong>
+        <strong>{hall.name}</strong>
         <div style={{ fontSize: 12, color: "#666" }}>
-          {h.rows && h.cols ? t("halls.seats", { count: h.rows * h.cols }) : ""}
+          {hall.rows && hall.cols ? t("halls.seats", { count: hall.rows * hall.cols }) : ""}
 
           {" • "}
-          <span className={`badge ${h.active ? "bg-success" : "bg-secondary"}`}>
-                {h.active ? t("util.active") : t("util.inactive")}
+          <span className={`badge ${hall.active ? "bg-success" : "bg-secondary"}`}>
+                {hall.active ? t("util.active") : t("util.inactive")}
               </span>
         </div>
       </div>
@@ -236,38 +230,27 @@ const handleToggleActive = async (h: Hall) => {
       <div style={{ display: "flex", gap: 8 }}>
         {/* Toggle button */}
         <button
-          className={`btn btn-sm ${h.active ? "btn-outline-danger" : "btn-outline-success"}`}
-          onClick={()=>handleToggleActive(h)}
+          className={`btn btn-sm ${hall.active ? "btn-outline-danger" : "btn-outline-success"}`}
+          onClick={()=>handleToggleActive(hall)}
         >
-          {h.active ? t("Deactivate") : t("Activate")}
+          {hall.active ? t("Deactivate") : t("Activate")}
         </button>
 
         {/* View / Delete buttons */}
         <button
           className="btn btn-sm btn-outline-secondary"
-          onClick={() => navigate(`/admin/hall/${h.uid}`, { state: { h } })}
+          onClick={() => navigate(`/admin/hall/${hall.uid}`, { state: { hall }})}
         >
           {t("halls.view")}
         </button>
+				<button 
+					className="btn btn-sm btn-outline-primary"
+					onClick={()=> navigate(`/admin/halls/add`, { state: { hall }})}>
+						{t("util.edit")}
+					</button>
         <button
           className="btn btn-sm btn-outline-danger"
-          onClick={async () => {
-            if (!confirm(t("halls.deleteConfirm"))) return;
-            try {
-              const res = await fetch(API_ENDPOINTS.hallDetails(h.uid), {
-                method: "DELETE",
-                headers: {
-                  Authorization: `Bearer ${token()}`,
-                  "Content-Type": "application/json",
-                },
-              });
-              if (!res.ok) throw new Error(t("halls.deleteFailed"));
-              setHalls((prev) => prev.filter((x) => x.uid !== h.uid));
-            } catch (err) {
-              console.error(err);
-              alert(t("halls.deleteFailed"));
-            }
-          }}
+          onClick={()=>handleDelete(hall)}
         >
           {t("halls.delete")}
         </button>
@@ -284,8 +267,10 @@ const handleToggleActive = async (h: Hall) => {
 					{selectedCinema && loading && halls.length === 0 && <div style={{ opacity: 0.6 }}>{t("halls.loading")}</div>}
 				</div>
 			</section>
+      {error && <div className="alert alert-danger">{error}</div>}
+
 		</div>
-	);
-};
+	);}
+
 
 export default ManageHalls;

@@ -1,7 +1,7 @@
 export interface Cinema {
   uid: string;
   city_uid: string;
-  city_name?: string | undefined;
+  city_name: string;
   name: string;
   address: string;
   phone: string;
