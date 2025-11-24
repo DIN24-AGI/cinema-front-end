@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "name": "Cinema Nova Oulu",
+    "address": "Kauppurienkatu 45, 90100 Oulu, Finland",
+    "phone": "+358 8 5542 3890",
+    "isActive": true,
+    "halls": [
+      { "id": "1", "name": "Auditorium 1", "seats": 145, "isActive": true },
+      { "id": "2", "name": "Auditorium 2", "seats": 87, "isActive": true },
+      { "id": "3", "name": "Auditorium 3", "seats": 163, "isActive": true }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Kino Baltic Turku",
+    "address": "Linnankatu 28, 20100 Turku, Finland",
+    "phone": "+358 2 2641 7520",
+    "isActive": true,
+    "halls": [
+      { "id": "1", "name": "Auditorium 1", "seats": 192, "isActive": true },
+      { "id": "2", "name": "Auditorium 2", "seats": 76, "isActive": true },
+      { "id": "3", "name": "Auditorium 3", "seats": 134, "isActive": true },
+      { "id": "4", "name": "Auditorium 4", "seats": 58, "isActive": true }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Elokuvateatteri Helsinki Central",
+    "address": "Mannerheimintie 112, 00100 Helsinki, Finland",
+    "phone": "+358 9 4257 6180",
+    "isActive": true,
+    "halls": [
+      { "id": "1", "name": "Auditorium 1", "seats": 178, "isActive": true },
+      { "id": "2", "name": "Auditorium 2", "seats": 121, "isActive": true }
+    ]
+  }
+]

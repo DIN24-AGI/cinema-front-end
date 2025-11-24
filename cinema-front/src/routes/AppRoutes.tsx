@@ -13,7 +13,6 @@ import HallDetails from "../pages/HallDetails";
 import AddHall from "../pages/AddHall";
 import ManageMovies from "../pages/ManageMovies";
 import AddEditMovie from "../pages/AddEditMovie";
-import ViewMovies from "../pages/ViewMovies";
 
 interface AppRoutesProps {
   token: string | null;
@@ -139,10 +138,6 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
                   <AddEditMovie />
                 </ProtectedResource>
               }
-            />
-            <Route
-              path="/movies"
-              element={<ViewMovies/>}
             />
           </Routes>
         </div>

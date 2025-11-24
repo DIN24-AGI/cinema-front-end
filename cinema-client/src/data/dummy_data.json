@@ -1,0 +1,200 @@
+[
+	{
+		"movieTitle": "Inception",
+		"date": "2025-12-01",
+		"screeningTime": "18:30",
+		"cinemaHallNumber": 1,
+		"length": "2h 28m",
+		"ticketPrice": 12.5,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "The Matrix",
+		"date": "2025-12-02",
+		"screeningTime": "20:00",
+		"cinemaHallNumber": 2,
+		"length": "2h 16m",
+		"ticketPrice": 10.0,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "Interstellar",
+		"date": "2025-12-03",
+		"screeningTime": "19:00",
+		"cinemaHallNumber": 3,
+		"length": "2h 49m",
+		"ticketPrice": 15.0,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "The Godfather",
+		"date": "2025-12-04",
+		"screeningTime": "21:00",
+		"cinemaHallNumber": 1,
+		"length": "2h 55m",
+		"ticketPrice": 14.0,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "Pulp Fiction",
+		"date": "2025-12-05",
+		"screeningTime": "17:30",
+		"cinemaHallNumber": 2,
+		"length": "2h 34m",
+		"ticketPrice": 11.0,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "The Dark Knight",
+		"date": "2025-12-06",
+		"screeningTime": "19:15",
+		"cinemaHallNumber": 3,
+		"length": "2h 32m",
+		"ticketPrice": 13.0,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "Fight Club",
+		"date": "2025-12-07",
+		"screeningTime": "20:30",
+		"cinemaHallNumber": 1,
+		"length": "2h 19m",
+		"ticketPrice": 12.0,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "Forrest Gump",
+		"date": "2025-12-08",
+		"screeningTime": "18:00",
+		"cinemaHallNumber": 2,
+		"length": "2h 22m",
+		"ticketPrice": 11.5,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "The Shawshank Redemption",
+		"date": "2025-12-09",
+		"screeningTime": "19:30",
+		"cinemaHallNumber": 3,
+		"length": "2h 22m",
+		"ticketPrice": 13.5,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "Goodfellas",
+		"date": "2025-12-10",
+		"screeningTime": "21:15",
+		"cinemaHallNumber": 1,
+		"length": "2h 26m",
+		"ticketPrice": 12.0,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "The Silence of the Lambs",
+		"date": "2025-12-11",
+		"screeningTime": "20:45",
+		"cinemaHallNumber": 2,
+		"length": "1h 58m",
+		"ticketPrice": 10.5,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "Saving Private Ryan",
+		"date": "2025-12-12",
+		"screeningTime": "18:45",
+		"cinemaHallNumber": 3,
+		"length": "2h 49m",
+		"ticketPrice": 14.5,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "Gladiator",
+		"date": "2025-12-13",
+		"screeningTime": "19:00",
+		"cinemaHallNumber": 1,
+		"length": "2h 35m",
+		"ticketPrice": 13.0,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "The Green Mile",
+		"date": "2025-12-14",
+		"screeningTime": "17:00",
+		"cinemaHallNumber": 2,
+		"length": "3h 9m",
+		"ticketPrice": 15.5,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "Avatar",
+		"date": "2025-12-15",
+		"screeningTime": "20:15",
+		"cinemaHallNumber": 3,
+		"length": "2h 42m",
+		"ticketPrice": 16.0,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "The Departed",
+		"date": "2025-12-16",
+		"screeningTime": "21:30",
+		"cinemaHallNumber": 1,
+		"length": "2h 31m",
+		"ticketPrice": 12.5,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "Whiplash",
+		"date": "2025-12-17",
+		"screeningTime": "18:15",
+		"cinemaHallNumber": 2,
+		"length": "1h 46m",
+		"ticketPrice": 9.5,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "The Prestige",
+		"date": "2025-12-18",
+		"screeningTime": "19:45",
+		"cinemaHallNumber": 3,
+		"length": "2h 10m",
+		"ticketPrice": 11.5,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "Parasite",
+		"date": "2025-12-19",
+		"screeningTime": "20:00",
+		"cinemaHallNumber": 1,
+		"length": "2h 12m",
+		"ticketPrice": 13.5,
+		"cinemaTheater": "Oulu"
+	},
+	{
+		"movieTitle": "Django Unchained",
+		"date": "2025-12-20",
+		"screeningTime": "21:00",
+		"cinemaHallNumber": 2,
+		"length": "2h 45m",
+		"ticketPrice": 14.0,
+		"cinemaTheater": "Helsinki"
+	},
+	{
+		"movieTitle": "Joker",
+		"date": "2025-12-21",
+		"screeningTime": "19:30",
+		"cinemaHallNumber": 3,
+		"length": "2h 2m",
+		"ticketPrice": 12.0,
+		"cinemaTheater": "Tampere"
+	},
+	{
+		"movieTitle": "1917",
+		"date": "2025-12-22",
+		"screeningTime": "18:30",
+		"cinemaHallNumber": 1,
+		"length": "1h 59m",
+		"ticketPrice": 13.0,
+		"cinemaTheater": "Oulu"
+	}
+]
