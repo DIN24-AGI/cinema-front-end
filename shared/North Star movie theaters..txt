@@ -1,0 +1,33 @@
+North Star movie theaters. 
+
+Cinema Nova Oulu
+Address: Kauppurienkatu 45, 90100 Oulu, Finland
+Phone: +358 8 5542 3890
+Auditoriums: 3
+Seating Capacity:
+
+Auditorium 1: 145 seats
+Auditorium 2: 87 seats
+Auditorium 3: 163 seats
+
+
+Kino Baltic Turku
+Address: Linnankatu 28, 20100 Turku, Finland
+Phone: +358 2 2641 7520
+Auditoriums: 4
+Seating Capacity:
+
+Auditorium 1: 192 seats
+Auditorium 2: 76 seats
+Auditorium 3: 134 seats
+Auditorium 4: 58 seats
+
+
+Elokuvateatteri Helsinki Central
+Address: Mannerheimintie 112, 00100 Helsinki, Finland
+Phone: +358 9 4257 6180
+Auditoriums: 2
+Seating Capacity:
+
+Auditorium 1: 178 seats
+Auditorium 2: 121 seats
