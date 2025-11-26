@@ -4,5 +4,9 @@
     "movies": "Movies",
     "schedule": "Schedule",
     "contact": "Contact Us"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "chooseCinema": "Choose Cinema"
   }
 }

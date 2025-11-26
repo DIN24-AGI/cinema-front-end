@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink} from "react-router";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import styles from "./NavBar.module.css";
 
-interface NavbarProps {
-  onLogout?: () => void;
-}
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
 
