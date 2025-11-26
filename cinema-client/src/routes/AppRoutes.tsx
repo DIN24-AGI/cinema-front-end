@@ -1,20 +1,24 @@
-import { BrowserRouter as Router, Routes, } from "react-router";
-
-
-
-
-
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
+import Home from "../pages/Home";
+import Movies from "../pages/Movies";
+import Schedule from "../pages/Schedule";
+import Contact from "../pages/Contact";
+import NavBar from "../components/NavBar/NavBar"
 
 const AppRoutes = () => {
 
   return (
     <Router>
-      {/* Show navbar on all pages except login */}
-      {/* <Navbar /> */}
+      <NavBar />
 
       <div className="container-fluid d-flex justify-content-center">
         <div className="w-100" style={{ maxWidth: "1200px" }}>
           <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="movies" element={<Movies />}></Route>
+            <Route path="schedule" element={<Schedule />}></Route>
+            <Route path="contact" element={<Contact />}></Route>
+            
           </Routes>
         </div>
       </div>

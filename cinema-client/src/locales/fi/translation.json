@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "home": "Koti",
+    "movies": "Elokuvat",
+    "schedule": "Aikataulu",
+    "contact": "Yhteystiedot",
+    "language": "Kieli"
+  },
+  "home": {
+    "welcome": "Tervetuloa elokuviimme"
+  }
+}
+
