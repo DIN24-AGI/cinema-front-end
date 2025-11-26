@@ -4,6 +4,7 @@ import Movies from "../pages/Movies";
 import Schedule from "../pages/Schedule";
 import Contact from "../pages/Contact";
 import NavBar from "../components/NavBar/NavBar"
+import MovieDetails from "../pages/MovieDetails"
 
 const AppRoutes = () => {
 
@@ -18,6 +19,7 @@ const AppRoutes = () => {
             <Route path="movies" element={<Movies />}></Route>
             <Route path="schedule" element={<Schedule />}></Route>
             <Route path="contact" element={<Contact />}></Route>
+            <Route path="movies/:uid" element={<MovieDetails />}> </Route>
             
           </Routes>
         </div>

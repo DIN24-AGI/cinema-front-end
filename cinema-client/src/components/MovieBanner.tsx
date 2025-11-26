@@ -1,52 +1,46 @@
-// import type { Movie } from "../types/cinemaTypes";
-// import { useTranslation } from "react-i18next";
+import React from "react";
+import type { Movie } from "../types/cinemaTypes";
 
+interface MovieBannerProps {
+  movie: Movie;
+  onDetails?: (movie: Movie) => void;
+}
 
-// interface MovieBannerProps extends Movie {
-//   onDetails?: () => void;
-// }
+const MovieBanner: React.FC<MovieBannerProps> = ({ movie, onDetails }) => {
+  return (
+    <div className="card mb-3 shadow-sm" style={{ maxWidth: "600px" }}>
+      <div className="row g-0 align-items-center">
+        
+        {/* Poster */}
+        <div className="col-4 col-md-3">
+          <img
+            src={movie.poster_url || "/placeholder.png"}
+            alt={movie.title}
+            className="img-fluid rounded-start"
+            style={{ objectFit: "cover", height: "100%" }}
+          />
+        </div>
 
-// const MovieBanner = ( {
-//   uid,
-//   title,
-//   duration_minutes,
-//   poster_url,
-//   release_year,
-//   active, } : MovieBannerProps
-// ) => {
-//   const { t } = useTranslation();
+        {/* Content */}
+        <div className="col-8 col-md-9">
+          <div className="card-body">
+            <h5 className="card-title mb-1">{movie.title}</h5>
 
-//   return (
-// <div className="w-48 bg-white rounded-2xl shadow-md overflow-hidden flex flex-col">
-//       {/* Poster */}
-//       <img
-//         src={poster_url}
-//         alt={title}
-//         className="w-full h-64 object-cover"
-//       />
+            <p className="card-text text-muted mb-2">
+              {movie.release_year}
+            </p>
 
-//       {/* Content */}
-//       <div className="p-3 flex flex-col gap-2 flex-grow">
-//         {/* Title */}
-//         <h3 className="text-lg font-semibold line-clamp-2">{title}</h3>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => onDetails?.(movie)}
+            >
+              Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-//         {/* Duration + Year */}
-//         <div className="flex justify-between text-sm text-gray-600">
-//           <span>{duration_minutes} min</span>
-//           <span>{release_year}</span>
-//         </div>
-
-//         {/* Button */}
-//         <button
-//           onClick={onDetails}
-//           className="mt-auto w-full bg-blue-600 text-white py-1.5 rounded-xl text-sm hover:bg-blue-700 transition"
-//         >
-//           View details
-//         </button>
-//       </div>
-//     </div>
-//   )
-
-// }
-
-// export default MovieBanner
+export default MovieBanner;

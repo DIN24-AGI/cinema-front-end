@@ -24,4 +24,5 @@ const API_BASE_URL =
 export const API_ENDPOINTS = {
   cinemas: `${API_BASE_URL}/api/cinemas`,
   cities: `${API_BASE_URL}/api/cities`,
+  movies: `${API_BASE_URL}/api/movies`
 }
