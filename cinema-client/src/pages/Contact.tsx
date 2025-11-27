@@ -2,6 +2,7 @@ import  { useEffect, useState } from "react";
 import type { City, Cinema } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
+import CinemaSelector from '../components/CinemaSelector'
  
  const Contact = () => {
   const { t } = useTranslation();
@@ -11,41 +12,39 @@ import { useTranslation } from "react-i18next";
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
+  useEffect(() => {
+      const fetchEverything = async () => {
+        try {
+          setLoading(true);
+          const [citiesRes, cinemasRes] = await Promise.all([
+            fetch(API_ENDPOINTS.cities,),
+            fetch(API_ENDPOINTS.cinemas,),
+          ]);
+  
+          if (!citiesRes.ok) throw new Error("Failed to load cities");
+          if (!cinemasRes.ok) throw new Error(t("cinemas.errorLoadCities"));
+  
+          const cityData: City[] = await citiesRes.json();
+          const cinemaData: Cinema[] = await cinemasRes.json();
+          setCities(cityData);
+          const activeCinemas = cinemaData.filter(cn => cn.active);
+          setCinemas(activeCinemas);
+          } catch (err: any) {
+          console.error(err);
+          console.log(error)
+          setError(err.message || t("cinemas.genericError"));
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchEverything();
+    }, [t]);
 
-useEffect(() => {
-    const fetchEverything = async () => {
-      try {
-        setLoading(true);
-        const [citiesRes, cinemasRes] = await Promise.all([
-          fetch(API_ENDPOINTS.cities,),
-          fetch(API_ENDPOINTS.cinemas,),
-        ]);
-
-        if (!citiesRes.ok) throw new Error("Failed to load cities");
-        if (!cinemasRes.ok) throw new Error(t("cinemas.errorLoadCities"));
-
-        const cityData: City[] = await citiesRes.json();
-        const cinemaData: Cinema[] = await cinemasRes.json();
-        setCities(cityData);
-        const activeCinemas = cinemaData.filter(cn => cn.active);
-        setCinemas(activeCinemas);
-        } catch (err: any) {
-        console.error(err);
-        setError(err.message || t("cinemas.genericError"));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEverything();
-  }, [t]);
-
-
-const onSelectCinema = async (cinema: Cinema) => {
+    
+    const onSelectCinema = async (cinema: Cinema) => {
   setSelectedCinema(cinema);
 };
-
-
 
 	return (
     <div style={{ paddingBottom: 40 }}>
@@ -59,50 +58,13 @@ const onSelectCinema = async (cinema: Cinema) => {
 
 
 			{/* Cinema selection area kept mounted to prevent jump */}
-			<section>	
+    <CinemaSelector
+      cinemas={cinemas}
+      cities={cities}
+      selectedCinema={selectedCinema}
+      onSelectCinema={onSelectCinema}
+    />
 
-				<div
-					style={{
-						display: "flex",
-						gap: 12,
-						flexWrap: "wrap",
-						minHeight: 90,
-						alignItems: cinemas.length === 0 ? "center" : "flex-start",
-					}}
-				>{cinemas.map((cn) => {
-            const cityName = cities.find((c) => c.uid === cn.city_uid)?.name || "";
-            const isSelected = selectedCinema?.uid === cn.uid;
-
-            return (
-              <div
-                key={cn.uid}
-                onClick={() => onSelectCinema(cn)}
-                style={{
-                  padding: 12,
-                  width: 180,
-                  borderRadius: 8,
-                  border: isSelected ? "2px solid #0d6efd" : "1px solid #ddd",
-                  background: "#fff",
-                  cursor: "pointer",
-                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-                  transition: "border-color .15s",
-                }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget.style.borderColor = "#0d6efd"))
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget.style.borderColor = isSelected ? "#0d6efd" : "#ddd"))
-                }
-              >
-                <div style={{ fontSize: 12, color: "#999", marginBottom: 4 }}>
-                  {cityName}
-                </div>
-                <strong style={{ fontSize: 14 }}>{cn.name}</strong>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
       {/* Selected cinema details */}
       {selectedCinema && (
