@@ -3,7 +3,7 @@
 This repository contains two separate Vite React applications deployed as distinct Azure Static Web Apps:
 
 - Admin Panel (tags: vX.X.X) → https://lively-moss-05fbe2703.3.azurestaticapps.net/
-- Client App (tags: cX.X.X) → https://thankful-grass-0a0c7fa03.3.azurestaticapps.net/
+- Client App (tags: cX.X.X) → https://orange-wave-0372a7903.3.azurestaticapps.net/
 
 ## Repository Structure
 
