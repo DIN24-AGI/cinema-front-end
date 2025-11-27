@@ -1,17 +1,17 @@
-name: Azure Static Web Apps CI/CD - Lively Moss
+name: Azure Static Web Apps CI/CD - Orange Wave
 
 on:
   push:
     branches:
-      - "**" # Run on all branches
+      - "**" # Build on all branch pushes
     tags:
-      - "v*" # Also run on version tags
+      - "c*" # Deploy on tags like c1.2.3
   workflow_dispatch:
 
 jobs:
-  # Build job runs on every push
+  # Build job runs on every branch push
   build_job:
-    if: startsWith(github.ref, 'refs/heads/') # Only for branch pushes
+    if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
     name: Build Job
     steps:
@@ -26,18 +26,18 @@ jobs:
           node-version: "22"
 
       - name: Install dependencies
-        working-directory: ./cinema-front
+        working-directory: ./cinema-client
         run: npm ci
 
       - name: Build
-        working-directory: ./cinema-front
+        working-directory: ./cinema-client
         run: npm run build
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
-  # Deploy job runs only on tag pushes
+  # Deploy job runs only on tag pushes starting with "c"
   build_and_deploy_job:
-    if: startsWith(github.ref, 'refs/tags/v') # Only for version tags
+    if: startsWith(github.ref, 'refs/tags/c')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
@@ -46,7 +46,6 @@ jobs:
           submodules: true
           lfs: false
 
-      # Optional: ensure a specific Node version
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
@@ -58,9 +57,9 @@ jobs:
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_MOSS_05FBE2703 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_WAVE_0372A7903 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "./cinema-front" # Vite app root
+          app_location: "./cinema-client" # Vite app root (match other app)
           output_location: "dist" # Vite build output
           app_build_command: "npm ci && npm run build"
