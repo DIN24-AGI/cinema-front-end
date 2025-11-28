@@ -1,18 +1,28 @@
 import React from "react";
-import type { Hall } from "../types/cinemaTypes";
-import type { ShowTime, Movie } from "../types/cinemaTypes";
+import type { Hall, Showing, Movie } from "../types/cinemaTypes";
 import AddMovie from "./AddMovie";
+import ShowingView from "./ShowingView";
 
 interface HallScheduleProps {
 	hall: Hall;
 	movies?: Movie[];
-	schedule?: ShowTime[]; // Pass schedule separately since Hall from cinemaTypes doesn't include it
+	date: string;
+	schedule?: Showing[];
+	onCreated?: (show: Showing) => void;
+	onDeleted?: (uid: string) => void;
 }
 
-const HallSchedule: React.FC<HallScheduleProps> = ({ hall, schedule = [] }) => {
+const HallSchedule: React.FC<HallScheduleProps> = ({
+	hall,
+	movies = [],
+	date,
+	schedule = [],
+	onCreated,
+	onDeleted,
+}) => {
 	return (
 		<section aria-label={`Schedule for hall ${hall.name}`}>
-			<header>
+			<header className="mb-3">
 				<h2>{hall.name}</h2>
 				<small>
 					Capacity: {hall.seats} seats ({hall.rows} rows × {hall.cols} cols)
@@ -25,37 +35,30 @@ const HallSchedule: React.FC<HallScheduleProps> = ({ hall, schedule = [] }) => {
 			</header>
 
 			{schedule?.length ? (
-				<ul>
-					{schedule.map((show) => (
-						<li key={show.id}>
-							<strong>{show.movieTitle}</strong>{" "}
-							<span>
-								{formatTime(show.startTime)}
-								{show.endTime ? ` - ${formatTime(show.endTime)}` : ""}
-							</span>
-						</li>
-					))}
-				</ul>
+				<div className="d-flex flex-column gap-2 mb-3">
+					{schedule.map((show) => {
+						const movie = movies.find((m) => m.uid === show.movie_uid);
+						const movieTitle = movie?.title || "Unknown Movie";
+
+						return (
+							<ShowingView
+								key={show.uid}
+								id={show.uid}
+								movieTitle={movieTitle}
+								startTime={show.starts_at}
+								endTime={show.ends_at}
+								onDeleted={onDeleted}
+							/>
+						);
+					})}
+				</div>
 			) : (
-				<p>No scheduled shows.</p>
+				<p className="text-muted">No scheduled shows.</p>
 			)}
-			<AddMovie onAdd={() => console.log("Movie Added")} />
+
+			<AddMovie movies={movies} hall_uid={hall.uid} date={date} onCreated={onCreated} />
 		</section>
 	);
 };
-
-function formatTime(value: string): string {
-	// Accepts ISO or "HH:mm" and returns a short, locale-aware time string
-	const isISO = /\d{4}-\d{2}-\d{2}T/.test(value);
-	const date = isISO ? new Date(value) : parseHM(value);
-	return isNaN(date.getTime()) ? value : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
-
-function parseHM(hm: string): Date {
-	const [h, m] = hm.split(":").map(Number);
-	const d = new Date();
-	d.setHours(h || 0, m || 0, 0, 0);
-	return d;
-}
 
 export default HallSchedule;

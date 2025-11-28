@@ -55,3 +55,11 @@ export interface ShowTime {
 	startTime: string; // ISO string or HH:mm
 	endTime?: string; // optional
 }
+
+export interface Showing {
+	uid: string;
+	movie_uid: string;
+	hall_uid: string;
+	starts_at: string;
+	ends_at: string;
+}

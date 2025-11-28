@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { Cinema, Hall, MovieItem } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import HallSchedule from "../components/HallSchedule";
+import type { Showing } from "../types/cinemaTypes";
 
 const Scheduler: React.FC = () => {
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -9,12 +10,15 @@ const Scheduler: React.FC = () => {
 	const [selectedCinema, setSelectedCinema] = useState<string>("");
 	const [halls, setHalls] = useState<Hall[]>([]);
 	const [movies, setMovies] = useState<MovieItem[]>([]);
+	const [showings, setShowings] = useState<Showing[]>([]);
 	const [loadingCinemas, setLoadingCinemas] = useState(false);
 	const [loadingHalls, setLoadingHalls] = useState(false);
 	const [loadingMovies, setLoadingMovies] = useState(false);
+	const [loadingShowings, setLoadingShowings] = useState(false);
 	const [cinemaError, setCinemaError] = useState("");
 	const [hallsError, setHallsError] = useState("");
 	const [moviesError, setMoviesError] = useState("");
+	const [showingsError, setShowingsError] = useState("");
 
 	const formatDate = (date: Date): string => {
 		return date.toISOString().split("T")[0];
@@ -113,6 +117,42 @@ const Scheduler: React.FC = () => {
 		fetchMovies();
 	}, []);
 
+	// Fetch showings whenever selectedDate changes
+	useEffect(() => {
+		const fetchShowings = async () => {
+			try {
+				setLoadingShowings(true);
+				setShowingsError("");
+				const token = localStorage.getItem("token");
+				const dateStr = formatDate(selectedDate);
+
+				// Adjust endpoint based on your API - you might need to pass date as query param
+				// Example: API_ENDPOINTS.showingsByDate(dateStr) or API_ENDPOINTS.showings + `?date=${dateStr}`
+				const res = await fetch(`${API_ENDPOINTS.showings}?date=${dateStr}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: token ? `Bearer ${token}` : "",
+					},
+				});
+
+				if (!res.ok) throw new Error("Failed to fetch showings");
+				const data: Showing[] = await res.json();
+				setShowings(data);
+			} catch (e: any) {
+				setShowingsError(e?.message || "Error loading showings");
+			} finally {
+				setLoadingShowings(false);
+			}
+		};
+
+		fetchShowings();
+	}, [selectedDate]); // Re-fetch whenever selectedDate changes
+
+	// Filter showings by hall_uid for each hall
+	const getShowingsForHall = (hallUid: string): Showing[] => {
+		return showings.filter((showing) => showing.hall_uid === hallUid);
+	};
+
 	return (
 		<div className="container mt-4">
 			{/* Date picker */}
@@ -160,9 +200,11 @@ const Scheduler: React.FC = () => {
 				</div>
 			</div>
 
-			{/* Optional movies loading/error badges */}
+			{/* Loading/error states */}
 			{loadingMovies && <div className="alert alert-info mt-3">Loading movies…</div>}
 			{moviesError && <div className="alert alert-danger mt-3">{moviesError}</div>}
+			{loadingShowings && <div className="alert alert-info mt-3">Loading showings…</div>}
+			{showingsError && <div className="alert alert-danger mt-3">{showingsError}</div>}
 
 			{/* Hall schedules */}
 			<div className="row mt-4">
@@ -180,8 +222,25 @@ const Scheduler: React.FC = () => {
 								<div key={hall.uid} className="col">
 									<div className="card">
 										<div className="card-body">
-											{/* Pass movies list so HallSchedule can resolve titles by movie_uid */}
-											<HallSchedule hall={hall} movies={movies} schedule={[]} />
+											<HallSchedule
+												hall={hall}
+												movies={movies}
+												date={formatDate(selectedDate)}
+												schedule={getShowingsForHall(hall.uid)}
+												onCreated={(created) => {
+													const createdDate = created.starts_at.split(" ")[0];
+													if (created.hall_uid === hall.uid && createdDate === formatDate(selectedDate)) {
+														setShowings((prev) => [...prev, created]);
+													}
+												}}
+												onDeleted={(uid) => {
+													// Option A: update local state
+													setShowings((prev) => prev.filter((s) => (s.uid === uid ? false : true)));
+
+													// Option B (instead): re-fetch from API for the selected date
+													// fetchShowings(); // if you have this function available
+												}}
+											/>
 										</div>
 									</div>
 								</div>
