@@ -24,5 +24,9 @@ const API_BASE_URL =
 export const API_ENDPOINTS = {
   cinemas: `${API_BASE_URL}/api/cinemas`,
   cities: `${API_BASE_URL}/api/cities`,
-  movies: `${API_BASE_URL}/api/movies`
+  movies: `${API_BASE_URL}/api/movies`, 
+  showtimes: `${API_BASE_URL}/api/client/showtimes`,   
+  showtime: `${API_BASE_URL}/api/client/showtimes`,    
+  seats: `${API_BASE_URL}/api/client/seats`,
+  paymentCreateSession: `${API_BASE_URL}/payments/create-checkout-session`,
 }
