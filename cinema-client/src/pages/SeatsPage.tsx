@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "../util/baseURL";
 
