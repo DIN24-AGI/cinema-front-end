@@ -13,7 +13,7 @@ function SeatsPage() {
   const { showtime_uid } = useParams();
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     const load = async () => {

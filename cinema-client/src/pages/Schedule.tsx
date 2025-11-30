@@ -19,7 +19,7 @@ function Schedule() {
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [_error, setError] = useState("");
 
 
   // Load cities and cinemas
