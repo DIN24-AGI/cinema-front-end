@@ -15,14 +15,15 @@ interface Movie {
 
 interface TodayMovieProps {
   movies: Movie[];
+  location: string
 }
 
-const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies }) => {
+const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies, location }) => {
   // const navigate = useNavigate();
 
   return (
     <section className="mb-5">
-      <h2 className="mb-4 fw-bold">Playing Today in Oulu</h2>
+      <h2 className="mb-4 fw-bold">Playing Today in {location}</h2>
       <div className="row g-4">
         {movies.map((movie) => (
           <div key={movie.id} className="col-12 col-sm-6 col-md-4 col-lg-3">

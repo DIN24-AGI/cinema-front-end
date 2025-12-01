@@ -48,3 +48,10 @@ export type MovieItem = {
   shows_left: number;
   active: boolean;
 };
+
+export interface CinemaSelectorProps {
+  cinemas: Cinema[];
+  cities: City[];
+  selectedCinema: Cinema | null;
+  onSelectCinema: (cinema: Cinema) => void;
+}
