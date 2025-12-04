@@ -3,11 +3,23 @@ import { useParams, useNavigate } from "react-router";
 import type { Movie } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 
+
+interface MovieShowtime {
+  uid: string;
+  starts_at: string;
+  ends_at: string;
+  hall_name: string;
+  cinema_name: string;
+}
+
 const MovieDetails: React.FC = () => {
   const { uid } = useParams<{ uid: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showtimes, setShowtimes] = useState<MovieShowtime[]>([]);
+  const [loadingShowtimes, setLoadingShowtimes] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,8 +42,22 @@ const MovieDetails: React.FC = () => {
         setLoading(false);
       }
     };
+      const fetchShowtimes = async () => {
+      try {
+        setLoadingShowtimes(true);
+        const res = await fetch(`${API_ENDPOINTS.movies}/${uid}/showtimes`);
+        if (!res.ok) throw new Error("Failed to load showtimes");
+        const data: MovieShowtime[] = await res.json();
+        setShowtimes(data);
+      } catch (err: any) {
+        console.error(err);
+      } finally {
+        setLoadingShowtimes(false);
+      }
+  };
 
     fetchMovie();
+    fetchShowtimes();
   }, [uid]);
 
   if (loading) return <div className="text-center mt-4">Loading...</div>;
@@ -39,13 +65,13 @@ const MovieDetails: React.FC = () => {
   if (!movie) return null;
 
   const handleBack = () => {
-    navigate("/movies")
+    navigate(-1);
   }
 
   return (
     <div className="container mt-4">
         {/* Back button */}
-      <button className="btn btn-secondary mb-4" onClick={handleBack}> Back to Movies
+      <button className="btn btn-secondary mb-4" onClick={handleBack}>Back
       </button>
       <div className="row g-4">
         {/* Poster */}
@@ -74,24 +100,47 @@ const MovieDetails: React.FC = () => {
       <div className="mt-5">
         <h4>Upcoming Showings (Next 7 Days)</h4>
 
-        {/* Placeholder for showings */}
-        <div className="alert alert-info mt-3">
-          Showings will be displayed here soon.
-        </div>
+        {loadingShowtimes && <div className="mt-3">Loading showings...</div>}
 
-        {/* Example structure — replace with real showings when backend is ready */}
-        {false && (
-          <div className="mt-3">
-            <div className="card p-3 mb-2 d-flex flex-row justify-content-between">
-              <div>
-                <strong>Monday 19:00</strong>
-                <p className="m-0">Hall 2</p>
-              </div>
-              <button className="btn btn-primary">Book Ticket</button>
-            </div>
+        {!loadingShowtimes && showtimes.length === 0 && (
+          <div className="alert alert-info mt-3">
+            No upcoming showings for this movie.
           </div>
         )}
-      </div>
+
+        {showtimes.map((st) => {
+          const date = new Date(st.starts_at);
+          const readable = date.toLocaleString("en-GB", {
+            weekday: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            day: "2-digit",
+            month: "short"
+          });
+
+          return (
+            <div key={st.uid} className="card p-3 mb-2 d-flex flex-row justify-content-between">
+              <div>
+                <strong>{readable}</strong>
+                <p className="m-0">
+                  {st.cinema_name} — {st.hall_name}
+                </p>
+              </div>
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate(`/showtime/${st.uid}`)}
+              >
+                Book Ticket
+              </button>
+            </div>
+    );
+  })}
+</div>
+
+
+       
+       
+    
     </div>
   );
 };
