@@ -4,6 +4,8 @@ import type { Cinema, City } from "../types/cinemaTypes";
 interface CinemaSelectorProps {
   cinemas: Cinema[];
   cities: City[];
+  label: string,
+  widthClass: string;
   selectedCinema: Cinema;
   onSelectCinema: (cinema: Cinema) => void;
 }
@@ -11,6 +13,8 @@ interface CinemaSelectorProps {
 const CinemaSelectorDropdown: React.FC<CinemaSelectorProps> = ({
   cinemas,
   cities,
+  label,
+  widthClass = "",
   selectedCinema,
   onSelectCinema
 }) => {
@@ -25,9 +29,9 @@ const CinemaSelectorDropdown: React.FC<CinemaSelectorProps> = ({
   };
 
   return (
-    <section className="mb-4">
+    <section className = {`my-box ${widthClass}`} >
       <label htmlFor="cinema-select" className="form-label">
-        Choose Cinema
+        {label}
       </label>
       <select
         id="cinema-select"

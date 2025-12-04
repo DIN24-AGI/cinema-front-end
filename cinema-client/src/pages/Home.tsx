@@ -7,6 +7,9 @@ import TodayMoviesSection from "../components/TodayMoviesSection";
 import ComingSoonSection from "../components/ComingSoonSection";
 import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
 import type { Showtime } from "../types/showtime";
+import type { Movie } from "../types/cinemaTypes"
+
+import { useNavigate } from "react-router"
 
 interface ShowtimeWithMovie {
   uid: string;
@@ -21,52 +24,14 @@ interface ShowtimeWithMovie {
   hall_name: string;
   cinema_name: string;
 }
-interface Movie {
+interface MovieWithShowtimes {
   id: string;            
   title: string;
   poster: string;
   showtimes: { id: string; time: string }[];
 }
 
-// const moviesToday = [
-//   {
-//     id: 1,
-//     title: "Zootropolis 2",
-//     poster: "https://upload.wikimedia.org/wikipedia/en/6/6a/Zootopia_2_%282025_film%29.jpg",
-//     showtimes: [
-//       { id: "st1", time: "14:30" },
-//       { id: "st2", time: "17:00" },
-//       { id: "st3", time: "20:15" },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: "Wicked",
-//     poster: "https://www.suomalainen.com/cdn/shop/files/9781035421060_1-wicked.jpg?v=1743786998",
-//     showtimes: [
-//       { id: "st4", time: "13:45" },
-//       { id: "st5", time: "16:30" },
-//     ],
-//   },
-//   {id: 3,
-//     title: "Sisu 2",
-//     poster: "https://upload.wikimedia.org/wikipedia/en/c/c0/Sisu_Road_to_Revenge.jpg",
-//     showtimes: [
-//       { id: "st6", time: "19:45" },
-//       { id: "st7", time: "21:30" },
-//     ]
-//   },
-//   {
-//     id: 4,
-//     title: "Free Solo",
-//     poster: "https://cdn.cinematerial.com/p/297x/t4joxqjv/free-solo-movie-poster-md.jpg?v=1539514421",
-//      showtimes: [
-//       { id: "st8", time: "20:45" },
-//       { id: "st9", time: "21:30" },
-//     ]
 
-//   }
-// ];
 
 const comingSoon = [
   {
@@ -83,6 +48,7 @@ const comingSoon = [
 
 const Home = () => {
     const { t } = useTranslation();
+    // const navigate = useNavigate();
 
     const [cities, setCities] = useState<City[]>([]);
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -136,16 +102,15 @@ const Home = () => {
       setError("");
 
       const today = new Date().toISOString().split("T")[0];
-
       try {
-        const res = await fetch(`${API_ENDPOINTS.showtimes}?cinema_uid=${selectedCinema.uid}&date=${today}`
+        const res = await fetch(`${API_ENDPOINTS.showtimesInCinema}?cinema_uid=${selectedCinema.uid}&date=${today}`
 );
 
         if (!res.ok) throw new Error("Failed to fetch showtimes");
 
         const data: ShowtimeWithMovie[] = await res.json();
 
-        const grouped: Movie[] = groupShowtimesByMovie(data);
+        const grouped: MovieWithShowtimes[] = groupShowtimesByMovie(data);
         setMoviesToday(grouped);
 
       } catch (err: any) {
@@ -162,6 +127,7 @@ const Home = () => {
   const onSelectCinema = (cinema: Cinema) => {
     setSelectedCinema(cinema);
   };
+
    
   return (
     <div className ="container mt-4">
@@ -171,6 +137,7 @@ const Home = () => {
         <CinemaSelectorDropdown
           cinemas={cinemas}
           cities={cities}
+          label={"Select your cinema"}
           selectedCinema={selectedCinema}
           onSelectCinema={onSelectCinema}
         />
@@ -189,8 +156,8 @@ const Home = () => {
   )
 }
 // Helper to transform showtimes into Movie[] for display
-const groupShowtimesByMovie = (showtimes: ShowtimeWithMovie[]): Movie[] => {
-  const map = new Map<string, Movie>();
+const groupShowtimesByMovie = (showtimes: ShowtimeWithMovie[]): MovieWithShowtimes[] => {
+  const map = new Map<string, MovieWithShowtimes>();
 
   showtimes.forEach(st => {
     if (!map.has(st.movie_uid)) {

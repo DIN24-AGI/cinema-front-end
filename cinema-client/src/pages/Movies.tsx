@@ -1,46 +1,87 @@
 import { useEffect, useState } from "react";
 import MovieBanner from "../components/MovieBanner";
-import type { Movie } from "../types/cinemaTypes";
+import type { Movie, City, Cinema } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useNavigate } from "react-router";
+import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
 
 const Movies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate()
 
   // Filters
   const [searchTitle, setSearchTitle] = useState("");
-  // const [location, setLocation] = useState(""); // placeholder
-  // const [date, setDate] = useState(""); // placeholder
+  const [cities, setCities] = useState(""); 
+  const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null)
+  const [selectedDate, setSelectedDate] = useState(""); 
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
+  useEffect(() => {
+          const fetchCinemasAndCities = async () => {
+            try {
+              setLoading(true);
+              const [citiesRes, cinemasRes] = await Promise.all([
+                fetch(API_ENDPOINTS.cities,),
+                fetch(API_ENDPOINTS.cinemas,),
+              ]);
+      
+              if (!citiesRes.ok) throw new Error("Failed to load cities");
+              if (!cinemasRes.ok) throw new Error(("cinemas.errorLoadCities"));
+      
+              const cityData: City[] = await citiesRes.json();
+              const cinemaData: Cinema[] = await cinemasRes.json();
+  
+              setCities(cityData);
+              setCinemas(cinemaData.filter(c => c.active));
+
+  
+              if (!selectedCinema && cinemaData.length > 0) {
+              setSelectedCinema(cinemaData[0]);
+          }
+              } catch (err: any) {
+              console.error(err);
+              console.log(error)
+              setError(err.message || "Failed to load data");
+            } finally {
+              setLoading(false);
+            }
+          };
+      
+          fetchCinemasAndCities();
+        }, []);
+
+  // Fetch movies from backend with filters
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
-        const res = await fetch(API_ENDPOINTS.movies);
+
+        const params = new URLSearchParams();
+        if (selectedCinema) params.append("cinema_uid", selectedCinema.uid);
+        // if (searchTitle) params.append("title", searchTitle);
+        if (selectedDate) params.append("date", selectedDate);
+
+        const res = await fetch(`${API_ENDPOINTS.movies}?${params.toString()}`);
 
         if (!res.ok) throw new Error("Failed to load movies");
 
         const data: Movie[] = await res.json();
-        const activeMovies = data.filter((m) => m.active);
-
-        setMovies(activeMovies);
-        setFilteredMovies(activeMovies);
+        setMovies(data);
       } catch (err: any) {
-        setError(err.message || "Failed to load data");
+        console.error(err);
+        setError(err.message || "Failed to load movies");
       } finally {
         setLoading(false);
       }
     };
 
     fetchMovies();
-  }, []);
+  }, [ selectedCinema, selectedDate]);
 
-
-  useEffect(() => {
+    useEffect(() => {
     let result = [...movies];
 
     if (searchTitle.trim() !== "") {
@@ -53,13 +94,15 @@ const Movies = () => {
   }, [searchTitle, movies]);
 
   const openMovieDetails = (movie: Movie) => {
-    console.log("Clicked movie:", movie);
     navigate(`/movies/${movie.uid}`, { state: { movieUid: movie.uid }})
   };
 
   if (loading) return <p>Loading movies...</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
+  const onSelectCinema = (cinema: Cinema) => {
+    setSelectedCinema(cinema);
+  };
   return (
     <div>
 
@@ -68,13 +111,15 @@ const Movies = () => {
 
         <div className="row g-3">
 
-          {/* Filter by location (placeholder) */}
-          <div className="col-12 col-md-4">
-            <label className="form-label fw-semibold">Location</label>
-            <select className="form-select" disabled>
-              <option>Coming soon...</option>
-            </select>
-          </div>
+          {/* Filter by location*/}
+        
+          <CinemaSelectorDropdown 
+            cinemas={cinemas}
+            cities={cities}
+            widthClass="col-12 col-md-4"
+            label={"Location"}
+            selectedCinema={selectedCinema}
+            onSelectCinema={onSelectCinema}/>
 
           {/* Filter by movie title */}
           <div className="col-12 col-md-4">
@@ -90,13 +135,14 @@ const Movies = () => {
 
       
 
-          {/* Filter by date (placeholder) */}
+          {/* Filter by date*/}
           <div className="col-12 col-md-4">
             <label className="form-label fw-semibold">Date</label>
             <input
               type="date"
               className="form-control"
-              disabled
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
             />
           </div>
 
@@ -106,15 +152,16 @@ const Movies = () => {
 
       {/* ------- MOVIE RESULTS ------- */}
       <div className="row g-3">
-        {filteredMovies.map((movie) => (
-          <div className="col-12 col-md-6 col-lg-4" key={movie.uid}>
-            <MovieBanner movie={movie} onDetails={openMovieDetails} />
-          </div>
-        ))}
-
         {filteredMovies.length === 0 && (
           <p className="text-center text-muted">No movies found.</p>
         )}
+
+        {filteredMovies.map((movie) => (
+          <div key={movie.uid} className="col-12 col-md-6 col-lg-4">
+            <MovieBanner movie={movie} onDetails={openMovieDetails}/>
+          
+          </div>
+        ))}
       </div>
     </div>
   );
