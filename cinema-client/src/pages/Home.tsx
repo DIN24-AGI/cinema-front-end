@@ -6,10 +6,6 @@ import { API_ENDPOINTS } from "../util/baseURL";
 import TodayMoviesSection from "../components/TodayMoviesSection";
 import ComingSoonSection from "../components/ComingSoonSection";
 import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
-import type { Showtime } from "../types/showtime";
-import type { Movie } from "../types/cinemaTypes"
-
-import { useNavigate } from "react-router"
 
 interface ShowtimeWithMovie {
   uid: string;
@@ -55,7 +51,7 @@ const Home = () => {
     const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [moviesToday, setMoviesToday] = useState<Showtime[]>([])
+    const [moviesToday, setMoviesToday] = useState<MovieWithShowtimes[]>([])
   
 
     useEffect(() => {
@@ -138,6 +134,7 @@ const Home = () => {
           cinemas={cinemas}
           cities={cities}
           label={"Select your cinema"}
+          widthClass="mb-4"
           selectedCinema={selectedCinema}
           onSelectCinema={onSelectCinema}
         />

@@ -13,7 +13,7 @@ const Movies = () => {
 
   // Filters
   const [searchTitle, setSearchTitle] = useState("");
-  const [cities, setCities] = useState(""); 
+  const [cities, setCities] = useState<City[]>([]); 
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null)
   const [selectedDate, setSelectedDate] = useState(""); 
@@ -118,7 +118,7 @@ const Movies = () => {
             cities={cities}
             widthClass="col-12 col-md-4"
             label={"Location"}
-            selectedCinema={selectedCinema}
+            selectedCinema={selectedCinema!}
             onSelectCinema={onSelectCinema}/>
 
           {/* Filter by movie title */}
