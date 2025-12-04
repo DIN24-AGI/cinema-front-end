@@ -43,21 +43,29 @@ const AddMovie: React.FC<AddMovieProps> = ({ movies, date, hall_uid, onCreated }
 		const hh = Number.isFinite(hhRaw) ? hhRaw : 0;
 		const mm = Number.isFinite(mmRaw) ? mmRaw : 0;
 
-		// Create starts_at in Finnish timezone (Europe/Helsinki)
-		// Use the date prop (YYYY-MM-DD) and selected time
-		const starts_at = `${date} ${hh}:${pad2(mm)}:00`;
-
-		// Calculate ends_at by adding duration
-		const durationMin = Number(selectedMovie.duration_minutes ?? 0);
-
-		// Create a Date object in local timezone (Finnish time)
+		// Build Date objects in local timezone (user’s system TZ; for you it’s Helsinki)
 		const [year, month, day] = date.split("-").map(Number);
-		const startDT = new Date(year, month - 1, day, hh, mm, 0);
+		const startDT = new Date(year, (month || 1) - 1, day || 1, hh, mm, 0, 0);
+
+		const durationMin = Number(selectedMovie.duration_minutes ?? 0);
 		const endDT = new Date(startDT.getTime() + (isNaN(durationMin) ? 0 : durationMin) * 60_000);
 
-		const formatYmd = (d: Date) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+		// Compute local offset for each Date (handles DST automatically)
+		const formatOffset = (d: Date) => {
+			const offsetMin = -d.getTimezoneOffset(); // e.g. +120 for UTC+2
+			const sign = offsetMin >= 0 ? "+" : "-";
+			const abs = Math.abs(offsetMin);
+			const offH = pad2(Math.floor(abs / 60));
+			const offM = pad2(abs % 60);
+			return `${sign}${offH}:${offM}`;
+		};
 
-		const ends_at = `${formatYmd(endDT)} ${endDT.getHours()}:${pad2(endDT.getMinutes())}:00`;
+		const formatYmdHMS = (d: Date) =>
+			`${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${d.getHours()}:${pad2(d.getMinutes())}:00`;
+
+		// Send with explicit timezone offset so Postgres stores exact intended time
+		const starts_at = `${formatYmdHMS(startDT)}${formatOffset(startDT)}`; // e.g. "2025-12-28 09:00:00+02:00"
+		const ends_at = `${formatYmdHMS(endDT)}${formatOffset(endDT)}`;
 
 		try {
 			const token = localStorage.getItem("token") || "";
