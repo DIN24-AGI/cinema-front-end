@@ -1,11 +1,5 @@
-import type { Cinema, City } from "../types/cinemaTypes";
+import type { CinemaSelectorProps } from "../types/cinemaTypes";
 
-interface CinemaSelectorProps {
-  cinemas: Cinema[];
-  cities: City[];
-  selectedCinema: Cinema | null;
-  onSelectCinema: (cinema: Cinema) => void;
-}
 
 const CinemaSelector: React.FC<CinemaSelectorProps> = ({
   cinemas,

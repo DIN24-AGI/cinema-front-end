@@ -19,7 +19,7 @@ function Schedule() {
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
 
   const [loading, setLoading] = useState(false);
-  const [_error, setError] = useState("");
+  const [error, setError] = useState("");
 
 
   // Load cities and cinemas
@@ -43,6 +43,10 @@ function Schedule() {
         const activeCinemas = cinemaData.filter(c => c.active);
         setCinemas(activeCinemas);
 
+        if (!selectedCinema && activeCinemas.length > 0) {
+          setSelectedCinema(activeCinemas[0]);
+        }
+
       } catch (err: any) {
         console.error(err);
         setError(err.message || t("cinemas.genericError"));
@@ -63,7 +67,7 @@ function Schedule() {
       try {
         setLoading(true);
 
-        const url = `${API_ENDPOINTS.showtimes}?cinema_uid=${selectedCinema.uid}&date=${date}`;
+        const url = `${API_ENDPOINTS.showtimesInCinema}?cinema_uid=${selectedCinema.uid}&date=${date}`;
         const res = await fetch(url);
 
         if (!res.ok) throw new Error("Failed to load showtimes");
@@ -85,6 +89,7 @@ function Schedule() {
 
   return (
     <div className="container mt-4">
+      {error && <div className="alert alert-danger">{error}</div>}
       <h2 className="mb-4">Schedule</h2>
 
       {/* Cinema Selector */}
@@ -93,7 +98,7 @@ function Schedule() {
         <CinemaSelector
           cinemas={cinemas}
           cities={cities}
-          selectedCinema={selectedCinema}
+          selectedCinema={selectedCinema!}
           onSelectCinema={setSelectedCinema}
         />
       </div>

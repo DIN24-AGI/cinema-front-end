@@ -1,77 +1,74 @@
 import React from "react";
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
-interface Showtime {
+// Showtimes for each movie
+interface ShowtimeShort {
   id: string;
-  time: string; 
+  time: string;
 }
 
-interface Movie {
-  id: number;
+// Movie with grouped showtimes
+interface MovieWithShowtimes {
+  id: string;
   title: string;
   poster: string;
-  showtimes: Showtime[];
+  showtimes: ShowtimeShort[];
 }
 
 interface TodayMovieProps {
-  movies: Movie[];
+  movies: MovieWithShowtimes[];
+  location: string;
 }
 
-const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies }) => {
-  // const navigate = useNavigate();
+const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies, location }) => {
+  const navigate = useNavigate();
+
+  const openMovieDetails = (movie: MovieWithShowtimes) => {
+    navigate(`/movies/${movie.id}`, { state: { movieUid: movie.id } });
+  };
+
+  const navigateToShowtimePage = (showtime: ShowtimeShort) => {
+    navigate(`/showtime/${showtime.id}/`, { state: { showtime_uid: showtime.id } });
+  };
 
   return (
     <section className="mb-5">
-      <h2 className="mb-4 fw-bold">Playing Today in Oulu</h2>
+      <h2 className="mb-4 fw-bold">Playing Today in {location}</h2>
       <div className="row g-4">
         {movies.map((movie) => (
           <div key={movie.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
             <div className="card h-100 shadow-sm">
-              <div
-                style={{
-                  width: "100%",
-                  height: 300,
-                  overflow: "hidden",
-                }}
-              >
+              <div style={{ width: "100%", height: 300, overflow: "hidden" }}>
                 <img
                   src={movie.poster}
                   alt={movie.title}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
+
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{movie.title}</h5>
 
                 {/* Showtimes */}
                 <div className="mb-3">
                   {movie.showtimes.map((st) => (
-                    <span
+                    <button
                       key={st.id}
-                      className="badge bg-primary me-1 mb-1"
+                      className="badge bg-primary me-1 mb-1 btn btn-sm"
+                      onClick={() => navigateToShowtimePage(st)}
                     >
-                      {st.time}
-                    </span>
+                      Book {st.time}
+                    </button>
                   ))}
                 </div>
 
-                {/* Buttons */}
-                <div className="mt-auto d-flex gap-2">
+                {/* Movie details button */}
+                <div className="mt-auto">
                   <button
-                    className="btn btn-outline-primary flex-fill"
-                    onClick={() => alert('This will nagivate to movie details')}
+                    className="btn btn-primary btn-sm"
+                    onClick={() => openMovieDetails(movie)}
                   >
                     Details
-                  </button>
-                  <button
-                    className="btn btn-primary flex-fill"
-                    onClick={() => alert("Book ticket clicked!")}
-                  >
-                    Book
                   </button>
                 </div>
               </div>

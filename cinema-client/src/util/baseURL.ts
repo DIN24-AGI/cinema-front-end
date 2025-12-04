@@ -29,4 +29,5 @@ export const API_ENDPOINTS = {
   showtime: `${API_BASE_URL}/api/client/showtimes`,    
   seats: `${API_BASE_URL}/api/client/seats`,
   paymentCreateSession: `${API_BASE_URL}/payments/create-checkout-session`,
+  showtimesInCinema: `${API_BASE_URL}/api/showtimes`,
 }
