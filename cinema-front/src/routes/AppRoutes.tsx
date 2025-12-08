@@ -14,6 +14,7 @@ import AddHall from "../pages/AddHall";
 import ManageMovies from "../pages/ManageMovies";
 import AddEditMovie from "../pages/AddEditMovie";
 import Scheduler from "../pages/Scheduler";
+import ManageUsers from "../pages/ManageUsers";
 
 interface AppRoutesProps {
 	token: string | null;
@@ -139,6 +140,14 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ token, setToken }) => {
 							element={
 								<ProtectedResource token={token}>
 									<Scheduler />
+								</ProtectedResource>
+							}
+						/>
+						<Route
+							path="/admin/users"
+							element={
+								<ProtectedResource token={token}>
+									<ManageUsers />
 								</ProtectedResource>
 							}
 						/>

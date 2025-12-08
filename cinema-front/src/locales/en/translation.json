@@ -8,7 +8,8 @@
     "data": "See Data",
     "logout": "Logout",
     "movieList": "Movie List",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "manageUsers": "Manage Users"
   },
   "login": {
     "title": "Admin Login",
