@@ -5,8 +5,70 @@
     "schedule": "Schedule",
     "contact": "Contact Us"
   },
+  "home": {
+    "selectCinema": "Select Your Cinema"
+  },
   "contact": {
     "title": "Contact Us",
-    "chooseCinema": "Choose Cinema"
+    "chooseCinema": "Choose Cinema",
+    "errorLoadCities": "Error loading cities",
+    "errorLoadCinemas": "Error loading cinemas",
+    "genericError": "Something went wrong",
+    "address": "Address: ",
+    "phone": "Phone: ",
+    "city": "City: "
+  },
+  "movies": {
+    "coming":"Coming Soon",
+    "detailAlert": "This will navigate to movie details",
+    "details": "Details",
+    "today": "Playing Today in {{location}}",
+    "error": "Failed to load movies",
+    "loading": "Loading Movies"
+  },
+  "util": {
+    "loading": "Loading...",
+    "genericError":"Something went wrong",
+    "back": "Back"
+  },
+  "cinemas": {
+    "title": "Cinemas"
+  },
+  "movieDetails": {
+    "errorShowtimes": "Failed to load showings",
+    "upcoming": "Upcoming showings (Next 7 days)",
+    "loading": "Loading showings",
+    "noShowings": "No upcoming showings for this movie"
+  },
+  "schedule": {
+    "location": "Location",
+    "title": "Movie Title",
+    "search": "Search by title...",
+    "date": "Date",
+    "pageTitle": "Schedule",
+    "cinemaSelect": "Select Cinema",
+    "dateSelect": "Select Date",
+    "require": "Please select a cinema to view the schedule.",
+    "starts": "Starts: ",
+    "ends": "Ends: ",
+    "book": "Book Ticket",
+    "noShowings": "No showings for this date",
+    "hall": "Hall: "
+  },
+  "payment": {
+    "cancelled": "Payment Cancelled",
+    "cancelledInfo": "Your reservation was not completed",
+    "success": "Payment Successful",
+    "successInfo": "Your reservation is confirmed"
+  },
+  "seats": {
+    "select": "Select Seats",
+    "row": "Row ",
+    "selected": "Selected Seats: ",
+    "seat": " seat(s)",
+    "payment": "Continue to payment",
+    "error": "Payment session error"
   }
+
+
 }

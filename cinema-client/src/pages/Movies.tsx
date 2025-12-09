@@ -4,8 +4,11 @@ import type { Movie, City, Cinema } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useNavigate } from "react-router";
 import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
+import { useTranslation } from "react-i18next";
+
 
 const Movies = () => {
+  const { t } = useTranslation();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,8 +31,8 @@ const Movies = () => {
                 fetch(API_ENDPOINTS.cinemas,),
               ]);
       
-              if (!citiesRes.ok) throw new Error("Failed to load cities");
-              if (!cinemasRes.ok) throw new Error(("cinemas.errorLoadCities"));
+              if (!citiesRes.ok) throw new Error(t("contact.errorLoadCities"));
+              if (!cinemasRes.ok) throw new Error(t("contact.errorLoadCinemas"));
       
               const cityData: City[] = await citiesRes.json();
               const cinemaData: Cinema[] = await cinemasRes.json();
@@ -44,14 +47,14 @@ const Movies = () => {
               } catch (err: any) {
               console.error(err);
               console.log(error)
-              setError(err.message || "Failed to load data");
+              setError(err.message || t("util.genericError"));
             } finally {
               setLoading(false);
             }
           };
       
           fetchCinemasAndCities();
-        }, []);
+        }, [error, selectedCinema, t]);
 
   // Fetch movies from backend with filters
   useEffect(() => {
@@ -66,20 +69,20 @@ const Movies = () => {
 
         const res = await fetch(`${API_ENDPOINTS.movies}?${params.toString()}`);
 
-        if (!res.ok) throw new Error("Failed to load movies");
+        if (!res.ok) throw new Error(t("movies.error"));
 
         const data: Movie[] = await res.json();
         setMovies(data);
       } catch (err: any) {
         console.error(err);
-        setError(err.message || "Failed to load movies");
+        setError(err.message || t("movies.error"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchMovies();
-  }, [ selectedCinema, selectedDate]);
+  }, [ selectedCinema, selectedDate, t] );
 
     useEffect(() => {
     let result = [...movies];
@@ -97,7 +100,7 @@ const Movies = () => {
     navigate(`/movies/${movie.uid}`, { state: { movieUid: movie.uid }})
   };
 
-  if (loading) return <p>Loading movies...</p>;
+  if (loading) return <p>{t("movies.loading")}</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
   const onSelectCinema = (cinema: Cinema) => {
@@ -117,17 +120,17 @@ const Movies = () => {
             cinemas={cinemas}
             cities={cities}
             widthClass="col-12 col-md-4"
-            label={"Location"}
+            label={t("schedule.location")}
             selectedCinema={selectedCinema!}
             onSelectCinema={onSelectCinema}/>
 
           {/* Filter by movie title */}
           <div className="col-12 col-md-4">
-            <label className="form-label fw-semibold">Movie Title</label>
+            <label className="form-label fw-semibold">{t("schedule.title")}</label>
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title..."
+              placeholder={t("schedule.search")}
               value={searchTitle}
               onChange={(e) => setSearchTitle(e.target.value)}
             />
@@ -137,7 +140,7 @@ const Movies = () => {
 
           {/* Filter by date*/}
           <div className="col-12 col-md-4">
-            <label className="form-label fw-semibold">Date</label>
+            <label className="form-label fw-semibold">{t("schedule.date")}</label>
             <input
               type="date"
               className="form-control"
