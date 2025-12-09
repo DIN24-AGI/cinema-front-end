@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { API_ENDPOINTS } from "../util/baseURL"; // adjust if needed
+import { API_ENDPOINTS } from "../util/baseURL"; 
+import UserList from "../components/UserList"
+import { useTranslation } from "react-i18next";
 
 const ManageUsers = () => {
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"regular" | "super">("regular");
@@ -34,15 +38,15 @@ const ManageUsers = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.msg || "Failed to create user");
+        throw new Error(data.msg || t("manageUsers.createError"));
       }
 
-      setMessage("User created successfully!");
+      setMessage(t("manageUsers.success"));
       setEmail("");
       setPassword("");
       setRole("regular");
     } catch (err: any) {
-      setMessage(err.message || "Something went wrong");
+      setMessage(err.message || t("manageUsers.genericError"));
     } finally {
       setLoading(false);
     }
@@ -50,12 +54,12 @@ const ManageUsers = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Manage Users</h2>
+      <h2 className="mb-4">{t("manageUsers.title")}</h2>
 
       {message && (
         <div
           className={`alert ${
-            message.includes("successfully") ? "alert-success" : "alert-danger"
+            message.includes(t("manageUsers.successKeyword")) ? "alert-success" : "alert-danger"
           }`}
         >
           {message}
@@ -65,7 +69,7 @@ const ManageUsers = () => {
       <form className="card p-4" onSubmit={handleCreateUser}>
         {/* Email */}
         <div className="mb-3">
-          <label className="form-label">Email</label>
+          <label className="form-label">{t("manageUsers.email")}</label>
           <input
             type="email"
             className="form-control"
@@ -77,7 +81,7 @@ const ManageUsers = () => {
 
         {/* Password */}
         <div className="mb-3">
-          <label className="form-label">Password</label>
+          <label className="form-label">{t("manageUsers.password")}</label>
           <input
             type="password"
             className="form-control"
@@ -89,23 +93,26 @@ const ManageUsers = () => {
 
         {/* Role */}
         <div className="mb-3">
-          <label className="form-label">Role</label>
+          <label className="form-label">{t("manageUsers.role")}</label>
           <select
             className="form-select"
             value={role}
             onChange={(e) => setRole(e.target.value as any)}
           >
-            <option value="regular">Regular</option>
-            <option value="super">Super Admin</option>
+           <option value="regular">{t("roles.regular")}</option>
+            <option value="super">{t("roles.super")}</option>
           </select>
         </div>
 
         {/* Submit */}
         <button className="btn btn-primary" type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create User"}
+          {loading ? t("manageUsers.loading") : t("manageUsers.create")}
         </button>
       </form>
+      <UserList />
+
     </div>
+
   );
 };
 

@@ -150,5 +150,34 @@
     "deactivate": "Deactivate",
     "selectCity": "Select City",
     "back": "Back"
+  },
+  "users": {
+    "title": "User List",
+    "email": "Email",
+    "role": "Role",
+    "changeRole": "Change Role",
+    "delete": "Delete",
+    "confirmRole": "Are you sure you want to change the role to \"{{role}}\"?",
+    "deleteUser": "Are you sure you want to DELETE the user? This cannot be undone.",
+    "loading": "Loading users..."
+  },
+
+  "roles": {
+    "regular": "Regular",
+    "super": "Superuser"
+  },
+
+  "manageUsers": {
+    "title": "Manage Users",
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "create": "Create User",
+    "loading": "Creating...",
+    "success": "User created successfully!",
+    "successKeyword": "successfully",
+    "createError": "Failed to create user",
+    "genericError": "Something went wrong"
   }
 }
+
