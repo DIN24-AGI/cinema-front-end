@@ -63,3 +63,9 @@ export interface Showing {
 	starts_at: string;
 	ends_at: string;
 }
+
+export interface User {
+	uid: string;
+	email: string;
+	role: string;
+}

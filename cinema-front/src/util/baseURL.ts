@@ -17,4 +17,5 @@ export const API_ENDPOINTS = {
 	halls: `${API_BASE_URL}/admin/halls`,
 	movies: `${API_BASE_URL}/admin/movies`,
 	showings: `${API_BASE_URL}/admin/showtimes`,
+	users: `${API_BASE_URL}/admin/users`
 };
