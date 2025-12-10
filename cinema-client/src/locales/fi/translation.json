@@ -16,7 +16,8 @@
     "genericError": "Jokin meni pieleen",
     "address": "Osoite: ",
     "phone": "Puhelin: ",
-    "city": "Kaupunki: "
+    "city": "Kaupunki: ",
+    "loading": "Ladataan..."
   },
   "movies": {
     "coming": "Tulossa pian",

@@ -16,7 +16,8 @@
     "genericError": "Something went wrong",
     "address": "Address: ",
     "phone": "Phone: ",
-    "city": "City: "
+    "city": "City: ",
+    "loading": "Loading..."
   },
   "movies": {
     "coming":"Coming Soon",
