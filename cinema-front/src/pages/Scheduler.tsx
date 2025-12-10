@@ -3,6 +3,7 @@ import type { Cinema, Hall, MovieItem } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import HallSchedule from "../components/HallSchedule";
 import type { Showing } from "../types/cinemaTypes";
+import { useTranslation } from "react-i18next";
 
 /**
  * Scheduler Component
@@ -22,6 +23,8 @@ import type { Showing } from "../types/cinemaTypes";
  * 5. Each hall displays its showings and allows adding new ones
  */
 const Scheduler: React.FC = () => {
+	const { t } = useTranslation();
+
 	// Date state - controls which day's schedule is displayed
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -94,7 +97,7 @@ const Scheduler: React.FC = () => {
 				const res = await fetch(API_ENDPOINTS.cinemas, {
 					headers: { Authorization: token ? `Bearer ${token}` : "" },
 				});
-				if (!res.ok) throw new Error("Failed to load cinemas");
+				if (!res.ok) throw new Error(t("cinemas.fetchError"));
 				const data: Cinema[] = await res.json();
 				setCinemas(data);
 				// Auto-select first cinema if none selected
@@ -102,13 +105,13 @@ const Scheduler: React.FC = () => {
 					setSelectedCinema(data[0].uid);
 				}
 			} catch (e: any) {
-				setCinemaError(e?.message || "Error");
+				setCinemaError(e?.message || t("cinemas.genericError"));
 			} finally {
 				setLoadingCinemas(false);
 			}
 		};
 		fetchCinemas();
-	}, []);
+	}, [t]);
 
 	/**
 	 * Effect: Fetch halls when a cinema is selected
@@ -128,17 +131,17 @@ const Scheduler: React.FC = () => {
 				const res = await fetch(API_ENDPOINTS.hallsByCinema(selectedCinema), {
 					headers: { Authorization: token ? `Bearer ${token}` : "" },
 				});
-				if (!res.ok) throw new Error("Failed to load halls");
+				if (!res.ok) throw new Error(t("halls.errorLoadHalls"));
 				const data: Hall[] = await res.json();
 				setHalls(data);
 			} catch (e: any) {
-				setHallsError(e?.message || "Error loading halls");
+				setHallsError(e?.message || t("halls.errorLoadHalls"));
 			} finally {
 				setLoadingHalls(false);
 			}
 		};
 		fetchHalls();
-	}, [selectedCinema]);
+	}, [selectedCinema, t]);
 
 	/**
 	 * Effect: Fetch active movies on component mount
@@ -156,17 +159,17 @@ const Scheduler: React.FC = () => {
 						Authorization: token ? `Bearer ${token}` : "",
 					},
 				});
-				if (!res.ok) throw new Error("fetchFailed");
+				if (!res.ok) throw new Error(t("movies.fetchError"));
 				const data: MovieItem[] = await res.json();
 				setMovies(data.filter((m) => m.active)); // Filter to only active movies
 			} catch (e: any) {
-				setMoviesError(e?.message === "fetchFailed" ? "Failed to fetch movies" : "Unexpected error");
+				setMoviesError(e?.message || t("movies.fetchError"));
 			} finally {
 				setLoadingMovies(false);
 			}
 		};
 		fetchMovies();
-	}, []);
+	}, [t]);
 
 	/**
 	 * Effect: Fetch showings when selected date changes
@@ -194,12 +197,12 @@ const Scheduler: React.FC = () => {
 				},
 			});
 
-			if (!res.ok) throw new Error("Failed to fetch showings");
+			if (!res.ok) throw new Error(t("scheduler.fetchShowingsError"));
 			const data: Showing[] = await res.json();
 			console.log(data);
 			setShowings(data);
 		} catch (e: any) {
-			setShowingsError(e?.message || "Error loading showings");
+			setShowingsError(e?.message || t("scheduler.fetchShowingsError"));
 		} finally {
 			setLoadingShowings(false);
 		}
@@ -223,7 +226,7 @@ const Scheduler: React.FC = () => {
 					<div className="input-group">
 						{/* Previous day button */}
 						<button className="btn btn-outline-primary" type="button" onClick={handlePreviousDay}>
-							<i className="bi bi-chevron-left"></i> Previous
+							<i className="bi bi-chevron-left"></i> {t("scheduler.previous")}
 						</button>
 						{/* Date input field */}
 						<input
@@ -234,7 +237,7 @@ const Scheduler: React.FC = () => {
 						/>
 						{/* Next day button */}
 						<button className="btn btn-outline-primary" type="button" onClick={handleNextDay}>
-							Next <i className="bi bi-chevron-right"></i>
+							{t("scheduler.next")} <i className="bi bi-chevron-right"></i>
 						</button>
 					</div>
 				</div>
@@ -244,7 +247,7 @@ const Scheduler: React.FC = () => {
 			<div className="row g-3 mt-3">
 				<div className="col-md-6 col-lg-4">
 					<label htmlFor="cinemaSelect" className="form-label">
-						Cinema
+						{t("scheduler.cinema")}
 					</label>
 					{/* Cinema dropdown */}
 					<select
@@ -254,7 +257,7 @@ const Scheduler: React.FC = () => {
 						onChange={(e) => setSelectedCinema(e.target.value)}
 						disabled={loadingCinemas}
 					>
-						<option value="">Select cinema</option>
+						<option value="">{t("scheduler.selectCinema")}</option>
 						{cinemas.map((c) => (
 							<option key={c.uid} value={c.uid}>
 								{c.name}
@@ -262,28 +265,28 @@ const Scheduler: React.FC = () => {
 						))}
 					</select>
 					{/* Loading/error feedback for cinemas */}
-					{loadingCinemas && <div className="form-text">Loading cinemas…</div>}
+					{loadingCinemas && <div className="form-text">{t("util.loading")}</div>}
 					{cinemaError && <div className="text-danger small">{cinemaError}</div>}
 				</div>
 			</div>
 
 			{/* Loading/Error States for Movies and Showings */}
-			{loadingMovies && <div className="alert alert-info mt-3">Loading movies…</div>}
+			{loadingMovies && <div className="alert alert-info mt-3">{t("scheduler.loadingMovies")}</div>}
 			{moviesError && <div className="alert alert-danger mt-3">{moviesError}</div>}
-			{loadingShowings && <div className="alert alert-info mt-3">Loading showings…</div>}
+			{loadingShowings && <div className="alert alert-info mt-3">{t("scheduler.loadingShowings")}</div>}
 			{showingsError && <div className="alert alert-danger mt-3">{showingsError}</div>}
 
 			{/* Hall Schedules Section */}
 			<div className="row mt-4">
 				<div className="col">
 					{/* Loading state for halls */}
-					{loadingHalls && <div className="text-muted">Loading halls…</div>}
+					{loadingHalls && <div className="text-muted">{t("halls.loading")}</div>}
 					{/* Error state for halls */}
 					{hallsError && <div className="alert alert-danger">{hallsError}</div>}
 
 					{/* Empty state: cinema selected but no halls found */}
 					{!loadingHalls && !hallsError && selectedCinema && halls.length === 0 && (
-						<div className="alert alert-info">No halls found for this cinema.</div>
+						<div className="alert alert-info">{t("scheduler.noHalls")}</div>
 					)}
 
 					{/* Render hall schedules when data is loaded */}
@@ -294,12 +297,12 @@ const Scheduler: React.FC = () => {
 									<div className="card">
 										<div className="card-body">
 											{/*
-												HallSchedule component for each hall
-												- Shows hall info and current showings
-												- Allows adding new showings
-												- Handles showing deletion
-												- Callbacks refetch showings from database
-											*/}
+                                                HallSchedule component for each hall
+                                                - Shows hall info and current showings
+                                                - Allows adding new showings
+                                                - Handles showing deletion
+                                                - Callbacks refetch showings from database
+                                            */}
 											<HallSchedule
 												hall={hall}
 												movies={movies}

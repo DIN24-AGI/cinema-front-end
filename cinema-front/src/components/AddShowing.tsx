@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import type { Movie } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 /**
  * ShowTime type - represents a movie showing in the database
@@ -51,6 +52,8 @@ const AddShowing: React.FC<AddMovieProps> = ({
 	existingShowings = [],
 	onCreated,
 }) => {
+	const { t } = useTranslation();
+
 	// Form state
 	const [time, setTime] = useState(""); // Selected start time (HH:mm format)
 	const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // Currently selected movie
@@ -135,7 +138,7 @@ const AddShowing: React.FC<AddMovieProps> = ({
 
 		// Check for overlaps before submitting
 		if (checkOverlap(startDT, endDT)) {
-			alert("This showing overlaps with an existing showing in the same hall. Please choose a different time.");
+			alert(t("addShowing.overlapError"));
 			return;
 		}
 
@@ -182,7 +185,7 @@ const AddShowing: React.FC<AddMovieProps> = ({
 				}),
 			});
 
-			if (!res.ok) throw new Error(await res.text().catch(() => "Failed to create showing"));
+			if (!res.ok) throw new Error(await res.text().catch(() => t("addShowing.createError")));
 
 			// Parse created showing and notify parent
 			const created: ShowTime = await res.json();
@@ -191,6 +194,7 @@ const AddShowing: React.FC<AddMovieProps> = ({
 			console.log("Showing created");
 		} catch (err) {
 			console.error(err);
+			alert(t("addShowing.createError"));
 		}
 	};
 
@@ -203,7 +207,7 @@ const AddShowing: React.FC<AddMovieProps> = ({
 					className="form-select w-auto"
 					value={selectedMovie?.title || ""}
 					onChange={(e) => setSelectedMovie(movies.find((m) => m.title === e.target.value) || null)}
-					aria-label="Select movie"
+					aria-label={t("addShowing.selectMovie")}
 				>
 					{options.map((title) => (
 						<option key={title} value={title}>
@@ -218,14 +222,14 @@ const AddShowing: React.FC<AddMovieProps> = ({
 					className="form-control w-auto"
 					value={time}
 					onChange={(e) => setTime(e.target.value)}
-					aria-label="Select time"
+					aria-label={t("addShowing.selectTime")}
 				/>
 
 				{/* Full/adult price input */}
 				<input
 					type="number"
 					className="form-control w-auto"
-					placeholder="Full Price (€)"
+					placeholder={t("addShowing.fullPrice")}
 					value={fullPrice.toFixed(2)} // Always show 2 decimals
 					onChange={(e) => setFullPrice(parseFloat(e.target.value) || 0)}
 					step="0.1"
@@ -237,7 +241,7 @@ const AddShowing: React.FC<AddMovieProps> = ({
 				<input
 					type="number"
 					className="form-control w-auto"
-					placeholder="Discount Price (€)"
+					placeholder={t("addShowing.discountedPrice")}
 					value={discountedPrice.toFixed(2)} // Always show 2 decimals
 					onChange={(e) => setDiscountedPrice(parseFloat(e.target.value) || 0)}
 					step="0.1"
@@ -247,7 +251,7 @@ const AddShowing: React.FC<AddMovieProps> = ({
 
 				{/* Submit button */}
 				<button type="submit" className="btn btn-primary">
-					Add
+					{t("addShowing.add")}
 				</button>
 			</form>
 		</div>

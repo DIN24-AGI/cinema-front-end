@@ -2,6 +2,7 @@ import React from "react";
 import type { Hall, Showing, Movie } from "../types/cinemaTypes";
 import AddShowing from "./AddShowing";
 import ShowingView from "./ShowingView";
+import { useTranslation } from "react-i18next";
 
 /**
  * Props for HallSchedule component
@@ -46,8 +47,10 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 	onCreated,
 	onDeleted,
 }) => {
+	const { t } = useTranslation();
+
 	return (
-		<section aria-label={`Schedule for hall ${hall.name}`}>
+		<section aria-label={`${t("hallSchedule.scheduleFor")} ${hall.name}`}>
 			{/* Hall Information Header */}
 			<header className="mb-3">
 				{/* Hall name */}
@@ -55,13 +58,14 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 
 				{/* Capacity information */}
 				<small>
-					Capacity: {hall.seats} seats ({hall.rows} rows × {hall.cols} cols)
+					{t("hallSchedule.capacity")}: {hall.seats} {t("hallSchedule.seats")} ({hall.rows} {t("hallSchedule.rows")} ×{" "}
+					{hall.cols} {t("hallSchedule.cols")})
 				</small>
 
 				{/* Active/Inactive status badge */}
 				{hall.active !== undefined && (
 					<span className={`ms-2 badge ${hall.active ? "bg-success" : "bg-secondary"}`}>
-						{hall.active ? "Active" : "Inactive"}
+						{hall.active ? t("util.active") : t("util.inactive")}
 					</span>
 				)}
 			</header>
@@ -73,7 +77,7 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 					{schedule.map((show) => {
 						// Find movie details for this showing
 						const movie = movies.find((m) => m.uid === show.movie_uid);
-						const movieTitle = movie?.title || "Unknown Movie";
+						const movieTitle = movie?.title || t("hallSchedule.unknownMovie");
 
 						return (
 							<ShowingView
@@ -91,7 +95,7 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 				</div>
 			) : (
 				// Empty state when no showings scheduled
-				<p className="text-muted">No scheduled shows.</p>
+				<p className="text-muted">{t("hallSchedule.noShows")}</p>
 			)}
 
 			{/* Add New Showing Form */}

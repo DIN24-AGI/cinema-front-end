@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import type { ShowTime } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 /**
  * Parses a time string and converts it to local HH:mm format
@@ -59,6 +60,8 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 	discountedPrice,
 	onDeleted,
 }) => {
+	const { t } = useTranslation();
+
 	// Deletion state - tracks if delete request is in progress
 	const [deleting, setDeleting] = useState(false);
 
@@ -84,14 +87,14 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 		const endD = new Date(endTimeStr.replace(" ", "T"));
 
 		// Validate parsed dates
-		if (isNaN(startD.getTime()) || isNaN(endD.getTime())) return "N/A";
+		if (isNaN(startD.getTime()) || isNaN(endD.getTime())) return t("showingView.invalidDuration");
 
 		// Calculate difference in milliseconds and convert to minutes
 		const diffMs = endD.getTime() - startD.getTime();
 		const diffMinutes = Math.floor(diffMs / 60000);
 
 		// Handle invalid (negative) durations
-		if (diffMinutes < 0) return "Invalid";
+		if (diffMinutes < 0) return t("showingView.invalidDuration");
 
 		// Format as hours and minutes
 		const hours = Math.floor(diffMinutes / 60);
@@ -126,13 +129,13 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 				},
 			});
 
-			if (!res.ok) throw new Error(await res.text().catch(() => "Failed to delete showtime"));
+			if (!res.ok) throw new Error(await res.text().catch(() => t("showingView.deleteError")));
 
 			// Notify parent component of successful deletion
 			onDeleted?.(showingUid);
 		} catch (err) {
 			console.error(err);
-			alert("Failed to delete showtime");
+			alert(t("showingView.deleteError"));
 		} finally {
 			setDeleting(false);
 		}
@@ -151,13 +154,15 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 				whiteSpace: "nowrap",
 			}}
 			role="group"
-			aria-label={`Showing ${showingUid}`}
+			aria-label={`${t("showingView.showing")} ${showingUid}`}
 		>
 			{/* Movie title - bold for emphasis */}
 			<span style={{ fontWeight: 600 }}>{movieTitle}</span>
 
 			{/* Duration - lighter weight */}
-			<span style={{ fontWeight: 200 }}>Duration: {duration}</span>
+			<span style={{ fontWeight: 200 }}>
+				{t("showingView.duration")}: {duration}
+			</span>
 
 			{/* Start and end times */}
 			<span style={{ color: "#333" }}>
@@ -168,21 +173,21 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 			{/* Full/adult ticket price - displayed in gray */}
 			{fullPrice !== undefined && fullPrice !== null && (
 				<span style={{ color: "#7c7c7cff" }}>
-					Full: €{(fullPrice / 100).toFixed(2)} {/* Convert cents to euros */}
+					{t("showingView.fullPrice")}: €{(fullPrice / 100).toFixed(2)} {/* Convert cents to euros */}
 				</span>
 			)}
 
 			{/* Discounted/child ticket price - displayed in lighter gray */}
 			{discountedPrice !== undefined && discountedPrice !== null && (
 				<span style={{ color: "#a5a5a5ff", fontWeight: 500 }}>
-					Discounted: €{(discountedPrice / 100).toFixed(2)} {/* Convert cents to euros */}
+					{t("showingView.discountedPrice")}: €{(discountedPrice / 100).toFixed(2)} {/* Convert cents to euros */}
 				</span>
 			)}
 
 			{/* Delete button - positioned at the far right */}
 			<button
 				type="button"
-				aria-label={`Delete showing ${showingUid}`}
+				aria-label={`${t("showingView.deleteShowing")} ${showingUid}`}
 				style={{
 					cursor: "pointer",
 					padding: "6px 10px",
@@ -195,7 +200,7 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 				onClick={handleDelete}
 				disabled={deleting} // Prevent multiple delete attempts
 			>
-				{deleting ? "Deleting..." : "Delete"}
+				{deleting ? t("util.deleting") : t("util.delete")}
 			</button>
 		</div>
 	);
