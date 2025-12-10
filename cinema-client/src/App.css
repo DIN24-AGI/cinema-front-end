@@ -1,7 +1,9 @@
-#root {
+body, html, #root {
   width: 100%;
   margin: 0 auto;
   text-align: center;
+  height: 100%;
+  background-color: #373F4C;
 }
 
 .logo {

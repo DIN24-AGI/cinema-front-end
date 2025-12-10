@@ -16,7 +16,7 @@ const ComingSoonSection: React.FC<{ movies: Movie[] }> = ({ movies }) => {
       <div className="row g-4">
         {movies.map((m) => (
           <div key={m.id} className="col-md-6">
-            <div className="card shadow">
+            <div className="card shadow $cyan-700">
               <img src={m.banner} className="card-img-top" alt={m.title} />
               <div className="card-body">
                 <h5 className="card-title">{m.title}</h5>
