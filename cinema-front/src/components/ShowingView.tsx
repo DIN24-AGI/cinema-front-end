@@ -95,9 +95,11 @@ const ShowingView: React.FC<ShowingViewProps> = ({
 				{start}
 				{end ? ` — ${end}` : ""}
 			</span>
-			{fullPrice !== undefined && <span style={{ color: "#555" }}>Full: €{fullPrice.toFixed(2)}</span>}
-			{discountedPrice !== undefined && (
-				<span style={{ color: "#28a745", fontWeight: 500 }}>Discount: €{discountedPrice.toFixed(2)}</span>
+			{fullPrice !== undefined && fullPrice !== null && (
+				<span style={{ color: "#7c7c7cff" }}>Full: €{(fullPrice / 100).toFixed(2)}</span>
+			)}
+			{discountedPrice !== undefined && discountedPrice !== null && (
+				<span style={{ color: "#a5a5a5ff", fontWeight: 500 }}>Discounted: €{(discountedPrice / 100).toFixed(2)}</span>
 			)}
 			<button
 				type="button"

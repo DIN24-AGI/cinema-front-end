@@ -47,8 +47,8 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 								movieTitle={movieTitle}
 								startTime={show.starts_at}
 								endTime={show.ends_at}
-								// fullPrice={show.adult_price}
-								// discountedPrice={show.child_price}
+								fullPrice={show.adult_price}
+								discountedPrice={show.child_price}
 								onDeleted={onDeleted}
 							/>
 						);
