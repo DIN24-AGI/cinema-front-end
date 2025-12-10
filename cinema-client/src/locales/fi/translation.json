@@ -3,11 +3,71 @@
     "home": "Koti",
     "movies": "Elokuvat",
     "schedule": "Aikataulu",
-    "contact": "Yhteystiedot",
-    "language": "Kieli"
+    "contact": "Ota yhteyttä"
   },
   "home": {
-    "welcome": "Tervetuloa elokuviimme"
+    "selectCinema": "Valitse elokuvateatterisi"
+  },
+  "contact": {
+    "title": "Ota yhteyttä",
+    "chooseCinema": "Valitse elokuvateatteri",
+    "errorLoadCities": "Virhe kaupunkien lataamisessa",
+    "errorLoadCinemas": "Virhe elokuvateattereiden lataamisessa",
+    "genericError": "Jokin meni pieleen",
+    "address": "Osoite: ",
+    "phone": "Puhelin: ",
+    "city": "Kaupunki: ",
+    "loading": "Ladataan..."
+  },
+  "movies": {
+    "coming": "Tulossa pian",
+    "detailAlert": "Tämä siirtyy elokuvan tietoihin",
+    "details": "Tiedot",
+    "today": "Esitetään tänään kohteessa {{location}}",
+    "error": "Elokuvien lataaminen epäonnistui",
+    "loading": "Ladataan elokuvia"
+  },
+  "util": {
+    "loading": "Ladataan...",
+    "genericError": "Jokin meni pieleen",
+    "back": "Takaisin"
+  },
+  "cinemas": {
+    "title": "Elokuvateatterit"
+  },
+  "movieDetails": {
+    "errorShowtimes": "Näytösten lataaminen epäonnistui",
+    "upcoming": "Tulossa olevat näytökset (Seuraavat 7 päivää)",
+    "loading": "Ladataan näytöksiä",
+    "noShowings": "Tälle elokuvalle ei ole tulevia näytöksiä"
+  },
+  "schedule": {
+    "location": "Sijainti",
+    "title": "Elokuvan nimi",
+    "search": "Hae nimellä...",
+    "date": "Päivämäärä",
+    "pageTitle": "Aikataulu",
+    "cinemaSelect": "Valitse elokuvateatteri",
+    "dateSelect": "Valitse päivämäärä",
+    "require": "Valitse elokuvateatteri nähdäksesi aikataulun.",
+    "starts": "Alkaa: ",
+    "ends": "Loppuu: ",
+    "book": "Varaa lippu",
+    "noShowings": "Tälle päivälle ei ole näytöksiä",
+    "hall": "Sali: "
+  },
+  "payment": {
+    "cancelled": "Maksu peruttu",
+    "cancelledInfo": "Varaustasi ei suoritettu loppuun",
+    "success": "Maksu onnistui",
+    "successInfo": "Varauksesi on vahvistettu"
+  },
+  "seats": {
+    "select": "Valitse paikat",
+    "row": "Rivi ",
+    "selected": "Valitut paikat: ",
+    "seat": " paikka(a)",
+    "payment": "Siirry maksamaan",
+    "error": "Maksusession virhe"
   }
 }
-

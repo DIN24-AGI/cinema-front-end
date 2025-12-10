@@ -8,7 +8,8 @@
     "data": "Näytä tiedot",
     "logout": "Kirjaudu ulos",
     "changePassword": "Vaihda salasana",
-    "movieList": "Elokuvan lista"
+    "movieList": "Elokuvan lista",
+    "manageUsers": "Käyttäjien hallinta"
   },
   "login": {
     "title": "Järjestelmänvalvojan kirjautuminen",
@@ -149,5 +150,34 @@
     "deactivate": "Poista käytöstä",
     "selectCity": "Valitse kaupunki",
     "back": "Takaisin"
+  },
+  "users": {
+    "title": "Käyttäjälista",
+    "email": "Sähköposti",
+    "role": "Rooli",
+    "changeRole": "Vaihda roolia",
+    "delete": "Poista",
+    "confirmRole": "Haluatko varmasti vaihtaa roolin arvoon \"{{role}}\"?",
+    "deleteUser": "Haluatko varmasti POISTAA tämän käyttäjän? Tämä toimintoa ei voi perua.",
+    "loading": "Ladataan käyttäjiä..."
+  },
+
+  "roles": {
+    "regular": "Tavallinen",
+    "super": "Ylläpitäjä"
+  },
+
+  "manageUsers": {
+    "title": "Käyttäjien hallinta",
+    "email": "Sähköposti",
+    "password": "Salasana",
+    "role": "Rooli",
+    "create": "Luo käyttäjä",
+    "loading": "Luodaan...",
+    "success": "Käyttäjä luotu onnistuneesti!",
+    "successKeyword": "onnistuneesti",
+    "createError": "Käyttäjän luominen epäonnistui",
+    "genericError": "Jokin meni pieleen"
   }
 }
+

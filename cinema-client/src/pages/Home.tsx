@@ -44,7 +44,6 @@ const comingSoon = [
 
 const Home = () => {
     const { t } = useTranslation();
-    // const navigate = useNavigate();
 
     const [cities, setCities] = useState<City[]>([]);
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -63,8 +62,8 @@ const Home = () => {
               fetch(API_ENDPOINTS.cinemas,),
             ]);
     
-            if (!citiesRes.ok) throw new Error("Failed to load cities");
-            if (!cinemasRes.ok) throw new Error(t("cinemas.errorLoadCities"));
+            if (!citiesRes.ok) throw new Error(t("contact.errorLoadCities"));
+            if (!cinemasRes.ok) throw new Error(t("contact.errorLoadCinemas"));
     
             const cityData: City[] = await citiesRes.json();
             const cinemaData: Cinema[] = await cinemasRes.json();
@@ -80,14 +79,14 @@ const Home = () => {
             } catch (err: any) {
             console.error(err);
             console.log(error)
-            setError(err.message || t("cinemas.genericError"));
+            setError(err.message || t("util.genericError"));
           } finally {
             setLoading(false);
           }
         };
     
         fetchCinemasAndCities();
-      }, [t, selectedCinema]);
+      }, [t, selectedCinema, error]);
 
 
       useEffect(() => {
@@ -111,14 +110,14 @@ const Home = () => {
 
       } catch (err: any) {
         console.error(err);
-        setError(err.message || "Failed to load movies");
+        setError(err.message || t("movies.error"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchMoviesToday();
-  }, [selectedCinema]);
+  }, [selectedCinema, t]);
 
   const onSelectCinema = (cinema: Cinema) => {
     setSelectedCinema(cinema);
@@ -133,7 +132,7 @@ const Home = () => {
         <CinemaSelectorDropdown
           cinemas={cinemas}
           cities={cities}
-          label={"Select your cinema"}
+          label={t("home.selectCinema")}
           widthClass="mb-4"
           selectedCinema={selectedCinema}
           onSelectCinema={onSelectCinema}

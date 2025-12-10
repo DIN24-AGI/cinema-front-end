@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 type Seat = {
   seat_uid: string;
@@ -10,6 +11,7 @@ type Seat = {
 };
 
 function SeatsPage() {
+  const { t } = useTranslation();
   const { showtime_uid } = useParams();
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
@@ -127,7 +129,7 @@ function SeatsPage() {
   // ----------------------------------------------------
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-5">Select Seats</h2>
+      <h2 className="text-center mb-5">{t("seats.select")}</h2>
 
       <div className="seat-layout">
         {Object.keys(rows).map((row) => (
@@ -163,7 +165,7 @@ function SeatsPage() {
             {selectedSeats.length}
           </div>
           <button className="btn btn-primary" onClick={goToPayment}>
-            Continue to Payment
+            {t("seats.payment")}
           </button>
         </div>
       )}
