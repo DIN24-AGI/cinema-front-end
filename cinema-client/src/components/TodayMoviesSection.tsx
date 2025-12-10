@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 // Showtimes for each movie
 interface ShowtimeShort {
@@ -22,6 +23,7 @@ interface TodayMovieProps {
 
 const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies, location }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const openMovieDetails = (movie: MovieWithShowtimes) => {
     navigate(`/movies/${movie.id}`, { state: { movieUid: movie.id } });
@@ -33,7 +35,7 @@ const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies, location }) => {
 
   return (
     <section className="mb-5">
-      <h2 className="mb-4 fw-bold">Playing Today in {location}</h2>
+      <h2 className="mb-4 fw-bold">{t("movies.today", {location: location})}</h2>
       <div className="row g-4">
         {movies.map((movie) => (
           <div key={movie.id} className="col-12 col-sm-6 col-md-4 col-lg-3">

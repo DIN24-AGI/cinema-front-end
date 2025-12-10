@@ -6,6 +6,7 @@ import CinemaSelector from '../components/CinemaSelector'
  
  const Contact = () => {
   const { t } = useTranslation();
+
 	const [cities, setCities] = useState<City[]>([]);
 	const [cinemas, setCinemas] = useState<Cinema[]>([]);
 	const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
@@ -21,8 +22,8 @@ import CinemaSelector from '../components/CinemaSelector'
             fetch(API_ENDPOINTS.cinemas,),
           ]);
   
-          if (!citiesRes.ok) throw new Error("Failed to load cities");
-          if (!cinemasRes.ok) throw new Error(t("cinemas.errorLoadCities"));
+          if (!citiesRes.ok) throw new Error("contact.errorLoadCities");
+          if (!cinemasRes.ok) throw new Error(t("contact.errorLoadCinemas"));
   
           const cityData: City[] = await citiesRes.json();
           const cinemaData: Cinema[] = await cinemasRes.json();
@@ -32,14 +33,14 @@ import CinemaSelector from '../components/CinemaSelector'
           } catch (err: any) {
           console.error(err);
           console.log(error)
-          setError(err.message || t("cinemas.genericError"));
+          setError(err.message || t("contact.genericError"));
         } finally {
           setLoading(false);
         }
       };
   
       fetchEverything();
-    }, [t]);
+    }, [t, error]);
 
     
     const onSelectCinema = async (cinema: Cinema) => {
@@ -54,7 +55,7 @@ import CinemaSelector from '../components/CinemaSelector'
         <h3>{t("contact.chooseCinema")}</h3>
       </section>
 
-      {loading && <p>{t("contact.loading")}</p>}
+      {loading && <p>{t("util.loading")}</p>}
 
 
 			{/* Cinema selection area kept mounted to prevent jump */}
@@ -81,13 +82,13 @@ import CinemaSelector from '../components/CinemaSelector'
           >
             <h4>{selectedCinema.name}</h4>
             <p>
-              <strong>Address: </strong> {selectedCinema.address || "-"}
+              <strong>{t("contact.address")}</strong> {selectedCinema.address || "-"}
             </p>
             <p>
-              <strong>Phone: </strong> {selectedCinema.phone || "-"}
+              <strong>{t("contact.phone")}</strong> {selectedCinema.phone || "-"}
             </p>
             <p>
-              <strong>City: </strong>
+              <strong>{t("contact.city")}</strong>
               {cities.find((c) => c.uid === selectedCinema.city_uid)?.name || ""}
             </p>
           </div>

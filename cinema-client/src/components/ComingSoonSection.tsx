@@ -1,13 +1,17 @@
+import { useTranslation } from "react-i18next"
+
 interface Movie {
   id: number;
   title: string;
   banner: string;
 }
 
+
 const ComingSoonSection: React.FC<{ movies: Movie[] }> = ({ movies }) => {
+  const { t } = useTranslation()
   return (
     <section className="mb-5">
-      <h2 className="mb-3 fw-bold">Coming Soon</h2>
+      <h2 className="mb-3 fw-bold">{t("movies.coming")}</h2>
 
       <div className="row g-4">
         {movies.map((m) => (
@@ -20,7 +24,7 @@ const ComingSoonSection: React.FC<{ movies: Movie[] }> = ({ movies }) => {
                               <div className="mt-auto d-flex gap-2">
                   <button
                     className="btn btn-outline-primary flex-fill"
-                    onClick={() => alert('This will nagivate to movie details')}
+                    onClick={() => alert(t("movies.detailAlert"))}
                   >
                     Details
                   </button>

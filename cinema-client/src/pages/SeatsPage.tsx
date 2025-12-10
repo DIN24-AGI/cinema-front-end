@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 type Seat = {
   seat_uid: string;
@@ -10,6 +11,7 @@ type Seat = {
 };
 
 function SeatsPage() {
+  const { t } = useTranslation();
   const { showtime_uid } = useParams();
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
@@ -59,19 +61,19 @@ const goToPayment = async () => {
   if (data.url) {
     window.location.href = data.url; 
   } else {
-    alert("Payment session error");
+    alert(t("seats.error"));
   }
 };
 
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-5">Select Seats</h2>
+      <h2 className="text-center mb-5">{t("seats.select")}</h2>
 
       <div className="seat-layout">
         {Object.keys(rows).map((row) => (
           <div key={row} className="seat-row">
-            <div className="row-label">Row {row}</div>
+            <div className="row-label">{t("seats.row")} {row}</div>
             <div className="seat-row-items">
               {rows[row].map((seat: Seat) => {
                 const isSelected = selectedSeats.includes(seat.seat_uid);
@@ -98,11 +100,11 @@ const goToPayment = async () => {
       {selectedSeats.length > 0 && (
         <div className="selected-bar">
           <div>
-            <strong>Selected Seats:</strong>{" "}
-            {selectedSeats.length} seat(s)
+            <strong>{t("seats.selected")}</strong>{" "}
+            {selectedSeats.length} {t("seats.seat")}
           </div>
           <button className="btn btn-primary" onClick={goToPayment}>
-            Continue to Payment
+            {t("seats.payment")}
           </button>
         </div>
       )}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import type { Movie } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
+import { useTranslation } from "react-i18next";
 
 
 interface MovieShowtime {
@@ -13,6 +14,7 @@ interface MovieShowtime {
 }
 
 const MovieDetails: React.FC = () => {
+  const { t } = useTranslation();
   const { uid } = useParams<{ uid: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ const MovieDetails: React.FC = () => {
         const res = await fetch(`${API_ENDPOINTS.movies}/${uid}`);
 
         if (!res.ok) {
-          throw new Error("Failed to load movie");
+          throw new Error(t("movies.error"));
         }
 
         const data: Movie = await res.json();
@@ -37,7 +39,7 @@ const MovieDetails: React.FC = () => {
         setMovie(data);
       } catch (err: any) {
         console.error(err);
-        setError(err.message || "Error loading movie");
+        setError(err.message || t("movies.error"));
       } finally {
         setLoading(false);
       }
@@ -46,7 +48,7 @@ const MovieDetails: React.FC = () => {
       try {
         setLoadingShowtimes(true);
         const res = await fetch(`${API_ENDPOINTS.movies}/${uid}/showtimes`);
-        if (!res.ok) throw new Error("Failed to load showtimes");
+        if (!res.ok) throw new Error(t("movieDetails.errorShowtimes"));
         const data: MovieShowtime[] = await res.json();
         setShowtimes(data);
       } catch (err: any) {
@@ -58,9 +60,9 @@ const MovieDetails: React.FC = () => {
 
     fetchMovie();
     fetchShowtimes();
-  }, [uid]);
+  }, [uid, t]);
 
-  if (loading) return <div className="text-center mt-4">Loading...</div>;
+  if (loading) return <div className="text-center mt-4">{t("util.loading")}</div>;
   if (error) return <div className="alert alert-danger">{error}</div>;
   if (!movie) return null;
 
@@ -71,7 +73,7 @@ const MovieDetails: React.FC = () => {
   return (
     <div className="container mt-4">
         {/* Back button */}
-      <button className="btn btn-secondary mb-4" onClick={handleBack}>Back
+      <button className="btn btn-secondary mb-4" onClick={handleBack}>{t("util.back")}
       </button>
       <div className="row g-4">
         {/* Poster */}
@@ -98,13 +100,13 @@ const MovieDetails: React.FC = () => {
 
       {/* Showings */}
       <div className="mt-5">
-        <h4>Upcoming Showings (Next 7 Days)</h4>
+        <h4>{t("movieDetails.upcoming")}</h4>
 
-        {loadingShowtimes && <div className="mt-3">Loading showings...</div>}
+        {loadingShowtimes && <div className="mt-3">{t("movieDetails.loading")}</div>}
 
         {!loadingShowtimes && showtimes.length === 0 && (
           <div className="alert alert-info mt-3">
-            No upcoming showings for this movie.
+            {t("movieDetails.noShowings")}
           </div>
         )}
 

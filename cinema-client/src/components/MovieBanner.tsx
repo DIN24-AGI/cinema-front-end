@@ -1,12 +1,13 @@
 import React from "react";
 import type { Movie } from "../types/cinemaTypes";
-
+import { useTranslation } from "react-i18next";
 interface MovieBannerProps {
   movie: Movie;
   onDetails?: (movie: Movie) => void;
 }
 
 const MovieBanner: React.FC<MovieBannerProps> = ({ movie, onDetails }) => {
+  const { t } = useTranslation();
   return (
     <div className="card mb-3 shadow-sm" style={{ maxWidth: "600px" }}>
       <div className="row g-0 align-items-center">
@@ -34,7 +35,7 @@ const MovieBanner: React.FC<MovieBannerProps> = ({ movie, onDetails }) => {
               className="btn btn-primary btn-sm"
               onClick={() => onDetails?.(movie)}
             >
-              Details
+              {t("movies.details")}
             </button>
           </div>
         </div>
