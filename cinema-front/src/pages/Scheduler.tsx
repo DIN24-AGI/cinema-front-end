@@ -4,43 +4,87 @@ import { API_ENDPOINTS } from "../util/baseURL";
 import HallSchedule from "../components/HallSchedule";
 import type { Showing } from "../types/cinemaTypes";
 
+/**
+ * Scheduler Component
+ *
+ * Admin page for managing movie showings across cinema halls.
+ * Allows scheduling movies by:
+ * - Selecting a date (with prev/next day navigation)
+ * - Choosing a cinema from dropdown
+ * - Viewing all halls for that cinema
+ * - Adding/deleting showings for each hall
+ *
+ * Data flow:
+ * 1. Fetches all cinemas on mount
+ * 2. When cinema selected → fetches halls for that cinema
+ * 3. Fetches active movies (used in hall scheduling)
+ * 4. Fetches showings for selected date
+ * 5. Each hall displays its showings and allows adding new ones
+ */
 const Scheduler: React.FC = () => {
+	// Date state - controls which day's schedule is displayed
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-	const [cinemas, setCinemas] = useState<Cinema[]>([]);
-	const [selectedCinema, setSelectedCinema] = useState<string>("");
-	const [halls, setHalls] = useState<Hall[]>([]);
+
+	// Cinema/Hall state
+	const [cinemas, setCinemas] = useState<Cinema[]>([]); // All available cinemas
+	const [selectedCinema, setSelectedCinema] = useState<string>(""); // Currently selected cinema UID
+	const [halls, setHalls] = useState<Hall[]>([]); // Halls for selected cinema
+
+	// Movies state - list of active movies that can be scheduled
 	const [movies, setMovies] = useState<MovieItem[]>([]);
+
+	// Showings state - all showings for the selected date
 	const [showings, setShowings] = useState<Showing[]>([]);
+
+	// Loading states for each data fetch operation
 	const [loadingCinemas, setLoadingCinemas] = useState(false);
 	const [loadingHalls, setLoadingHalls] = useState(false);
 	const [loadingMovies, setLoadingMovies] = useState(false);
 	const [loadingShowings, setLoadingShowings] = useState(false);
+
+	// Error states for each data fetch operation
 	const [cinemaError, setCinemaError] = useState("");
 	const [hallsError, setHallsError] = useState("");
 	const [moviesError, setMoviesError] = useState("");
 	const [showingsError, setShowingsError] = useState("");
 
+	/**
+	 * Formats a Date object to YYYY-MM-DD string format
+	 * Used for API calls and date input field
+	 */
 	const formatDate = (date: Date): string => {
 		return date.toISOString().split("T")[0];
 	};
 
+	/**
+	 * Navigate to previous day
+	 */
 	const handlePreviousDay = () => {
 		const newDate = new Date(selectedDate);
 		newDate.setDate(newDate.getDate() - 1);
 		setSelectedDate(newDate);
 	};
 
+	/**
+	 * Navigate to next day
+	 */
 	const handleNextDay = () => {
 		const newDate = new Date(selectedDate);
 		newDate.setDate(newDate.getDate() + 1);
 		setSelectedDate(newDate);
 	};
 
+	/**
+	 * Handle manual date input change
+	 */
 	const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedDate(new Date(e.target.value));
 	};
 
-	// Fetch all cinemas on mount
+	/**
+	 * Effect: Fetch all cinemas on component mount
+	 * Auto-selects first cinema if available
+	 */
 	useEffect(() => {
 		const fetchCinemas = async () => {
 			try {
@@ -53,6 +97,7 @@ const Scheduler: React.FC = () => {
 				if (!res.ok) throw new Error("Failed to load cinemas");
 				const data: Cinema[] = await res.json();
 				setCinemas(data);
+				// Auto-select first cinema if none selected
 				if (!selectedCinema && data.length > 0) {
 					setSelectedCinema(data[0].uid);
 				}
@@ -65,7 +110,10 @@ const Scheduler: React.FC = () => {
 		fetchCinemas();
 	}, []);
 
-	// Fetch halls when cinema is selected
+	/**
+	 * Effect: Fetch halls when a cinema is selected
+	 * Clears halls if no cinema selected
+	 */
 	useEffect(() => {
 		if (!selectedCinema) {
 			setHalls([]);
@@ -92,7 +140,10 @@ const Scheduler: React.FC = () => {
 		fetchHalls();
 	}, [selectedCinema]);
 
-	// Fetch active movies (same pattern as MovieList.tsx)
+	/**
+	 * Effect: Fetch active movies on component mount
+	 * Only active movies can be scheduled
+	 */
 	useEffect(() => {
 		const fetchMovies = async () => {
 			try {
@@ -107,7 +158,7 @@ const Scheduler: React.FC = () => {
 				});
 				if (!res.ok) throw new Error("fetchFailed");
 				const data: MovieItem[] = await res.json();
-				setMovies(data.filter((m) => m.active)); // only active movies
+				setMovies(data.filter((m) => m.active)); // Filter to only active movies
 			} catch (e: any) {
 				setMoviesError(e?.message === "fetchFailed" ? "Failed to fetch movies" : "Unexpected error");
 			} finally {
@@ -117,39 +168,47 @@ const Scheduler: React.FC = () => {
 		fetchMovies();
 	}, []);
 
-	// Fetch showings whenever selectedDate changes
+	/**
+	 * Effect: Fetch showings when selected date changes
+	 * Re-fetches data whenever user navigates to different date
+	 */
 	useEffect(() => {
-		const fetchShowings = async () => {
-			try {
-				setLoadingShowings(true);
-				setShowingsError("");
-				const token = localStorage.getItem("token");
-				const dateStr = formatDate(selectedDate);
-
-				// Adjust endpoint based on your API - you might need to pass date as query param
-				// Example: API_ENDPOINTS.showingsByDate(dateStr) or API_ENDPOINTS.showings + `?date=${dateStr}`
-				const res = await fetch(`${API_ENDPOINTS.showings}?date=${dateStr}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: token ? `Bearer ${token}` : "",
-					},
-				});
-
-				if (!res.ok) throw new Error("Failed to fetch showings");
-				const data: Showing[] = await res.json();
-				console.log(data);
-				setShowings(data);
-			} catch (e: any) {
-				setShowingsError(e?.message || "Error loading showings");
-			} finally {
-				setLoadingShowings(false);
-			}
-		};
-
 		fetchShowings();
-	}, [selectedDate]); // Re-fetch whenever selectedDate changes
+	}, [selectedDate]);
 
-	// Filter showings by hall_uid for each hall
+	/**
+	 * Fetches all showings for the selected date
+	 * Called on date change and after creating/deleting showings
+	 */
+	const fetchShowings = async () => {
+		try {
+			setLoadingShowings(true);
+			setShowingsError("");
+			const token = localStorage.getItem("token");
+			const dateStr = formatDate(selectedDate);
+
+			const res = await fetch(`${API_ENDPOINTS.showings}?date=${dateStr}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: token ? `Bearer ${token}` : "",
+				},
+			});
+
+			if (!res.ok) throw new Error("Failed to fetch showings");
+			const data: Showing[] = await res.json();
+			console.log(data);
+			setShowings(data);
+		} catch (e: any) {
+			setShowingsError(e?.message || "Error loading showings");
+		} finally {
+			setLoadingShowings(false);
+		}
+	};
+
+	/**
+	 * Filters showings by hall UID
+	 * Used to display only relevant showings for each hall
+	 */
 	const getShowingsForHall = (hallUid: string): Showing[] => {
 		const showingsForHall = showings.filter((showing) => showing.hall_uid === hallUid);
 		console.log("Hall: ", showingsForHall);
@@ -158,19 +217,22 @@ const Scheduler: React.FC = () => {
 
 	return (
 		<div className="container mt-4">
-			{/* Date picker */}
+			{/* Date Navigation Section */}
 			<div className="row justify-content-center">
 				<div className="col-md-6">
 					<div className="input-group">
+						{/* Previous day button */}
 						<button className="btn btn-outline-primary" type="button" onClick={handlePreviousDay}>
 							<i className="bi bi-chevron-left"></i> Previous
 						</button>
+						{/* Date input field */}
 						<input
 							type="date"
 							className="form-control text-center"
 							value={formatDate(selectedDate)}
 							onChange={handleDateChange}
 						/>
+						{/* Next day button */}
 						<button className="btn btn-outline-primary" type="button" onClick={handleNextDay}>
 							Next <i className="bi bi-chevron-right"></i>
 						</button>
@@ -178,12 +240,13 @@ const Scheduler: React.FC = () => {
 				</div>
 			</div>
 
-			{/* Cinema dropdown */}
+			{/* Cinema Selection Section */}
 			<div className="row g-3 mt-3">
 				<div className="col-md-6 col-lg-4">
 					<label htmlFor="cinemaSelect" className="form-label">
 						Cinema
 					</label>
+					{/* Cinema dropdown */}
 					<select
 						id="cinemaSelect"
 						className="form-select"
@@ -198,47 +261,55 @@ const Scheduler: React.FC = () => {
 							</option>
 						))}
 					</select>
+					{/* Loading/error feedback for cinemas */}
 					{loadingCinemas && <div className="form-text">Loading cinemas…</div>}
 					{cinemaError && <div className="text-danger small">{cinemaError}</div>}
 				</div>
 			</div>
 
-			{/* Loading/error states */}
+			{/* Loading/Error States for Movies and Showings */}
 			{loadingMovies && <div className="alert alert-info mt-3">Loading movies…</div>}
 			{moviesError && <div className="alert alert-danger mt-3">{moviesError}</div>}
 			{loadingShowings && <div className="alert alert-info mt-3">Loading showings…</div>}
 			{showingsError && <div className="alert alert-danger mt-3">{showingsError}</div>}
 
-			{/* Hall schedules */}
+			{/* Hall Schedules Section */}
 			<div className="row mt-4">
 				<div className="col">
+					{/* Loading state for halls */}
 					{loadingHalls && <div className="text-muted">Loading halls…</div>}
+					{/* Error state for halls */}
 					{hallsError && <div className="alert alert-danger">{hallsError}</div>}
 
+					{/* Empty state: cinema selected but no halls found */}
 					{!loadingHalls && !hallsError && selectedCinema && halls.length === 0 && (
 						<div className="alert alert-info">No halls found for this cinema.</div>
 					)}
 
+					{/* Render hall schedules when data is loaded */}
 					{!loadingHalls && !hallsError && halls.length > 0 && (
 						<div className="row row-cols-1 g-4">
 							{halls.map((hall) => (
 								<div key={hall.uid} className="col">
 									<div className="card">
 										<div className="card-body">
+											{/*
+												HallSchedule component for each hall
+												- Shows hall info and current showings
+												- Allows adding new showings
+												- Handles showing deletion
+												- Callbacks refetch showings from database
+											*/}
 											<HallSchedule
 												hall={hall}
 												movies={movies}
 												date={formatDate(selectedDate)}
 												schedule={getShowingsForHall(hall.uid)}
-												onCreated={(created) => {
-													const createdDate = created.starts_at.split(" ")[0];
-													if (created.hall_uid === hall.uid && createdDate === formatDate(selectedDate)) {
-														setShowings((prev) => [...prev, created]);
-													}
+												onCreated={() => {
+													fetchShowings(); // Refetch after creating showing
 												}}
-												onDeleted={(uid) => {
-													// Option A: update local state
-													setShowings((prev) => prev.filter((s) => (s.uid === uid ? false : true)));
+												onDeleted={() => {
+													fetchShowings(); // Refetch after deleting showing
 												}}
 											/>
 										</div>
