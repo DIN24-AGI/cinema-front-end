@@ -1,6 +1,6 @@
 import React from "react";
 import type { Hall, Showing, Movie } from "../types/cinemaTypes";
-import AddMovie from "./AddMovie";
+import AddShowing from "./AddShowing";
 import ShowingView from "./ShowingView";
 
 interface HallScheduleProps {
@@ -47,6 +47,8 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 								movieTitle={movieTitle}
 								startTime={show.starts_at}
 								endTime={show.ends_at}
+								// fullPrice={show.adult_price}
+								// discountedPrice={show.child_price}
 								onDeleted={onDeleted}
 							/>
 						);
@@ -56,7 +58,7 @@ const HallSchedule: React.FC<HallScheduleProps> = ({
 				<p className="text-muted">No scheduled shows.</p>
 			)}
 
-			<AddMovie movies={movies} hall_uid={hall.uid} date={date} onCreated={onCreated} />
+			<AddShowing movies={movies} hall_uid={hall.uid} date={date} onCreated={onCreated} />
 		</section>
 	);
 };

@@ -15,10 +15,20 @@ const parseTime = (time: string) => {
 
 type ShowingViewProps = ShowTime & {
 	movieTitle: string;
+	fullPrice?: number;
+	discountedPrice?: number;
 	onDeleted?: (uid: string) => void;
 };
 
-const ShowingView: React.FC<ShowingViewProps> = ({ id, movieTitle, startTime, endTime, onDeleted }) => {
+const ShowingView: React.FC<ShowingViewProps> = ({
+	id,
+	movieTitle,
+	startTime,
+	endTime,
+	fullPrice,
+	discountedPrice,
+	onDeleted,
+}) => {
 	const [deleting, setDeleting] = useState(false);
 
 	// Normalize fields
@@ -81,10 +91,14 @@ const ShowingView: React.FC<ShowingViewProps> = ({ id, movieTitle, startTime, en
 		>
 			<span style={{ fontWeight: 600 }}>{movieTitle}</span>
 			<span style={{ fontWeight: 200 }}>Duration: {duration}</span>
-			<span style={{ color: "#333", marginLeft: "auto", marginRight: 8 }}>
+			<span style={{ color: "#333" }}>
 				{start}
 				{end ? ` — ${end}` : ""}
 			</span>
+			{fullPrice !== undefined && <span style={{ color: "#555" }}>Full: €{fullPrice.toFixed(2)}</span>}
+			{discountedPrice !== undefined && (
+				<span style={{ color: "#28a745", fontWeight: 500 }}>Discount: €{discountedPrice.toFixed(2)}</span>
+			)}
 			<button
 				type="button"
 				aria-label={`Delete showing ${showingUid}`}
@@ -95,6 +109,7 @@ const ShowingView: React.FC<ShowingViewProps> = ({ id, movieTitle, startTime, en
 					border: "1px solid #dc3545",
 					background: deleting ? "#f8d7da" : "#f5f5f5",
 					color: "#dc3545",
+					marginLeft: "auto",
 				}}
 				onClick={handleDelete}
 				disabled={deleting}

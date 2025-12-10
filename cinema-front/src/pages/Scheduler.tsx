@@ -137,6 +137,7 @@ const Scheduler: React.FC = () => {
 
 				if (!res.ok) throw new Error("Failed to fetch showings");
 				const data: Showing[] = await res.json();
+				console.log(data);
 				setShowings(data);
 			} catch (e: any) {
 				setShowingsError(e?.message || "Error loading showings");
@@ -150,7 +151,9 @@ const Scheduler: React.FC = () => {
 
 	// Filter showings by hall_uid for each hall
 	const getShowingsForHall = (hallUid: string): Showing[] => {
-		return showings.filter((showing) => showing.hall_uid === hallUid);
+		const showingsForHall = showings.filter((showing) => showing.hall_uid === hallUid);
+		console.log("Hall: ", showingsForHall);
+		return showingsForHall;
 	};
 
 	return (
@@ -236,9 +239,6 @@ const Scheduler: React.FC = () => {
 												onDeleted={(uid) => {
 													// Option A: update local state
 													setShowings((prev) => prev.filter((s) => (s.uid === uid ? false : true)));
-
-													// Option B (instead): re-fetch from API for the selected date
-													// fetchShowings(); // if you have this function available
 												}}
 											/>
 										</div>

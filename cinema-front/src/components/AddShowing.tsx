@@ -14,13 +14,24 @@ type AddMovieProps = {
 	movies: Movie[];
 	date: string;
 	hall_uid: string;
-	onCreated?: (show: ShowTime) => void; // NEW: notify parent on success
+	fullPrice?: number;
+	discountedPrice?: number;
+	onCreated?: (show: ShowTime) => void;
 };
 
-const AddMovie: React.FC<AddMovieProps> = ({ movies, date, hall_uid, onCreated }) => {
+const AddShowing: React.FC<AddMovieProps> = ({
+	movies,
+	date,
+	hall_uid,
+	fullPrice: initialFullPrice = 12,
+	discountedPrice: initialDiscountedPrice = 10,
+	onCreated,
+}) => {
 	const [time, setTime] = useState("");
 	const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 	const [options, setOptions] = useState<string[]>([]); // movie titles
+	const [fullPrice, setFullPrice] = useState<number>(initialFullPrice);
+	const [discountedPrice, setDiscountedPrice] = useState<number>(initialDiscountedPrice);
 
 	// Map options to movie titles on mount / movies change
 	useEffect(() => {
@@ -80,6 +91,8 @@ const AddMovie: React.FC<AddMovieProps> = ({ movies, date, hall_uid, onCreated }
 					hall_uid,
 					starts_at,
 					ends_at,
+					adult_price: Math.round(fullPrice * 100),
+					child_price: Math.round(discountedPrice * 100),
 				}),
 			});
 			if (!res.ok) throw new Error(await res.text().catch(() => "Failed to create showing"));
@@ -117,6 +130,28 @@ const AddMovie: React.FC<AddMovieProps> = ({ movies, date, hall_uid, onCreated }
 					aria-label="Select time"
 				/>
 
+				<input
+					type="number"
+					className="form-control w-auto"
+					placeholder="Full Price (€)"
+					value={fullPrice.toFixed(2)}
+					onChange={(e) => setFullPrice(parseFloat(e.target.value) || 0)}
+					step="0.1"
+					min="0"
+					style={{ maxWidth: 120 }}
+				/>
+
+				<input
+					type="number"
+					className="form-control w-auto"
+					placeholder="Discount Price (€)"
+					value={discountedPrice.toFixed(2)}
+					onChange={(e) => setDiscountedPrice(parseFloat(e.target.value) || 0)}
+					step="0.1"
+					min="0"
+					style={{ maxWidth: 120 }}
+				/>
+
 				<button type="submit" className="btn btn-primary">
 					Add
 				</button>
@@ -125,4 +160,4 @@ const AddMovie: React.FC<AddMovieProps> = ({ movies, date, hall_uid, onCreated }
 	);
 };
 
-export default AddMovie;
+export default AddShowing;
