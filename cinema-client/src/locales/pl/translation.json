@@ -1,0 +1,73 @@
+{
+	"nav": {
+		"home": "Strona główna",
+		"movies": "Filmy",
+		"schedule": "Harmonogram",
+		"contact": "Skontaktuj się z nami"
+	},
+	"home": {
+		"selectCinema": "Wybierz swoje kino"
+	},
+	"contact": {
+		"title": "Skontaktuj się z nami",
+		"chooseCinema": "Wybierz kino",
+		"errorLoadCities": "Błąd przy ładowaniu miast",
+		"errorLoadCinemas": "Błąd przy ładowaniu kin",
+		"genericError": "Coś poszło nie tak",
+		"address": "Adres: ",
+		"phone": "Telefon: ",
+		"city": "Miasto: ",
+		"loading": "Ładowanie..."
+	},
+	"movies": {
+		"coming": "Wkrótce",
+		"detailAlert": "Spowoduje to przejście do szczegółów filmu",
+		"details": "Szczegóły",
+		"today": "Grają dzisiaj w {{location}}",
+		"error": "Nie udało się załadować filmów",
+		"loading": "Ładowanie filmów"
+	},
+	"util": {
+		"loading": "Ładowanie...",
+		"genericError": "Coś poszło nie tak",
+		"back": "Wróć"
+	},
+	"cinemas": {
+		"title": "Kina"
+	},
+	"movieDetails": {
+		"errorShowtimes": "Nie udało się załadować seansów",
+		"upcoming": "Nadchodzące seanse (Następne 7 dni)",
+		"loading": "Ładowanie seansów",
+		"noShowings": "Brak nadchodzących seansów dla tego filmu"
+	},
+	"schedule": {
+		"location": "Lokalizacja",
+		"title": "Tytuł filmu",
+		"search": "Szukaj po tytule...",
+		"date": "Data",
+		"pageTitle": "Harmonogram",
+		"cinemaSelect": "Wybierz kino",
+		"dateSelect": "Wybierz datę",
+		"require": "Proszę wybrać kino, aby zobaczyć harmonogram.",
+		"starts": "Początek: ",
+		"ends": "Koniec: ",
+		"book": "Zarezerwuj bilet",
+		"noShowings": "Brak seansów na tę datę",
+		"hall": "Sala: "
+	},
+	"payment": {
+		"cancelled": "Płatność anulowana",
+		"cancelledInfo": "Twoja rezerwacja nie została ukończona",
+		"success": "Płatność powiodła się",
+		"successInfo": "Twoja rezerwacja jest potwierdzona"
+	},
+	"seats": {
+		"select": "Wybierz miejsca",
+		"row": "Rząd ",
+		"selected": "Wybrane miejsca: ",
+		"seat": " miejsc(a)",
+		"payment": "Przejdź do płatności",
+		"error": "Błąd sesji płatności"
+	}
+}
