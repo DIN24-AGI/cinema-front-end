@@ -38,10 +38,14 @@ const CinemaDetails: React.FC = () => {
 
 				if (!res.ok) throw new Error("Failed to fetch cinema");
 
-				const data: Cinema = await res.json();
-				setCinemaData(data);
+				const data = await res.json();
+				console.log("Fetched cinema data:", data);
+
+				// Handle if API returns array or object
+				const cinemaObj: Cinema = Array.isArray(data) ? data[0] : data;
+				setCinemaData(cinemaObj);
 			} catch (err: any) {
-				console.error(err);
+				console.error("Error fetching cinema:", err);
 				setError(err.message || "Something went wrong");
 			} finally {
 				setLoading(false);
@@ -94,7 +98,7 @@ const CinemaDetails: React.FC = () => {
 	// Delete cinema
 	const handleDelete = async () => {
 		// Always prefer server-fetched data; fallback to location state
-		let currentCinema: Cinema | null = cinema || null;
+		let currentCinema: Cinema | null = cinemaData || cinema || null;
 		console.log(currentCinema);
 		if (!cinema_uid) return;
 
