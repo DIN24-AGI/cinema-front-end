@@ -20,4 +20,5 @@ export const API_ENDPOINTS = {
 	showings: `${API_BASE_URL}/admin/showtimes`,
 	users: `${API_BASE_URL}/admin/users`,
 	seats: (hallUid: string) => `${API_BASE_URL}/admin/hall/${hallUid}/seats`,
+	toggleSeat: (seat_uid: string) => `${API_BASE_URL}/admin/seats/${seat_uid}/activate`,
 };

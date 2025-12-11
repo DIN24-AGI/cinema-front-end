@@ -225,6 +225,6 @@
 		"hallSeats": "Hall Seats",
 		"activeSeat": "Active Seat",
 		"inactiveSeat": "Inactive Seat",
-		"totalSeats": "Total Seats"
+		"activeSeats": "Active Seats"
 	}
 }
