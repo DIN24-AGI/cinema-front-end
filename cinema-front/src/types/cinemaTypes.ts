@@ -71,3 +71,10 @@ export interface User {
 	email: string;
 	role: string;
 }
+
+export interface Seat {
+	uid: string;
+	row: number;
+	number: number;
+	active: boolean;
+}

@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { API_ENDPOINTS } from "../util/baseURL";
-import type { Hall } from "../types/cinemaTypes";
-
-/**
- * Seat type - represents a single seat in the database
- */
-type Seat = {
-	uid: string;
-	row: number;
-	number: number;
-	active: boolean;
-};
+import type { Hall, Seat } from "../types/cinemaTypes";
 
 /**
  * Props for ShowSeats component

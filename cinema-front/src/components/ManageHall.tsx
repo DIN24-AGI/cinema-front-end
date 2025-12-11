@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import type { Hall, Cinema } from "../types/cinemaTypes";
+import type { Hall, Cinema, Seat } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
 
@@ -28,9 +28,18 @@ const ManageHall: React.FC<ManageHallProps> = ({ hall: initialHall, cinema, onDe
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [hall, setHall] = useState<Hall>(initialHall);
+	const [activeSeatsCount, setActiveSeatsCount] = useState<number>(0);
 
 	const token = () => localStorage.getItem("token");
 
+	/**
+	 * Effect: Fetch seats when component mounts or hall.uid changes
+	 */
+	useEffect(() => {
+		if (hall.uid) {
+			fetchSeats();
+		}
+	}, [hall.uid]);
 	/**
 	 * Toggles the active status of the hall
 	 */
@@ -78,6 +87,22 @@ const ManageHall: React.FC<ManageHallProps> = ({ hall: initialHall, cinema, onDe
 		}
 	};
 
+	const fetchSeats = async () => {
+		try {
+			const res = await fetch(`${API_ENDPOINTS.seats(hall.uid)}`, {
+				headers: { Authorization: `Bearer ${token()}` },
+			});
+
+			if (!res.ok) throw new Error(t("seats.fetchError"));
+
+			const data: Seat[] = await res.json();
+			console.log("fetched seats:", data);
+			setActiveSeatsCount(data.filter((seat) => seat.active).length);
+		} catch (err: any) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<div className="card">
 			<div className="card-body">
@@ -94,7 +119,9 @@ const ManageHall: React.FC<ManageHallProps> = ({ hall: initialHall, cinema, onDe
 
 				<div className="row align-items-center">
 					<div className="col-12 d-flex align-items-center gap-2 flex-wrap">
-						<p className="mb-0">{hall.rows && hall.cols ? t("halls.seats", { count: hall.rows * hall.cols }) : ""}</p>
+						<p>
+							{t("seats.activeSeats")}: {activeSeatsCount} / {hall.rows * hall.cols}
+						</p>
 						{/* Action buttons inline and right-aligned */}
 						<div className="d-flex align-items-center gap-2 flex-wrap ms-auto justify-content-end">
 							<button
