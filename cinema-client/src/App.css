@@ -1,130 +1,139 @@
 /* ===== Root layout ===== */
 #root {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
 }
 
 /* ===== Logo (default Vite template) ===== */
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+	height: 6em;
+	padding: 1.5em;
+	will-change: filter;
+	transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+	filter: drop-shadow(0 0 2em #646cffaa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+	filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+	a:nth-of-type(2) .logo {
+		animation: logo-spin infinite 20s linear;
+	}
 }
 
 /* ===== General layout ===== */
 .card {
-  padding: 2em;
+	padding: 2em;
 }
 
 .read-the-docs {
-  color: #888;
+	color: #888;
 }
 
 /* ===== Seat layout ===== */
 .seat-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	align-items: center;
 }
 
 .seat-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
 .row-label {
-  width: 60px;
-  text-align: right;
-  font-weight: bold;
-  opacity: 0.8;
+	width: 60px;
+	text-align: right;
+	font-weight: bold;
+	opacity: 0.8;
 }
 
 .seat-row-items {
-  display: flex;
-  gap: 6px;
+	display: flex;
+	gap: 6px;
+}
+
+.seat-placeholder {
+	width: 38px;
+	height: 38px;
 }
 
 .seat-btn {
-  width: 38px;
-  height: 38px;
-  border: 1px solid #999;
-  border-radius: 4px;
-  background: #f2f2f2;
-  font-size: 14px;
-  transition: background 0.2s ease, border 0.2s ease;
+	width: 38px;
+	height: 38px;
+	border: 1px solid #999;
+	border-radius: 4px;
+	background: #f2f2f2;
+	font-size: 14px;
+	transition: background 0.2s ease, border 0.2s ease;
 }
 
 /* ===== Seat status colors ===== */
 
 /* FREELY AVAILABLE */
 .seat-free {
-  background: white;
+	background: white;
 }
 
 /* RESERVED (not yet paid) → gray */
 .seat-reserved {
-  background: #cfcfcf;
-  color: #444;
+	background: #cfcfcf;
+	color: #444;
 }
 
 /* PAID (purchased, highlight orange) */
 .seat-paid {
-  background: orange;
-  color: white;
-  font-weight: bold;
+	background: orange;
+	color: white;
+	font-weight: bold;
 }
 
 /* SOLD (alternative logic) */
 .seat-sold {
-  background: red;
-  color: white;
+	background: red;
+	color: white;
 }
 
 /* BLOCKED (admin-locked seats) */
 .seat-blocked {
-  background: #555;
-  color: white;
+	width: 38px;
+	height: 38px;
 }
 
 /* USER-SELECTED SEATS (before payment) */
 .seat-selected {
-  background: #4caf50 !important;
-  color: white !important;
-  border-color: #39843f !important;
+	background: #4caf50 !important;
+	color: white !important;
+	border-color: #39843f !important;
 }
 
 /* ===== Bottom bar ===== */
 .selected-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
-  border-top: 2px solid #eee;
-  z-index: 9999;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: white;
+	padding: 20px 40px;
+	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);
+	border-top: 2px solid #eee;
+	z-index: 9999;
 }

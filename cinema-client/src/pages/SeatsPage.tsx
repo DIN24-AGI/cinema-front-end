@@ -4,173 +4,179 @@ import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
 
 type Seat = {
-  seat_uid: string;
-  row: number;
-  number: number;
-  seat_status: "free" | "reserved" | "paid" | "blocked" | "sold";
+	seat_uid: string;
+	row: number;
+	number: number;
+	seat_status: "free" | "reserved" | "paid" | "blocked" | "sold" | "inactive";
+	is_active?: boolean;
+	active?: boolean;
 };
 
 function SeatsPage() {
-  const { t } = useTranslation();
-  const { showtime_uid } = useParams();
-  const [seats, setSeats] = useState<Seat[]>([]);
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+	const { t } = useTranslation();
+	const { showtime_uid } = useParams();
+	const [seats, setSeats] = useState<Seat[]>([]);
+	const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 
-  // ----------------------------------------------------
-  // 1) Load initial seats
-  // ----------------------------------------------------
-  useEffect(() => {
-    if (!showtime_uid) return;
+	// Seats flagged inactive in the backend should not show up in the UI
+	const isSeatActive = (seat: Seat) => {
+		if (seat.is_active !== undefined) return seat.is_active;
+		if (seat.active !== undefined) return seat.active;
+		return seat.seat_status !== "inactive";
+	};
 
-    const loadSeats = async () => {
-      const res = await fetch(`${API_ENDPOINTS.seats}?showtime_uid=${showtime_uid}`);
-      const data = await res.json();
-      setSeats(data);
-    };
+	// ----------------------------------------------------
+	// 1) Load initial seats
+	// ----------------------------------------------------
+	useEffect(() => {
+		if (!showtime_uid) return;
 
-    loadSeats();
-  }, [showtime_uid]);
+		const loadSeats = async () => {
+			const res = await fetch(`${API_ENDPOINTS.seats}?showtime_uid=${showtime_uid}`);
+			const data = await res.json();
+			console.log("fetched seats data:", data);
+			setSeats(Array.isArray(data) ? data : []);
+		};
 
-  // ----------------------------------------------------
-  // 2) Live WebSocket seat updates
-  // ----------------------------------------------------
-  useEffect(() => {
-    if (!showtime_uid) return;
+		loadSeats();
+	}, [showtime_uid]);
 
-    // Convert backend HTTP URL → ws:// or wss://
-    const WS_URL =
-      API_ENDPOINTS.base.replace("http", "ws") +
-      `/ws/seats?showtime_uid=${showtime_uid}`;
+	// ----------------------------------------------------
+	// 2) Live WebSocket seat updates
+	// ----------------------------------------------------
+	useEffect(() => {
+		if (!showtime_uid) return;
 
-    console.log("Connecting seats WS:", WS_URL);
+		// Convert backend HTTP URL → ws:// or wss://
+		const WS_URL = API_ENDPOINTS.base.replace("http", "ws") + `/ws/seats?showtime_uid=${showtime_uid}`;
 
-    const ws = new WebSocket(WS_URL);
+		console.log("Connecting seats WS:", WS_URL);
 
-    ws.onopen = () => console.log("[WS] seats connected");
-    ws.onclose = () => console.log("[WS] seats disconnected");
-    ws.onerror = (e) => console.error("[WS] error:", e);
+		const ws = new WebSocket(WS_URL);
 
-    ws.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
+		ws.onopen = () => console.log("[WS] seats connected");
+		ws.onclose = () => console.log("[WS] seats disconnected");
+		ws.onerror = (e) => console.error("[WS] error:", e);
 
-      if (msg.type !== "seat_update") return;
+		ws.onmessage = (event) => {
+			const msg = JSON.parse(event.data);
 
-      const { seat_uid, status } = msg;
+			if (msg.type !== "seat_update") return;
 
-      console.log("[WS] Seat update:", msg);
+			const { seat_uid, status } = msg;
 
-      // Update seat status in UI
-      setSeats((prev) =>
-        prev.map((s) =>
-          s.seat_uid === seat_uid ? { ...s, seat_status: status } : s
-        )
-      );
+			console.log("[WS] Seat update:", msg);
 
-      // If seat becomes reserved/paid, remove from local selection
-      if (status !== "free") {
-        setSelectedSeats((prev) => prev.filter((id) => id !== seat_uid));
-      }
-    };
+			// Update seat status in UI
+			setSeats((prev) => prev.map((s) => (s.seat_uid === seat_uid ? { ...s, seat_status: status } : s)));
 
-    return () => ws.close();
-  }, [showtime_uid]);
+			// If seat becomes reserved/paid, remove from local selection
+			if (status !== "free") {
+				setSelectedSeats((prev) => prev.filter((id) => id !== seat_uid));
+			}
+		};
 
-  // ----------------------------------------------------
-  // Group seats by row
-  // ----------------------------------------------------
-  const rows = seats.reduce((acc: any, seat) => {
-    if (!acc[seat.row]) acc[seat.row] = [];
-    acc[seat.row].push(seat);
-    return acc;
-  }, {});
+		return () => ws.close();
+	}, [showtime_uid]);
 
-  // ----------------------------------------------------
-  // Handle seat selection (only free seats)
-  // ----------------------------------------------------
-  const toggleSeat = (seat_uid: string) => {
-    const seat = seats.find((s) => s.seat_uid === seat_uid);
-    if (!seat || seat.seat_status !== "free") return;
+	// ----------------------------------------------------
+	// Group seats by row
+	// ----------------------------------------------------
+	const visibleSeats = seats.filter(isSeatActive);
 
-    setSelectedSeats((prev) =>
-      prev.includes(seat_uid)
-        ? prev.filter((s) => s !== seat_uid)
-        : [...prev, seat_uid]
-    );
-  };
+	const rows = visibleSeats.reduce((acc: any, seat) => {
+		if (!acc[seat.row]) acc[seat.row] = [];
+		acc[seat.row].push(seat);
+		return acc;
+	}, {});
 
-  // ----------------------------------------------------
-  // Go to payment
-  // ----------------------------------------------------
-  const goToPayment = async () => {
-    if (selectedSeats.length === 0) return;
+	// ----------------------------------------------------
+	// Handle seat selection (only free seats)
+	// ----------------------------------------------------
+	const toggleSeat = (seat_uid: string) => {
+		const seat = seats.find((s) => s.seat_uid === seat_uid);
+		if (!seat || !isSeatActive(seat) || seat.seat_status !== "free") return;
 
-    const res = await fetch(API_ENDPOINTS.paymentCreateSession, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        showtime_uid,
-        seat_uids: selectedSeats,
-        amount: selectedSeats.length * 1000,
-        currency: "eur",
-      }),
-    });
+		setSelectedSeats((prev) => (prev.includes(seat_uid) ? prev.filter((s) => s !== seat_uid) : [...prev, seat_uid]));
+	};
 
-    const data = await res.json();
+	// ----------------------------------------------------
+	// Go to payment
+	// ----------------------------------------------------
+	const goToPayment = async () => {
+		if (selectedSeats.length === 0) return;
 
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert("Payment session error");
-    }
-  };
+		const res = await fetch(API_ENDPOINTS.paymentCreateSession, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				showtime_uid,
+				seat_uids: selectedSeats,
+				amount: selectedSeats.length * 1000,
+				currency: "eur",
+			}),
+		});
 
-  // ----------------------------------------------------
-  // RENDER UI
-  // ----------------------------------------------------
-  return (
-    <div className="container mt-4">
-      <h2 className="text-center mb-5">{t("seats.select")}</h2>
+		const data = await res.json();
 
-      <div className="seat-layout">
-        {Object.keys(rows).map((row) => (
-          <div key={row} className="seat-row">
-            <div className="row-label">Row {row}</div>
+		if (data.url) {
+			window.location.href = data.url;
+		} else {
+			alert("Payment session error");
+		}
+	};
 
-            <div className="seat-row-items">
-              {rows[row].map((seat: Seat) => {
-                const isSelected = selectedSeats.includes(seat.seat_uid);
+	// ----------------------------------------------------
+	// RENDER UI
+	// ----------------------------------------------------
+	return (
+		<div className="container mt-4">
+			<h2 className="text-center mb-5">{t("seats.select")}</h2>
 
-                return (
-                  <button
-                    key={seat.seat_uid}
-                    disabled={seat.seat_status !== "free"}
-                    onClick={() => toggleSeat(seat.seat_uid)}
-                    className={`seat-btn seat-${seat.seat_status} ${
-                      isSelected ? "seat-selected" : ""
-                    }`}
-                  >
-                    {seat.number}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
+			<div className="seat-layout">
+				{Object.keys(rows).map((row) => (
+					<div key={row} className="seat-row">
+						<div className="row-label">Row {row}</div>
 
-      {selectedSeats.length > 0 && (
-        <div className="selected-bar">
-          <div>
-            <strong>Selected Seats: </strong>
-            {selectedSeats.length}
-          </div>
-          <button className="btn btn-primary" onClick={goToPayment}>
-            {t("seats.payment")}
-          </button>
-        </div>
-      )}
-    </div>
-  );
+						<div className="seat-row-items">
+							{seats
+								.filter((s) => s.row === parseInt(row))
+								.map((seat: Seat) => {
+									if (!isSeatActive(seat) || seat.seat_status === "blocked") {
+										return <div key={seat.seat_uid} className="seat-placeholder"></div>;
+									}
+
+									const isSelected = selectedSeats.includes(seat.seat_uid);
+
+									return (
+										<button
+											key={seat.seat_uid}
+											disabled={seat.seat_status !== "free"}
+											onClick={() => toggleSeat(seat.seat_uid)}
+											className={`seat-btn seat-${seat.seat_status} ${isSelected ? "seat-selected" : ""}`}
+										>
+											{seat.number}
+										</button>
+									);
+								})}
+						</div>
+					</div>
+				))}
+			</div>
+
+			{selectedSeats.length > 0 && (
+				<div className="selected-bar">
+					<div>
+						<strong>Selected Seats: </strong>
+						{selectedSeats.length}
+					</div>
+					<button className="btn btn-primary" onClick={goToPayment}>
+						{t("seats.payment")}
+					</button>
+				</div>
+			)}
+		</div>
+	);
 }
 
 export default SeatsPage;
