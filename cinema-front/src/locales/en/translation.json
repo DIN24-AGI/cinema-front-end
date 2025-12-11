@@ -236,6 +236,7 @@
 		"row": "Row",
 		"seat": "Seat",
 		"totalSeats": "Total Seats",
-		"toggleError": "Failed to toggle seat status"
+		"toggleError": "Failed to toggle seat status",
+		"activeSeats": "Active Seats"
 	}
 }

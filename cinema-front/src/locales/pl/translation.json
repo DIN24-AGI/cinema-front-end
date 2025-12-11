@@ -231,6 +231,7 @@
 		"inactiveSeat": "Nieaktywne miejsce",
 		"row": "Rząd",
 		"seat": "Miejsce",
-		"totalSeats": "Razem miejsc"
+		"totalSeats": "Razem miejsc",
+		"activeSeats": "Aktywne miejsca"
 	}
 }

@@ -231,6 +231,7 @@
 		"inactiveSeat": "Passiivinen paikka",
 		"row": "Rivi",
 		"seat": "Paikka",
-		"totalSeats": "Yhteensä paikkoja"
+		"totalSeats": "Yhteensä paikkoja",
+		"activeSeats": "Aktiiviset paikat"
 	}
 }
