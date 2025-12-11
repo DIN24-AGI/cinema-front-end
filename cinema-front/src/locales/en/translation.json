@@ -53,7 +53,11 @@
 		"toggleError": "Failed to update movie state",
 		"searchPlaceholder": "Search by title...",
 		"filterAll": "All",
-		"filterActiveOnly": "Active only"
+		"filterActiveOnly": "Active only",
+		"fetchDetails": "Fetch Details",
+		"titleRequired": "Please enter a movie title",
+		"omdbFetchError": "Failed to fetch movie details from OMDB",
+		"movieNotFound": "Movie not found on OMDB"
 	},
 	"cinemas": {
 		"title": "Manage Cinemas",
@@ -109,7 +113,7 @@
 		"delete": "Delete",
 		"deleteConfirm": "Delete this hall?",
 		"deleteFailed": "Delete failed",
-		"seats": "{{count}} seats",
+		"seats": "seats",
 		"seatsNumber": "Number Of Seats",
 		"loading": "Loading…",
 		"errorLoadCities": "Failed to load cities",
@@ -122,7 +126,13 @@
 		"colNumber": "Number Of Columns",
 		"deleteHall": "Delete Hall",
 		"editHall": "Edit Hall",
-		"updateHall": "Update Hall"
+		"updateHall": "Update Hall",
+		"recreateSeats": "Recreate Seats",
+		"recreateSeatsConfirm": "This will recreate all seats for this hall based on the current row and column configuration. Continue?",
+		"recreateSeatsSuccess": "Seats recreated successfully!",
+		"recreateSeatsError": "Failed to recreate seats",
+		"toggleFailed": "Failed to update hall state",
+		"notFound": "Hall not found"
 	},
 	"cinemaCard": {
 		"address": "Address",
@@ -161,12 +171,10 @@
 		"deleteUser": "Are you sure you want to DELETE the user? This cannot be undone.",
 		"loading": "Loading users..."
 	},
-
 	"roles": {
 		"regular": "Regular",
 		"super": "Superuser"
 	},
-
 	"manageUsers": {
 		"title": "Manage Users",
 		"email": "Email",
@@ -225,6 +233,9 @@
 		"hallSeats": "Hall Seats",
 		"activeSeat": "Active Seat",
 		"inactiveSeat": "Inactive Seat",
-		"activeSeats": "Active Seats"
+		"row": "Row",
+		"seat": "Seat",
+		"totalSeats": "Total Seats",
+		"toggleError": "Failed to toggle seat status"
 	}
 }
