@@ -9,7 +9,7 @@ interface MovieBannerProps {
 const MovieBanner: React.FC<MovieBannerProps> = ({ movie, onDetails }) => {
   const { t } = useTranslation();
   return (
-    <div className="card mb-3 shadow-sm" style={{ maxWidth: "600px" }}>
+    <div className="card mb-3 shadow-sm" data-testid='movie-card' style={{ maxWidth: "600px" }}>
       <div className="row g-0 align-items-center">
         
         {/* Poster */}
