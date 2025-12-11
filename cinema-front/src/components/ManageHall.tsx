@@ -24,7 +24,7 @@ interface ManageHallProps {
  * - Toggle active/inactive status
  * - Delete hall
  */
-const ManageHall: React.FC<ManageHallProps> = ({ hall: initialHall, cinema, onDeleted }) => {
+const ManageHall: React.FC<ManageHallProps> = ({ hall: initialHall, onDeleted }) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [hall, setHall] = useState<Hall>(initialHall);
