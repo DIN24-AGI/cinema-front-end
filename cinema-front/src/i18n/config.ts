@@ -13,6 +13,9 @@ import translationEN from "../locales/en/translation.json";
 // Import Finnish translation file
 import translationFI from "../locales/fi/translation.json";
 
+//Import Polish translation file
+import translationPL from "../locales/pl/translation.json";
+
 /**
  * Define translation resources structure
  * Each language (en, fi) has a 'translation' namespace containing all translations
@@ -24,6 +27,9 @@ const resources = {
 	},
 	fi: {
 		translation: translationFI,
+	},
+	pl: {
+		translation: translationPL,
 	},
 };
 

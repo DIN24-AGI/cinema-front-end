@@ -1,10 +1,11 @@
+/* ===== Root layout ===== */
 #root {
   width: 100%;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
+/* ===== Logo (default Vite template) ===== */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -19,12 +20,8 @@
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -33,6 +30,7 @@
   }
 }
 
+/* ===== General layout ===== */
 .card {
   padding: 2em;
 }
@@ -41,6 +39,7 @@
   color: #888;
 }
 
+/* ===== Seat layout ===== */
 .seat-layout {
   display: flex;
   flex-direction: column;
@@ -73,32 +72,49 @@
   border-radius: 4px;
   background: #f2f2f2;
   font-size: 14px;
+  transition: background 0.2s ease, border 0.2s ease;
 }
 
+/* ===== Seat status colors ===== */
+
+/* FREELY AVAILABLE */
 .seat-free {
   background: white;
 }
 
+/* RESERVED (not yet paid) → gray */
 .seat-reserved {
-  background: orange;
+  background: #cfcfcf;
+  color: #444;
 }
 
+/* PAID (purchased, highlight orange) */
+.seat-paid {
+  background: orange;
+  color: white;
+  font-weight: bold;
+}
+
+/* SOLD (alternative logic) */
 .seat-sold {
   background: red;
   color: white;
 }
 
+/* BLOCKED (admin-locked seats) */
 .seat-blocked {
   background: #555;
   color: white;
 }
 
+/* USER-SELECTED SEATS (before payment) */
 .seat-selected {
   background: #4caf50 !important;
   color: white !important;
   border-color: #39843f !important;
 }
 
+/* ===== Bottom bar ===== */
 .selected-bar {
   position: fixed;
   bottom: 0;

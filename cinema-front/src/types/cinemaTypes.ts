@@ -62,4 +62,19 @@ export interface Showing {
 	hall_uid: string;
 	starts_at: string;
 	ends_at: string;
+	adult_price?: number;
+	child_price?: number;
+}
+
+export interface User {
+	uid: string;
+	email: string;
+	role: string;
+}
+
+export interface Seat {
+	uid: string;
+	row: number;
+	number: number;
+	active: boolean;
 }

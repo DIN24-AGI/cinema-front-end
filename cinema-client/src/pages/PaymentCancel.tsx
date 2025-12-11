@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next";
+
 function PaymentCancel() {
+  const { t } = useTranslation();
   return (
     <div className="container mt-5 text-center">
-      <h2>Payment Cancelled</h2>
-      <p>Your reservation was not completed.</p>
+      <h2>{t("payment.cancelled")}</h2>
+      <p>{t("payment.cancelledInfo")}</p>
     </div>
   );
 }

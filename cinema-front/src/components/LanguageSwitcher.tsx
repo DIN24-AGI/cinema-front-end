@@ -25,6 +25,13 @@ const LanguageSwitcher: React.FC = () => {
 			>
 				FI
 			</button>
+			<button
+				type="button"
+				className={`btn btn-sm ${i18n.language === "pl" ? "btn-primary" : "btn-outline-primary"}`}
+				onClick={() => changeLanguage("pl")}
+			>
+				PL
+			</button>
 		</div>
 	);
 };

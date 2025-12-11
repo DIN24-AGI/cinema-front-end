@@ -33,7 +33,7 @@ function Schedule() {
           fetch(API_ENDPOINTS.cinemas),
         ]);
 
-        if (!citiesRes.ok) throw new Error("Failed to load cities");
+        if (!citiesRes.ok) throw new Error(t("contact.errorLoadCities"));
 
         const cityData: City[] = await citiesRes.json();
         const cinemaData: Cinema[] = await cinemasRes.json();
@@ -49,14 +49,14 @@ function Schedule() {
 
       } catch (err: any) {
         console.error(err);
-        setError(err.message || t("cinemas.genericError"));
+        setError(err.message || t("util.genericError"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchEverything();
-  }, [t]);
+  }, [t, selectedCinema]);
 
 
   // Load showtimes when cinema/date changes
@@ -70,13 +70,13 @@ function Schedule() {
         const url = `${API_ENDPOINTS.showtimesInCinema}?cinema_uid=${selectedCinema.uid}&date=${date}`;
         const res = await fetch(url);
 
-        if (!res.ok) throw new Error("Failed to load showtimes");
+        if (!res.ok) throw new Error(t("movieDetails.errorShowtimes"));
 
         const data: Showtime[] = await res.json();
         setShowtimes(data);
 
       } catch (err) {
-        console.error("Failed to load showtimes:", err);
+        console.error(`t("movieDetails.errorShowtimes) :`, err);
         setShowtimes([]);
       } finally {
         setLoading(false);
@@ -84,17 +84,17 @@ function Schedule() {
     };
 
     loadShowtimes();
-  }, [selectedCinema, date]);
+  }, [selectedCinema, date, t]);
 
 
   return (
     <div className="container mt-4">
       {error && <div className="alert alert-danger">{error}</div>}
-      <h2 className="mb-4">Schedule</h2>
+      <h2 className="mb-4">{t("schedule.pageTitle")}</h2>
 
       {/* Cinema Selector */}
       <div className="cinema">
-        <h5>Select Cinema</h5>
+        <h5>{t("schedule.cinemaSelect")}</h5>
         <CinemaSelector
           cinemas={cinemas}
           cities={cities}
@@ -105,7 +105,7 @@ function Schedule() {
 
       {/* Date Picker */}
       <div className="mb-4">
-        <label className="form-label">Select Date</label>
+        <label className="form-label">{t("schedule.dateSelect")}</label>
         <input
           type="date"
           className="form-control"
@@ -115,10 +115,10 @@ function Schedule() {
         />
       </div>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p>{t("util.loading")}</p>}
 
       {!selectedCinema && (
-        <p className="text-muted">Please select a cinema to view the schedule.</p>
+        <p className="text-muted">{t("schedule.require")}</p>
       )}
 
       {/* SHOWTIMES */}
@@ -133,9 +133,9 @@ function Schedule() {
                   <h6 className="card-subtitle mb-2 text-muted">{show.hall_name}</h6>
 
                   <p className="mt-3 mb-0">
-                    <strong>Starts:</strong>{" "}
+                    <strong>{t("schedule.starts")}</strong>{" "}
                     {new Date(show.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}<br />
-                    <strong>Ends:</strong>{" "}
+                    <strong>{t("schedule.ends")}</strong>{" "}
                     {new Date(show.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </p>
 
@@ -143,7 +143,7 @@ function Schedule() {
                     className="btn btn-primary btn-sm mt-3 w-100"
                     onClick={() => navigate(`/showtime/${show.uid}`)}
                   >
-                    Book Ticket
+                    {t("schedule.book")}
                   </button>
 
                 </div>
@@ -152,7 +152,7 @@ function Schedule() {
           ))}
 
           {showtimes.length === 0 && (
-            <p>No showtimes available for this date.</p>
+            <p>{t("schedule.noShowings")}</p>
           )}
         </div>
       )}
