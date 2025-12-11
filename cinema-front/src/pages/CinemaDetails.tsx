@@ -93,7 +93,7 @@ const CinemaDetails: React.FC = () => {
 
 	// Delete cinema
 	const handleDelete = async () => {
-		const currentCinema = cinemaData || cinema;
+		const currentCinema = cinema;
 		if (!currentCinema || !cinema_uid) return;
 
 		const cityUid = currentCinema.city_uid;
@@ -129,7 +129,7 @@ const CinemaDetails: React.FC = () => {
 			// 3. Check remaining cinemas in the same city
 			let shouldDeleteCity = false;
 			try {
-				console.log("Checking remaining cinemas for city:", cityUid);
+				console.log("Checking remaining cinemas for city:", cinema.city_name, cityUid);
 				const listRes = await fetch(API_ENDPOINTS.cinemasByCity(cityUid), {
 					headers: { Authorization: `Bearer ${token}` },
 				});
