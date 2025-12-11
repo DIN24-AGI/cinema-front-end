@@ -102,14 +102,14 @@
 		"chooseCinema": "Wybierz kino",
 		"titleForCinema": "Sale dla {{cinema}}",
 		"addHall": "Dodaj salę",
-		"noHalls": "Brak sal",
+		"noHalls": "Brak sal jeszcze",
 		"active": "Aktywne",
 		"inactive": "Nieaktywne",
 		"view": "Zobacz",
 		"delete": "Usuń",
 		"deleteConfirm": "Czy na pewno chcesz usunąć tę salę?",
 		"deleteFailed": "Usunięcie nie powiodło się",
-		"seats": "{{count}} miejsc",
+		"seats": "miejsc",
 		"seatsNumber": "Liczba miejsc",
 		"loading": "Ładowanie…",
 		"errorLoadCities": "Nie udało się załadować miast",
@@ -122,7 +122,13 @@
 		"colNumber": "Liczba kolumn",
 		"deleteHall": "Usuń salę",
 		"editHall": "Edytuj salę",
-		"updateHall": "Zaktualizuj salę"
+		"updateHall": "Zaktualizuj salę",
+		"recreateSeats": "Odtwórz miejsca",
+		"recreateSeatsConfirm": "Spowoduje to odtworzenie wszystkich miejsc dla tej sali na podstawie aktualnej konfiguracji rzędów i kolumn. Kontynuować?",
+		"recreateSeatsSuccess": "Miejsca zostały odtworzone pomyślnie!",
+		"recreateSeatsError": "Nie udało się odtworzyć miejsc",
+		"toggleFailed": "Nie udało się zmienić stanu sali",
+		"notFound": "Nie znaleziono sali"
 	},
 	"cinemaCard": {
 		"address": "Adres",
@@ -213,5 +219,18 @@
 		"add": "Dodaj",
 		"overlapError": "Ten pokaz pokrywa się z istniejącym pokazem w tej samej sali. Wybierz inny czas.",
 		"createError": "Nie udało się utworzyć pokazu"
+	},
+	"seats": {
+		"seatMap": "Mapa miejsc",
+		"available": "Dostępne",
+		"unavailable": "Niedostępne",
+		"loading": "Ładowanie miejsc...",
+		"fetchError": "Nie udało się załadować miejsc.",
+		"hallSeats": "Miejsca w sali",
+		"activeSeat": "Aktywne miejsce",
+		"inactiveSeat": "Nieaktywne miejsce",
+		"row": "Rząd",
+		"seat": "Miejsce",
+		"totalSeats": "Razem miejsc"
 	}
 }

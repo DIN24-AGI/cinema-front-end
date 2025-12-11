@@ -7,8 +7,8 @@
 		"halls": "Hallitse saleja",
 		"data": "Näytä tiedot",
 		"logout": "Kirjaudu ulos",
-		"changePassword": "Vaihda salasana",
 		"movieList": "Elokuvan lista",
+		"changePassword": "Vaihda salasana",
 		"manageUsers": "Käyttäjien hallinta"
 	},
 	"login": {
@@ -22,7 +22,7 @@
 		"changePassword": "Vaihda salasana"
 	},
 	"movieList": {
-		"title": "Elokuvanäytökset",
+		"title": "Elokuvat",
 		"location": "Sijainti",
 		"date": "Päivämäärä",
 		"movie": "Elokuva",
@@ -50,7 +50,7 @@
 		"fetchError": "Elokuvan lataus epäonnistui",
 		"updateError": "Elokuvan päivitys epäonnistui",
 		"createError": "Elokuvan luonti epäonnistui",
-		"toggleError": "Tilapäivitys epäonnistui.",
+		"toggleError": "Tilapäivitys epäonnistui",
 		"searchPlaceholder": "Hae nimellä...",
 		"filterAll": "Kaikki",
 		"filterActiveOnly": "Vain aktiiviset"
@@ -102,14 +102,14 @@
 		"chooseCinema": "Valitse teatteri",
 		"titleForCinema": "Salit teatterissa {{cinema}}",
 		"addHall": "Lisää sali",
-		"noHalls": "Ei saleja",
+		"noHalls": "Ei saleja vielä",
 		"active": "Aktiivinen",
 		"inactive": "Ei-aktiivinen",
 		"view": "Näytä",
 		"delete": "Poista",
 		"deleteConfirm": "Poistetaanko tämä sali?",
 		"deleteFailed": "Poisto epäonnistui",
-		"seats": "{{count}} paikkaa",
+		"seats": "paikkaa",
 		"seatsNumber": "Paikkojen määrä",
 		"loading": "Ladataan…",
 		"errorLoadCities": "Kaupunkien lataus epäonnistui",
@@ -117,12 +117,18 @@
 		"errorLoadHalls": "Salien lataus epäonnistui",
 		"genericError": "Virhe",
 		"createHall": "Luo sali",
-		"hallDetails": "Sali tiedot",
+		"hallDetails": "Salin tiedot",
 		"rowsNumber": "Rivien määrä",
 		"colNumber": "Sarakkeiden määrä",
 		"deleteHall": "Poista sali",
-		"editHall": "Muokkaa halli",
-		"updateHall": "Päivittää salia"
+		"editHall": "Muokkaa salia",
+		"updateHall": "Päivitä sali",
+		"recreateSeats": "Luo paikat uudelleen",
+		"recreateSeatsConfirm": "Tämä luo kaikki paikat tälle salille uudelleen nykyisen rivi- ja sarakeasetelun mukaan. Jatka?",
+		"recreateSeatsSuccess": "Paikat luotu uudelleen onnistuneesti!",
+		"recreateSeatsError": "Paikkojen uudelleenluominen epäonnistui",
+		"toggleFailed": "Salin tilan vaihtaminen epäonnistui",
+		"notFound": "Salia ei löytynyt"
 	},
 	"cinemaCard": {
 		"address": "Osoite",
@@ -132,14 +138,14 @@
 	},
 	"util": {
 		"load": "Lataa",
-		"loading": "Ladataan…",
+		"loading": "Ladataan...",
 		"submit": "Lähetä",
 		"cancel": "Peruuta",
-		"canceling": "Peruutetaan…",
+		"canceling": "Peruutetaan...",
 		"save": "Tallenna",
-		"saving": "Tallennetaan…",
+		"saving": "Tallennetaan...",
 		"delete": "Poista",
-		"deleting": "Poistetaan…",
+		"deleting": "Poistetaan...",
 		"edit": "Muokkaa",
 		"confirm": "Vahvista",
 		"status": "Tila",
@@ -161,12 +167,10 @@
 		"deleteUser": "Haluatko varmasti POISTAA tämän käyttäjän? Tämä toimintoa ei voi perua.",
 		"loading": "Ladataan käyttäjiä..."
 	},
-
 	"roles": {
 		"regular": "Tavallinen",
 		"super": "Ylläpitäjä"
 	},
-
 	"manageUsers": {
 		"title": "Käyttäjien hallinta",
 		"email": "Sähköposti",
@@ -205,7 +209,7 @@
 		"discountedPrice": "Alennettu",
 		"deleteShowing": "Poista näytös",
 		"deleteError": "Näytöksen poistaminen epäonnistui",
-		"invalidDuration": "Ei saatavilla"
+		"invalidDuration": "N/A"
 	},
 	"addShowing": {
 		"selectMovie": "Valitse elokuva",
@@ -215,5 +219,18 @@
 		"add": "Lisää",
 		"overlapError": "Tämä näytös menee päällekkäin olemassa olevan näytöksen kanssa samassa salissa. Valitse eri aika.",
 		"createError": "Näytöksen luominen epäonnistui"
+	},
+	"seats": {
+		"seatMap": "Istumiskartta",
+		"available": "Saatavilla",
+		"unavailable": "Ei saatavilla",
+		"loading": "Ladataan paikkoja...",
+		"fetchError": "Paikkojen lataaminen epäonnistui.",
+		"hallSeats": "Salin paikat",
+		"activeSeat": "Aktiivinen paikka",
+		"inactiveSeat": "Passiivinen paikka",
+		"row": "Rivi",
+		"seat": "Paikka",
+		"totalSeats": "Yhteensä paikkoja"
 	}
 }

@@ -24,6 +24,31 @@ const AddHall: React.FC = () => {
 
 	const token = localStorage.getItem("token");
 
+	/**
+	 * Recreates seats for the hall based on rows/cols configuration
+	 */
+	const recreateSeats = async (hallUid: string) => {
+		try {
+			const res = await fetch(API_ENDPOINTS.recreateHallSeats(hallUid), {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			});
+
+			if (!res.ok) {
+				const d = await res.json().catch(() => ({}));
+				throw new Error(d.msg || "Failed to recreate seats");
+			}
+
+			console.log("Seats recreated successfully");
+		} catch (err: any) {
+			console.error("Error recreating seats:", err);
+			// Don't throw - continue even if seat recreation fails
+		}
+	};
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!cinemaUid) {
@@ -56,6 +81,9 @@ const AddHall: React.FC = () => {
 
 			const savedHall: Hall = await res.json();
 			console.log("Saved hall:", savedHall);
+
+			// Recreate seats after hall is saved
+			await recreateSeats(savedHall.uid);
 
 			nav(-1);
 		} catch (err: any) {

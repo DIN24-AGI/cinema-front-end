@@ -215,5 +215,16 @@
 		"add": "Add",
 		"overlapError": "This showing overlaps with an existing showing in the same hall. Please choose a different time.",
 		"createError": "Failed to create showing"
+	},
+	"seats": {
+		"seatMap": "Seat Map",
+		"available": "Available",
+		"unavailable": "Unavailable",
+		"loading": "Loading seats...",
+		"fetchError": "Failed to load seats.",
+		"hallSeats": "Hall Seats",
+		"activeSeat": "Active Seat",
+		"inactiveSeat": "Inactive Seat",
+		"totalSeats": "Total Seats"
 	}
 }

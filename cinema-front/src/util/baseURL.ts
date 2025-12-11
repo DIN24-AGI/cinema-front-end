@@ -15,7 +15,9 @@ export const API_ENDPOINTS = {
 	//for viewing single hall
 	hallDetail: (hallUid: string) => `${API_BASE_URL}/admin/hall/${hallUid}`,
 	halls: `${API_BASE_URL}/admin/halls`,
+	recreateHallSeats: (hallUid: string) => `${API_BASE_URL}/admin/halls/${hallUid}/recreate-seats`,
 	movies: `${API_BASE_URL}/admin/movies`,
 	showings: `${API_BASE_URL}/admin/showtimes`,
-	users: `${API_BASE_URL}/admin/users`
+	users: `${API_BASE_URL}/admin/users`,
+	seats: (hallUid: string) => `${API_BASE_URL}/admin/hall/${hallUid}/seats`,
 };

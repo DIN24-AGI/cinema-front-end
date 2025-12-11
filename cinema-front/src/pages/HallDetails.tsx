@@ -4,6 +4,7 @@ import { useNavigate, useParams, useLocation } from "react-router";
 import type { Hall } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
+import ShowSeats from "../components/ShowSeats";
 // import MonthView from "../components/MonthView";
 
 const HallDetails: React.FC = () => {
@@ -92,6 +93,7 @@ const HallDetails: React.FC = () => {
 						</div>
 					</div>
 				</div>
+				<ShowSeats hall={hall} hallUid={hall.uid} />
 				<div className="card-footer d-flex gap-2">
 					<button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
 						{t("util.back")}
@@ -104,7 +106,6 @@ const HallDetails: React.FC = () => {
 					</button>
 				</div>
 			</div>
-			{/* <MonthView hallUid={hall.uid} month="2025-11" /> */}
 		</div>
 	);
 };
