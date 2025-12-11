@@ -93,12 +93,40 @@ const CinemaDetails: React.FC = () => {
 
 	// Delete cinema
 	const handleDelete = async () => {
-		const currentCinema = cinema;
-		if (!currentCinema || !cinema_uid) return;
+		// Always prefer server-fetched data; fallback to location state
+		let currentCinema: Cinema | null = cinema || null;
+		console.log(currentCinema);
+		if (!cinema_uid) return;
 
-		const cityUid = currentCinema.city_uid;
+		// If city_uid is missing (e.g., shallow state passed via navigation), refetch full cinema details
+		if (!currentCinema || !currentCinema.city_uid) {
+			try {
+				const token = localStorage.getItem("token");
+				if (!token) {
+					alert("No token found. Please log in.");
+					return;
+				}
+				const res = await fetch(`${API_ENDPOINTS.cinemas}/${cinema_uid}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (res.ok) {
+					currentCinema = await res.json();
+					setCinemaData(currentCinema);
+				} else {
+					console.error("Failed to refetch cinema before delete", res.status);
+				}
+			} catch (e) {
+				console.error("Error refetching cinema before delete", e);
+			}
+		}
+
+		const cityUid = currentCinema?.city_uid;
+		console.log("city_uid for deletion:", cityUid);
 		if (!cityUid) {
-			console.error("No city_uid found for cinema", { cinemaData, cinema });
+			console.error("No city_uid found for cinema", { cinemaData, cinema, currentCinema });
 			alert("Cannot delete cinema: missing city information");
 			return;
 		}
@@ -188,7 +216,7 @@ const CinemaDetails: React.FC = () => {
 	if (error) return <p style={{ color: "red" }}>{error}</p>;
 
 	// Use cinemaData if available, fallback to cinema from state
-	const displayCinema = cinema;
+	const displayCinema = cinemaData || cinema;
 
 	// Check if we have cinema data after loading
 	if (!displayCinema) return <p>Cinema not found.</p>;
