@@ -191,7 +191,7 @@ function SeatsPage() {
 	// RENDER UI
 	// ----------------------------------------------------
 	return (
-		<div className="container mt-4">
+		<div className="container mt-4 mb-5" style={{ paddingBottom: selectedSeats.length > 0 ? "500px" : "20px" }}>
 			<h2 className="text-center mb-5">{t("seats.select")}</h2>
 
 			<div className="seat-layout">
