@@ -12,11 +12,26 @@ type Seat = {
 	active?: boolean;
 };
 
+type Showtime = {
+	uid: string;
+	movie_uid: string;
+	hall_uid: string;
+	starts_at: string;
+	ends_at: string;
+	adult_price: number;
+	child_price: number;
+	title: string;
+	poster_url: string;
+	hall_name: string;
+};
+
 function SeatsPage() {
 	const { t } = useTranslation();
 	const { showtime_uid } = useParams();
 	const [seats, setSeats] = useState<Seat[]>([]);
 	const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+	const [showtime, setShowtime] = useState<Showtime | null>(null);
+	const [discountedSeats, setDiscountedSeats] = useState<Set<string>>(new Set());
 
 	// Seats flagged inactive in the backend should not show up in the UI
 	const isSeatActive = (seat: Seat) => {
@@ -26,19 +41,26 @@ function SeatsPage() {
 	};
 
 	// ----------------------------------------------------
-	// 1) Load initial seats
+	// 1) Load initial seats and showtime details
 	// ----------------------------------------------------
 	useEffect(() => {
 		if (!showtime_uid) return;
 
-		const loadSeats = async () => {
-			const res = await fetch(`${API_ENDPOINTS.seats}?showtime_uid=${showtime_uid}`);
-			const data = await res.json();
-			console.log("fetched seats data:", data);
-			setSeats(Array.isArray(data) ? data : []);
+		const loadData = async () => {
+			// Fetch seats
+			const seatsRes = await fetch(`${API_ENDPOINTS.seats}?showtime_uid=${showtime_uid}`);
+			const seatsData = await seatsRes.json();
+			console.log("fetched seats data:", seatsData);
+			setSeats(Array.isArray(seatsData) ? seatsData : []);
+
+			// Fetch showtime details
+			const showtimeRes = await fetch(`${API_ENDPOINTS.base}/client/showtimes/${showtime_uid}`);
+			const showtimeData = await showtimeRes.json();
+			console.log("fetched showtime data:", showtimeData);
+			setShowtime(showtimeData);
 		};
 
-		loadSeats();
+		loadData();
 	}, [showtime_uid]);
 
 	// ----------------------------------------------------
@@ -92,19 +114,58 @@ function SeatsPage() {
 
 	// ----------------------------------------------------
 	// Handle seat selection (only free seats)
-	// ----------------------------------------------------
+	// Helper to get seat details
+	const getSeatDetails = (seat_uid: string) => {
+		return seats.find((s) => s.seat_uid === seat_uid);
+	};
+
+	// Toggle discount for a seat
+	const toggleDiscount = (seat_uid: string) => {
+		setDiscountedSeats((prev) => {
+			const updated = new Set(prev);
+			if (updated.has(seat_uid)) {
+				updated.delete(seat_uid);
+			} else {
+				updated.add(seat_uid);
+			}
+			return updated;
+		});
+	};
+
+	// Get price for a seat
+	const getSeatPrice = (seat_uid: string) => {
+		if (!showtime) return 0;
+		return discountedSeats.has(seat_uid) ? showtime.child_price : showtime.adult_price;
+	};
+
+	// Calculate total price
+	const calculateTotal = () => {
+		return selectedSeats.reduce((sum, seat_uid) => sum + getSeatPrice(seat_uid), 0);
+	};
+
 	const toggleSeat = (seat_uid: string) => {
 		const seat = seats.find((s) => s.seat_uid === seat_uid);
 		if (!seat || !isSeatActive(seat) || seat.seat_status !== "free") return;
 
-		setSelectedSeats((prev) => (prev.includes(seat_uid) ? prev.filter((s) => s !== seat_uid) : [...prev, seat_uid]));
+		setSelectedSeats((prev) => {
+			const updated = prev.includes(seat_uid) ? prev.filter((s) => s !== seat_uid) : [...prev, seat_uid];
+			// Remove discount when deselecting seat
+			if (!updated.includes(seat_uid)) {
+				setDiscountedSeats((prev) => {
+					const updatedDiscounts = new Set(prev);
+					updatedDiscounts.delete(seat_uid);
+					return updatedDiscounts;
+				});
+			}
+			return updated;
+		});
 	};
 
 	// ----------------------------------------------------
 	// Go to payment
 	// ----------------------------------------------------
 	const goToPayment = async () => {
-		if (selectedSeats.length === 0) return;
+		if (selectedSeats.length === 0 || !showtime) return;
 
 		const res = await fetch(API_ENDPOINTS.paymentCreateSession, {
 			method: "POST",
@@ -112,7 +173,7 @@ function SeatsPage() {
 			body: JSON.stringify({
 				showtime_uid,
 				seat_uids: selectedSeats,
-				amount: selectedSeats.length * 1000,
+				amount: calculateTotal(),
 				currency: "eur",
 			}),
 		});
@@ -166,9 +227,50 @@ function SeatsPage() {
 
 			{selectedSeats.length > 0 && (
 				<div className="selected-bar">
-					<div>
-						<strong>Selected Seats: </strong>
-						{selectedSeats.length}
+					<div className="selected-seats-list">
+						<h4>Selected Seats:</h4>
+						<div className="seats-details">
+							{selectedSeats.map((seat_uid) => {
+								const seat = getSeatDetails(seat_uid);
+								if (!seat) return null;
+								const isDiscounted = discountedSeats.has(seat_uid);
+								const price = getSeatPrice(seat_uid);
+
+								return (
+									<div key={seat_uid} className="seat-detail-row">
+										<div className="seat-info">
+											<span>
+												Row {seat.row}, Seat {seat.number}
+											</span>
+										</div>
+										<div className="seat-pricing">
+											<label className="price-label">
+												<input
+													type="radio"
+													name={`ticket-type-${seat_uid}`}
+													checked={!isDiscounted}
+													onChange={() => isDiscounted && toggleDiscount(seat_uid)}
+												/>
+												Adult: €{(showtime?.adult_price || 0) / 100}
+											</label>
+											<label className="price-label">
+												<input
+													type="radio"
+													name={`ticket-type-${seat_uid}`}
+													checked={isDiscounted}
+													onChange={() => !isDiscounted && toggleDiscount(seat_uid)}
+												/>
+												Child: €{(showtime?.child_price || 0) / 100}
+											</label>
+											<span className="seat-price">€{price / 100}</span>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+						<div className="total-price">
+							<strong>Total: €{calculateTotal() / 100}</strong>
+						</div>
 					</div>
 					<button className="btn btn-primary" onClick={goToPayment}>
 						{t("seats.payment")}
