@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
 	cities: `${API_BASE_URL}/api/cities`,
 	movies: `${API_BASE_URL}/api/movies`,
 	showtimes: `${API_BASE_URL}/api/client/showtimes`,
-	showtime: `${API_BASE_URL}/api/client/showtimes`,
+	showtime: `${API_BASE_URL}/client/showtimes`,
 	seats: `${API_BASE_URL}/api/seats`,
 	paymentCreateSession: `${API_BASE_URL}/payments/create-checkout-session`,
 	showtimesInCinema: `${API_BASE_URL}/api/showtimes`,

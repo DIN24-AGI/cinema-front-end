@@ -45,7 +45,7 @@ function SeatsPage() {
 	// ----------------------------------------------------
 	useEffect(() => {
 		if (!showtime_uid) return;
-
+		console.log("showtime_uid:", showtime_uid);
 		const loadData = async () => {
 			// Fetch seats
 			const seatsRes = await fetch(`${API_ENDPOINTS.seats}?showtime_uid=${showtime_uid}`);
@@ -54,7 +54,7 @@ function SeatsPage() {
 			setSeats(Array.isArray(seatsData) ? seatsData : []);
 
 			// Fetch showtime details
-			const showtimeRes = await fetch(`${API_ENDPOINTS.base}/client/showtimes/${showtime_uid}`);
+			const showtimeRes = await fetch(`${API_ENDPOINTS.showtimes}/${showtime_uid}`);
 			const showtimeData = await showtimeRes.json();
 			console.log("fetched showtime data:", showtimeData);
 			setShowtime(showtimeData);
