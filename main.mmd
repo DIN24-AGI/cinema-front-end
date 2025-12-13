@@ -1,0 +1,147 @@
+gitGraph
+    commit id: "76750f7 - Initial commit"
+    commit id: "30304e1 - Azure workflow"
+    commit id: "ec2367c - fix workflow"
+    commit id: "ff7a8ad - Trigger deploy"
+    commit id: "604c568 - auth publish profile"
+    commit id: "e115699 - ignore .env"
+    
+    branch dev
+    commit id: "8c61c24 - login & registration"
+    commit id: "cf1e92e - dashboard router"
+    commit id: "5895fd7 - delete trash"
+    checkout main
+    merge dev
+    
+    checkout dev
+    commit id: "90ce3ef - city/cinema/hall mgmt"
+    checkout main
+    merge dev
+    
+    commit id: "32c0a87 - fix build"
+    commit id: "f282a64 - add routes" tag: "v0.0.1"
+    
+    checkout dev
+    commit id: "05a3f54 - hall activation"
+    checkout main
+    merge dev tag: "v0.1.0"
+    
+    checkout dev
+    commit id: "403f6ee - cinema CRUD"
+    commit id: "4e028d3 - modify gitignore"
+    commit id: "2514580 - return gitignore"
+    checkout main
+    merge dev
+    merge dev tag: "v0.1.1"
+    
+    checkout dev
+    commit id: "669582e - movie endpoints"
+    commit id: "4ddd679 - payments routes"
+    commit id: "9fd6f06 - stripe + showtime"
+    commit id: "09376e3 - get seats"
+    commit id: "99ae9da - stripe webhook"
+    checkout main
+    merge dev
+    
+    branch fix/cors-configuration
+    commit id: "44041a1 - CORS config"
+    checkout main
+    merge fix/cors-configuration tag: "v0.2.0"
+    
+    checkout dev
+    commit id: "99b8589 - phone field"
+    commit id: "aed7289 - change password"
+    commit id: "d3b07b5 - POST /halls"
+    commit id: "0fb3abc - PUT /halls"
+    commit id: "caa4158 - edit active"
+    checkout main
+    merge dev
+    
+    commit id: "f3d731c - deploy" tag: "v0.2.1"
+    
+    branch fix/fix-cinema-phone
+    commit id: "978324c - fix cinema phone"
+    checkout main
+    merge fix/fix-cinema-phone
+    
+    commit id: "78b4654 - fix port" tag: "v0.2.2"
+    commit id: "867609d - health check" tag: "v0.2.3"
+    commit id: "2660a9d - fix pool" tag: "v0.2.4"
+    commit id: "6455496 - add checks" tag: "v0.2.5"
+    
+    branch public-app
+    commit id: "3956e77 - client endpoint"
+    commit id: "f584d0b - GET movies"
+    checkout main
+    merge public-app tag: "v0.3.0"
+    
+    branch fix/cors
+    commit id: "f9c0177 - fix cors"
+    checkout main
+    merge fix/cors tag: "v0.3.1"
+    
+    branch feature/manage-schedule
+    commit id: "643bb4e - showings endpoints"
+    checkout main
+    merge feature/manage-schedule
+    
+    checkout dev
+    commit id: "21b4088 - showtime prices"
+    commit id: "f99a85d - client routes"
+    commit id: "32592b4 - fetch showtimes"
+    checkout main
+    merge dev tag: "v0.4.0"
+    
+    checkout public-app
+    commit id: "95c781f - GET showtime"
+    commit id: "e0b11ab - client.ts"
+    commit id: "1d2468d - GET /movies filter"
+    commit id: "5fe0d70 - GET movie showtimes"
+    checkout main
+    merge public-app tag: "v0.4.1"
+    
+    checkout dev
+    commit id: "b43b714 - routers bug"
+    commit id: "23a2755 - email confirmation"
+    commit id: "3f3590c - websocket status"
+    commit id: "b68a557 - seat reservation"
+    
+    branch feature/manage-users
+    commit id: "b68a557 - add admin"
+    commit id: "676c343 - fix typo"
+    commit id: "5d7596e - GET/update/delete"
+    checkout main
+    merge feature/manage-users tag: "v0.5.0"
+    
+    checkout dev
+    merge main
+    commit id: "577a60c - fix package.json"
+    checkout main
+    merge dev tag: "v1.0.0"
+    
+    commit id: "b95980c - handler fix" tag: "v1.0.1"
+    
+    branch fix/schedule
+    commit id: "b87436b - price endpoint"
+    
+    branch fix/updateHall
+    commit id: "d112488 - recreate seats"
+    commit id: "50dcaed - fix endpoint"
+    commit id: "1ab7dd5 - seat status"
+    
+    checkout fix/schedule
+    merge fix/updateHall
+    checkout main
+    merge fix/schedule
+    
+    checkout fix/updateHall
+    commit id: "fe48025 - host png"
+    checkout main
+    merge fix/updateHall tag: "v1.1.0"
+    
+    branch qr
+    commit id: "55feb54 - qr"
+    checkout main
+    merge qr tag: "v1.1.1"
+    
+    commit id: "4731cc4 - fix GET cinemas" tag: "v1.1.2"

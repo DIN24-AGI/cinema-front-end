@@ -1,0 +1,212 @@
+* fd59645 -  (HEAD -> main, tag: v1.1.6, origin/main, origin/HEAD) fix deleting cinema v3 (21 hours ago) <Gleb Bulygin>
+* 36cb5fc -  (tag: v1.1.5) fix deleting cinema v2 (21 hours ago) <Gleb Bulygin>
+* 09ff8c9 -  (tag: v1.1.4) fix deleting cinema (22 hours ago) <Gleb Bulygin>
+* ec5c859 -  (tag: c1.1.2) make selected seats and hall scrollable (22 hours ago) <Gleb Bulygin>
+* 5fa9759 -  (tag: c1.1.1) fix css file (23 hours ago) <Gleb Bulygin>
+*   2294783 -  (tag: c1.1.0) Merge pull request #42 from DIN24-AGI/fix/seatLayoutPrice (23 hours ago) <Gleb Bulygin>
+|\  
+| * 5ef9935 -  (fix/seatLayoutPrice) add selected seats with price (23 hours ago) <Gleb Bulygin>
+| *   94eac1a -  Merge branch 'main' into fix/seatLayoutPrice merge main into fix/seatLayoutPrice (23 hours ago) <Gleb Bulygin>
+| |\  
+| |/  
+|/|   
+* |   e984938 -  Merge pull request #41 from DIN24-AGI/tests (24 hours ago) <Gleb Bulygin>
+|\ \  
+| * | 8e49eb1 -  (origin/tests) updated url (25 hours ago) <Ala Williams>
+| * |   ddfc9b7 -  Merge branch 'main' of https://github.com/DIN24-AGI/cinema-front-end into tests (25 hours ago) <Ala Williams>
+| |\ \  
+| |/ /  
+|/| |   
+* | | 3a89a31 -  (tag: v1.1.3) fix active seats label, add OMDb api key to build file (27 hours ago) <Gleb Bulygin>
+* | |   de981b7 -  (tag: v1.1.2, tag: v1.1.1, tag: v1.1.0) Merge pull request #40 from DIN24-AGI/feature/fetchMovieApi (30 hours ago) <alaWilliams>
+|\ \ \  
+| | * | 750e805 -  cypress test added (30 hours ago) <Ala Williams>
+| | | * 13201a0 -  seats page work in progress (30 hours ago) <Gleb Bulygin>
+| | | * fadcfd6 -  hide blocked seats completely, fix seats ednpoint (32 hours ago) <Gleb Bulygin>
+| | |/  
+| |/|   
+| * | 507a4ab -  (feature/fetchMovieApi) fix unused import (2 days ago) <Gleb Bulygin>
+| * | 6ce8aed -  add fetch by movie title (2 days ago) <Gleb Bulygin>
+| * | ec5e037 -  (origin/fix/update-manageCinemas, fix/update-manageCinemas) update ManageHall and ShowSeats components (2 days ago) <Gleb Bulygin>
+| * | ce2a6f8 -  activate seats in Hall Details view (2 days ago) <Gleb Bulygin>
+| * | e916233 -  update hall details, update add hall component to recreate all seats on row or column change (2 days ago) <Gleb Bulygin>
+| * | 50596ce -  remove Manage Halls from navbar (2 days ago) <Gleb Bulygin>
+| * | adaf4bd -  move manage halls under manage Cinemas (2 days ago) <Gleb Bulygin>
+| * | 49f09d5 -  (origin/fix/schedule, fix/schedule, feature/statistics) add polish language support (2 days ago) <Gleb Bulygin>
+| * | d3d39db -  add polish language support (2 days ago) <Gleb Bulygin>
+| * | 6929e24 -  translate all components (2 days ago) <Gleb Bulygin>
+| * | b31992c -  add an overlap check to add showing, add comments (2 days ago) <Gleb Bulygin>
+| * | cfb8b22 -  fix refrashing component after adding a showtime (2 days ago) <Gleb Bulygin>
+| * | 8f45ef6 -  showtime takes price (2 days ago) <Gleb Bulygin>
+| * | 1d6ff64 -  schedule - work in progress (2 days ago) <Gleb Bulygin>
+| * | 54d5def -  addMovie work in progress (2 days ago) <Gleb Bulygin>
+|/ /  
+* | c0a7ebf -  (tag: v1.0.0) add staticwebapp.config.json file (2 days ago) <Gleb Bulygin>
+* | 13a275c -  (tag: c1.0.1) add staticwebapp.config.json file (2 days ago) <Gleb Bulygin>
+* |   cc2cb79 -  (tag: c1.0.0) Merge pull request #39 from DIN24-AGI/feature/payments (2 days ago) <alaWilliams>
+|\ \  
+| * \   7e43fe7 -  (origin/feature/payments) Merge branch 'main' into feature/payments (2 days ago) <alaWilliams>
+| |\ \  
+| |/ /  
+|/| |   
+* | |   3aadee2 -  Merge pull request #38 from DIN24-AGI/feature/i18n (2 days ago) <Gleb Bulygin>
+|\ \ \  
+* \ \ \   7ae260e -  (tag: v0.4.0) Merge pull request #37 from DIN24-AGI/feature/manage-users (3 days ago) <Gleb Bulygin>
+|\ \ \ \  
+| |_|_|/  
+|/| | |   
+| * | | dd34b0b -  (origin/feature/manage-users) updating, deleting users + translation (3 days ago) <Ala Williams>
+| * | | 17847b7 -  manage users page, adding users (4 days ago) <Ala Williams>
+|/ / /  
+| | * 92089dc -  feat(seatpage) websocket realtime update of reservations done (4 days ago) <Igor Bologov>
+| |/  
+|/|   
+| | * 180d508 -  (origin/feature/ui) background changed (2 days ago) <Ala Williams>
+| |/  
+| * 8b86f55 -  adding translation (2 days ago) <Ala Williams>
+| * 25fb4b9 -  fi-en translation (3 days ago) <Ala Williams>
+|/  
+*   89af877 -  (tag: c0.3.1) Merge pull request #36 from DIN24-AGI/available-movies (8 days ago) <Gleb Bulygin>
+|\  
+| * 51e0319 -  (origin/available-movies) movie details updated, schedule updated (8 days ago) <Ala Williams>
+| * 67ec8f5 -  fixed build errors (8 days ago) <Ala Williams>
+| * c66c345 -  movies page with working filters (8 days ago) <Ala Williams>
+| * ce14bfe -  dashboard: dropdown menu to show cinemas, fetching movies playing today (11 days ago) <Ala Williams>
+|/  
+*   abf5c1e -  (tag: c0.3.0, tag: c0.2.0) Merge pull request #35 from DIN24-AGI/feature/payments (11 days ago) <alaWilliams>
+|\  
+| * d3e9856 -  fix(unused vars removed  v0.2) (12 days ago) <Igor Bologov>
+| * 64ec79a -  fix(unused vars removed) (12 days ago) <Igor Bologov>
+| * c465acd -  feat: add Stripe payments + seat selection + cinema pages (13 days ago) <Igor Bologov>
+* |   bc315e7 -  (tag: v0.3.3) Merge pull request #34 from DIN24-AGI/feature/schedule (11 days ago) <alaWilliams>
+|\ \  
+| |/  
+|/|   
+| * cd61bf2 -  shedule working, no checks yet (2 weeks ago) <Gleb Bulygin>
+| *   89c9094 -  Merge branch 'main' of https://github.com/DIN24-AGI/cinema-front-end into feature/schedule (2 weeks ago) <Gleb Bulygin>
+| |\  
+| * | cfbfa67 -  schedule feature, work in progress (2 weeks ago) <Gleb Bulygin>
+* | |   cccb0b4 -  Merge pull request #33 from DIN24-AGI/fix/deployment (2 weeks ago) <Gleb Bulygin>
+|\ \ \  
+| |_|/  
+|/| |   
+| * | 56645ac -  update package.json to force later versions of node and npm (2 weeks ago) <Gleb Bulygin>
+|/ /  
+* |   001bbe3 -  (tag: c0.1.0) Merge pull request #32 from DIN24-AGI/available-movies (2 weeks ago) <Gleb Bulygin>
+|\ \  
+| * | 65f24f1 -  dashboard done with hardcoded data (2 weeks ago) <Ala Williams>
+| * |   c21954d -  Merge branch 'main' of https://github.com/DIN24-AGI/cinema-front-end into available-movies (2 weeks ago) <Ala Williams>
+| |\ \  
+| |/ /  
+|/| |   
+* | | aebdf32 -  update the name of the first job, update readme (2 weeks ago) <Gleb Bulygin>
+* | | 59ff14d -  (tag: c0.0.6) add a new workflow for redeployed app. remove old workflow. (2 weeks ago) <Gleb Bulygin>
+* | | 30ce701 -  ci: add Azure Static Web Apps workflow file on-behalf-of: @Azure opensource@microsoft.com (2 weeks ago) <Gleb Bulygin>
+* | | ab7f69b -  (tag: c0.0.5) remove deployment token (deploy with github token) (2 weeks ago) <Gleb Bulygin>
+* | | dba2acb -  (tag: c0.0.4, tag: c0.0.3) fix paths in the workflow (2 weeks ago) <Gleb Bulygin>
+* | | dea2a50 -  (tag: c0.0.2) fix paths in the workflow (2 weeks ago) <Gleb Bulygin>
+* | |   552aa7e -  (tag: c0.0.1) Merge pull request #31 from DIN24-AGI/dev-deployment (2 weeks ago) <alaWilliams>
+|\ \ \  
+| | |/  
+| |/|   
+| * | abb52ce -  update delployment workflow, update readme (2 weeks ago) <Gleb Bulygin>
+| * | ecdbbe1 -  remove package-lock.json from the root directory (2 weeks ago) <Gleb Bulygin>
+|/ /  
+* | 52d61b0 -  ci: add Azure Static Web Apps workflow file on-behalf-of: @Azure opensource@microsoft.com (2 weeks ago) <Gleb Bulygin>
+* |   2b718fe -  Merge pull request #30 from DIN24-AGI/available-movies (3 weeks ago) <Gleb Bulygin>
+|\ \  
+| | * 4508214 -  CinemaSelector component created, schedule page outlined (2 weeks ago) <Ala Williams>
+| | * 53ed2c9 -  movie list and movieDetails done for now (2 weeks ago) <Ala Williams>
+| | * 52974af -  client navbar and contact page done (2 weeks ago) <Ala Williams>
+| | * 4b93449 -  contact us page (2 weeks ago) <Ala Williams>
+| | * c224d2c -  client page structure, router setup, i18n working, first components and pages draft (2 weeks ago) <Ala Williams>
+| |/  
+| * d9cfb2d -  initial set up for the 2nd front app (3 weeks ago) <Ala Williams>
+| * 65f394e -  new vite project for client side app (3 weeks ago) <Ala Williams>
+| *   03f0160 -  Merge branch 'main' of https://github.com/DIN24-AGI/cinema-front-end into available-movies (3 weeks ago) <Ala Williams>
+| |\  
+| |/  
+|/|   
+* |   5cbcaac -  (tag: v0.3.2) Merge pull request #29 from DIN24-AGI/fix/cinema (3 weeks ago) <alaWilliams>
+|\ \  
+| * | 99a5929 -  fix cinema errors, add city on cinema creation, remove city if delete last cinema in the city, fix AddMovies issues (3 weeks ago) <GllBhh>
+|/ /  
+* |   7bfe115 -  Merge pull request #28 from DIN24-AGI/theaters-and-halls-mgnt (3 weeks ago) <Gleb Bulygin>
+|\ \  
+| * | a2aa0ae -  removing a setter from addhall (3 weeks ago) <Ala Williams>
+| * | 3cffdbc -  fixed build errors (3 weeks ago) <Ala Williams>
+| * | adccc45 -  refactored manage halls (3 weeks ago) <Ala Williams>
+| * | 6e8f897 -  removed city selection from halls mgnt, active/notactive hall checkbox, added edit halls btn (3 weeks ago) <Ala Williams>
+| * | 47cd9be -  removing choose gity from halls mgnt (3 weeks ago) <Ala Williams>
+| * |   9ac2fa8 -  Merge branch 'main' of https://github.com/DIN24-AGI/cinema-front-end into theaters-and-halls-mgnt (3 weeks ago) <Ala Williams>
+| |\ \  
+| |/ /  
+|/| |   
+| * | 599b0b1 -  month view (3 weeks ago) <Ala Williams>
+| | * f311462 -  viewing movies started (3 weeks ago) <Ala Williams>
+| |/  
+|/|   
+* |   8d83fc7 -  Merge pull request #27 from DIN24-AGI/feature/manage-movies (4 weeks ago) <alaWilliams>
+|\ \  
+| * | 8e02534 -  fix name Movie.tsx >> MovieCard.tsx, fix imports (4 weeks ago) <GllBhh>
+| * | 7c0d6fa -  add MovieList component (again), update NavBar to display the link to it) ; (4 weeks ago) <GllBhh>
+| * | 518722b -  Add movie management feature with CRUD operations, search, filters, and comprehensive documentation, update github actions to build on push (4 weeks ago) <GllBhh>
+|/ /  
+* | 6a99041 -  (tag: v0.3.1) Merge pull request #26 from DIN24-AGI/theaters-and-halls-mgnt (4 weeks ago) <Gleb Bulygin>
+|\| 
+| * 753863f -  halls and cinemas management done (4 weeks ago) <Ala Williams>
+| * faeaca2 -  cinema card now showing the city, adding halls fixed (4 weeks ago) <Ala Williams>
+| * 1ebcea6 -  add cinema dropdown, managing halls (4 weeks ago) <Ala Williams>
+| *   483e494 -  Merge branch 'main' into theaters-and-halls-mgnt (4 weeks ago) <Ala Williams>
+| |\  
+| |/  
+|/|   
+* |   9ab0ba0 -  (tag: v0.3.0) Merge pull request #25 from DIN24-AGI/feature/add-second-language (4 weeks ago) <alaWilliams>
+|\ \  
+| * | 9b5e541 -  fix build issues (5 weeks ago) <Gleb Bulygin>
+| * | 7786af0 -  add en-fi language support, fix styling (5 weeks ago) <Gleb Bulygin>
+|/ /  
+* | efdde41 -  (tag: v0.2.2) fix build bugs (5 weeks ago) <Gleb Bulygin>
+* |   f4ec163 -  (tag: v0.2.1) Merge pull request #24 from DIN24-AGI/theaters-and-halls-mgnt (5 weeks ago) <Gleb Bulygin>
+|\ \  
+| | * b84ee90 -  app routes changed (5 weeks ago) <Ala Williams>
+| |/  
+| * aeeb591 -  hall mgnt in progress (5 weeks ago) <Ala Williams>
+| * ec62956 -  toggling active state done (5 weeks ago) <Ala Williams>
+| * e3e98d9 -  handling deleting a cinema done (5 weeks ago) <Ala Williams>
+| * a027f5a -  editing and adding new cinemas done (5 weeks ago) <Ala Williams>
+| * d72f288 -  manage theaters and view details done (5 weeks ago) <Ala Williams>
+| * 404a8e0 -  renaming, refactoring mng theaters, using mock data for now (5 weeks ago) <Ala Williams>
+| * f13df63 -  renaming, refactoring mng theaters, using mock data for now (5 weeks ago) <Ala Williams>
+| * e98f474 -  theaters mgnt in progress (5 weeks ago) <Ala Williams>
+| *   8c6cca4 -  Merge branch 'main' into theaters-and-halls-mgnt (5 weeks ago) <Ala Williams>
+| |\  
+| |/  
+|/|   
+* | dee7e0f -  (tag: v0.2.0, tag: v0.1.2) fix build error (5 weeks ago) <Gleb Bulygin>
+* | 867b6b8 -  (tag: v0.1.1) fix unused imports (5 weeks ago) <Gleb Bulygin>
+* |   012db73 -  (tag: v0.1.0) Merge pull request #23 from DIN24-AGI/feature/add-router (5 weeks ago) <alaWilliams>
+|\ \  
+| * | a5e6fce -  index set to admin login, update AppRoutes.tsx, update NavBar.tsx, update AdminLogin.tsx, update AdminDashboard.tsx, update App.tsx, update ChangePassword.tsx (5 weeks ago) <Gleb Bulygin>
+|/ /  
+| * 092f36b -  TheaterCard and Manage page (5 weeks ago) <Ala Williams>
+|/  
+*   9a3a8b1 -  Merge pull request #22 from DIN24-AGI/feature/admin-login (5 weeks ago) <Gleb Bulygin>
+|\  
+| * 1337e9b -  changing register feature to change password (5 weeks ago) <Ala Williams>
+| * c6391c6 -  changing register feature to change password (5 weeks ago) <Ala Williams>
+| * b107e27 -  changing structure of the directories, adding admin dashboard, navbar (5 weeks ago) <Ala Williams>
+| * 8412384 -  adding base URL (5 weeks ago) <Ala Williams>
+| * ee6bff9 -  admin login and registration components and pages (5 weeks ago) <Ala Williams>
+* | 2d245f7 -  (tag: v0.0.7) add link to the backend to github secrets, update workflow (6 weeks ago) <Gleb Bulygin>
+|/  
+* e2b161d -  (tag: v0.0.6, tag: v0.0.5) add backend connection test box (6 weeks ago) <Gleb Bulygin>
+* 1668b19 -  (tag: v0.0.4) add bootstrap, replace logo (react logo for now) (6 weeks ago) <Gleb Bulygin>
+* 1596358 -  (tag: v0.0.3) Add Node 20 engine requirement (6 weeks ago) <Gleb Bulygin>
+* 39dfd9d -  (tag: v0.0.2) update workflow, fix unsued imports (6 weeks ago) <Gleb Bulygin>
+* 2c656cc -  (tag: v0.0.1) update workflow (6 weeks ago) <Gleb Bulygin>
+* 53a2bf8 -  ci: add Azure Static Web Apps workflow file on-behalf-of: @Azure opensource@microsoft.com (6 weeks ago) <Gleb Bulygin>
+* e3fcac3 -  fix readme (6 weeks ago) <Gleb Bulygin>
+* e72ef00 -  add .gitignore, README.md missing from previous commit (6 weeks ago) <Gleb Bulygin>
+* 537b897 -  initial commit. Add .gitignore, initialize React app, placehoder page with dummy data (6 weeks ago) <Gleb Bulygin>
+* ed9e2c5 -  Initial commit (6 weeks ago) <Gleb Bulygin>

@@ -1,0 +1,117 @@
+gitGraph
+    commit id: "ed9e2c5 - Initial commit"
+    commit id: "537b897 - initialize React app"
+    commit id: "e72ef00 - add .gitignore"
+    commit id: "53a2bf8 - add Azure workflow" tag: "v0.0.1"
+    commit id: "1596358 - Node 20 requirement" tag: "v0.0.3"
+    commit id: "1668b19 - add bootstrap" tag: "v0.0.4"
+    commit id: "e2b161d - backend test" tag: "v0.0.6"
+    
+    branch feature/admin-login
+    commit id: "ee6bff9 - admin login"
+    commit id: "b107e27 - add dashboard"
+    commit id: "1337e9b - change password"
+    checkout main
+    merge feature/admin-login
+    
+    branch feature/add-router
+    commit id: "a5e6fce - add routes" tag: "v0.1.0"
+    checkout main
+    merge feature/add-router
+    
+    commit id: "867b6b8 - fix imports" tag: "v0.1.1"
+    commit id: "dee7e0f - fix build" tag: "v0.2.0"
+    
+    branch theaters-and-halls-mgnt
+    commit id: "e98f474 - theaters mgnt"
+    commit id: "d72f288 - manage theaters"
+    commit id: "e3e98d9 - delete cinema"
+    commit id: "aeeb591 - hall mgnt"
+    
+    checkout main
+    branch feature/add-second-language
+    commit id: "7786af0 - add en-fi" tag: "v0.3.0"
+    checkout main
+    merge feature/add-second-language
+    
+    checkout theaters-and-halls-mgnt
+    commit id: "753863f - halls done"
+    checkout main
+    merge theaters-and-halls-mgnt tag: "v0.3.1"
+    
+    commit id: "efdde41 - fix build" tag: "v0.2.2"
+    
+    branch feature/manage-movies
+    commit id: "518722b - movie mgmt"
+    commit id: "7c0d6fa - MovieList"
+    checkout main
+    merge feature/manage-movies
+    
+    branch feature/schedule
+    commit id: "cfbfa67 - schedule WIP"
+    commit id: "cd61bf2 - schedule done"
+    checkout main
+    merge feature/schedule tag: "v0.3.3"
+    
+    branch available-movies
+    commit id: "ce14bfe - fetch movies"
+    commit id: "c66c345 - filters"
+    commit id: "51e0319 - movie details"
+    
+    checkout main
+    branch feature/payments
+    commit id: "c465acd - Stripe payments" tag: "c0.2.0"
+    checkout main
+    merge feature/payments tag: "c0.3.0"
+    
+    checkout available-movies
+    merge main
+    checkout main
+    merge available-movies tag: "c0.3.1"
+    
+    branch feature/manage-users
+    commit id: "17847b7 - add users"
+    commit id: "dd34b0b - update users"
+    checkout main
+    merge feature/manage-users tag: "v0.4.0"
+    
+    branch feature/i18n
+    commit id: "8b86f55 - translation"
+    commit id: "25fb4b9 - fi-en"
+    checkout main
+    merge feature/i18n
+    
+    commit id: "c0a7ebf - config.json" tag: "c1.0.0"
+    commit id: "13a275c - config.json" tag: "v1.0.0"
+    
+    branch feature/fetchMovieApi
+    commit id: "adaf4bd - manage halls"
+    commit id: "e916233 - hall details"
+    commit id: "ce2a6f8 - activate seats"
+    commit id: "ec5e037 - update components"
+    commit id: "6ce8aed - fetch by title"
+    commit id: "507a4ab - fix import"
+    
+    checkout main
+    commit id: "3a89a31 - fix seats" tag: "v1.1.3"
+    
+    branch tests
+    commit id: "750e805 - cypress test"
+    checkout main
+    merge tests
+    
+    checkout feature/fetchMovieApi
+    merge main
+    checkout main
+    merge feature/fetchMovieApi tag: "v1.1.2"
+    
+    branch fix/seatLayoutPrice
+    commit id: "13201a0 - seats WIP"
+    commit id: "5ef9935 - selected seats"
+    checkout main
+    merge fix/seatLayoutPrice tag: "c1.1.0"
+    
+    commit id: "ec5c859 - scrollable" tag: "c1.1.2"
+    commit id: "09ff8c9 - fix delete v1" tag: "v1.1.4"
+    commit id: "36cb5fc - fix delete v2" tag: "v1.1.5"
+    commit id: "fd59645 - fix delete v3" tag: "v1.1.6"
