@@ -75,33 +75,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 								{t("nav.cinemas")}
 							</NavLink>
 						</li>
-						{/* <li className="nav-item">
-							<NavLink
-								to="/admin/halls"
-								className={({ isActive }) => `nav-link ${isActive ? styles.active : ""}`}
-								onClick={closeNavbar}
-							>
-								{t("nav.halls")}
-							</NavLink>
-						</li> */}
-						<li className="nav-item">
-							<NavLink
-								to="/admin/data"
-								className={({ isActive }) => `nav-link ${isActive ? styles.active : ""}`}
-								onClick={closeNavbar}
-							>
-								{t("nav.data")}
-							</NavLink>
-						</li>
-						{/* <li className="nav-item">
-							<NavLink
-								to="/movie-list"
-								className={({ isActive }) => `nav-link ${isActive ? styles.active : ""}`}
-								onClick={closeNavbar}
-							>
-								{t("nav.movieList")}
-							</NavLink>
-						</li> */}
+
 						<li className="nav-item">
 							<NavLink
 								to="/admin/scheduler"
@@ -111,15 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 								Scheduler
 							</NavLink>
 						</li>
-						{/* <li className="nav-item">
-							<NavLink
-								to="/admin/change-password"
-								className={({ isActive }) => `nav-link ${isActive ? styles.active : ""}`}
-								onClick={closeNavbar}
-							>
-								{t("nav.changePassword")}
-							</NavLink>
-						</li> */}
+
 						<li className="nav-item">
 							<NavLink
 								to="/admin/users"
