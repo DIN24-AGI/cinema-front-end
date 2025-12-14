@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
-import { useTranslation } from "react-i18next"; 
-import type { City, Cinema } from "../types/cinemaTypes"
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import type { City, Cinema } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 
 import TodayMoviesSection from "../components/TodayMoviesSection";
@@ -8,169 +8,166 @@ import ComingSoonSection from "../components/ComingSoonSection";
 import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
 
 interface ShowtimeWithMovie {
-  uid: string;
-  movie_uid: string;
-  hall_uid: string;
-  starts_at: string;
-  ends_at: string;
-  adult_price?: number;
-  child_price?: number;
-  movie_title: string;
-  poster_url: string;
-  hall_name: string;
-  cinema_name: string;
+	uid: string;
+	movie_uid: string;
+	hall_uid: string;
+	starts_at: string;
+	ends_at: string;
+	adult_price?: number;
+	child_price?: number;
+	movie_title: string;
+	poster_url: string;
+	hall_name: string;
+	cinema_name: string;
 }
 interface MovieWithShowtimes {
-  id: string;            
-  title: string;
-  poster: string;
-  showtimes: { id: string; time: string }[];
+	id: string;
+	title: string;
+	poster: string;
+	showtimes: { id: string; time: string }[];
 }
 
-
-
 const comingSoon = [
-  {
-    id: 10,
-    title: "Echoes of Tomorrow",
-    banner: "https://picsum.photos/1000/350?random=10",
-  },
-  {
-    id: 11,
-    title: "Dragon's Gate",
-    banner: "https://picsum.photos/1000/350?random=11",
-  }
+	{
+		id: 10,
+		title: "Echoes of Tomorrow",
+		banner: "https://picsum.photos/1000/350?random=10",
+	},
+	{
+		id: 11,
+		title: "Dragon's Gate",
+		banner: "https://picsum.photos/1000/350?random=11",
+	},
 ];
 
 const Home = () => {
-    const { t } = useTranslation();
+	const { t } = useTranslation();
 
-    const [cities, setCities] = useState<City[]>([]);
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
-    const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [moviesToday, setMoviesToday] = useState<MovieWithShowtimes[]>([])
-  
+	const [cities, setCities] = useState<City[]>([]);
+	const [cinemas, setCinemas] = useState<Cinema[]>([]);
+	const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const [moviesToday, setMoviesToday] = useState<MovieWithShowtimes[]>([]);
 
-    useEffect(() => {
-        const fetchCinemasAndCities = async () => {
-          try {
-            setLoading(true);
-            const [citiesRes, cinemasRes] = await Promise.all([
-              fetch(API_ENDPOINTS.cities,),
-              fetch(API_ENDPOINTS.cinemas,),
-            ]);
-    
-            if (!citiesRes.ok) throw new Error(t("contact.errorLoadCities"));
-            if (!cinemasRes.ok) throw new Error(t("contact.errorLoadCinemas"));
-    
-            const cityData: City[] = await citiesRes.json();
-            const cinemaData: Cinema[] = await cinemasRes.json();
+	useEffect(() => {
+		const fetchCinemasAndCities = async () => {
+			try {
+				setLoading(true);
+				const [citiesRes, cinemasRes] = await Promise.all([fetch(API_ENDPOINTS.cities), fetch(API_ENDPOINTS.cinemas)]);
 
-            setCities(cityData);
+				if (!citiesRes.ok) throw new Error(t("contact.errorLoadCities"));
+				if (!cinemasRes.ok) throw new Error(t("contact.errorLoadCinemas"));
 
-            const activeCinemas = cinemaData.filter(cn => cn.active);
-            setCinemas(activeCinemas);
+				const cityData: City[] = await citiesRes.json();
+				const cinemaData: Cinema[] = await cinemasRes.json();
 
-            if (!selectedCinema && activeCinemas.length > 0) {
-          setSelectedCinema(activeCinemas[0]);
-        }
-            } catch (err: any) {
-            console.error(err);
-            console.log(error)
-            setError(err.message || t("util.genericError"));
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        fetchCinemasAndCities();
-      }, [t, selectedCinema, error]);
+				setCities(cityData);
 
+				const activeCinemas = cinemaData.filter((cn) => cn.active);
+				setCinemas(activeCinemas);
 
-      useEffect(() => {
-    const fetchMoviesToday = async () => {
-      if (!selectedCinema) return;
+				if (activeCinemas.length > 0) {
+					setSelectedCinema(activeCinemas[0]);
+				}
+			} catch (err: any) {
+				console.error(err);
+				setError(err.message || t("util.genericError"));
+			} finally {
+				setLoading(false);
+			}
+		};
 
-      setLoading(true);
-      setError("");
+		fetchCinemasAndCities();
+	}, [t]);
 
-      const today = new Date().toISOString().split("T")[0];
-      try {
-        const res = await fetch(`${API_ENDPOINTS.showtimesInCinema}?cinema_uid=${selectedCinema.uid}&date=${today}`
-);
+	useEffect(() => {
+		const fetchMoviesToday = async () => {
+			if (!selectedCinema) return;
 
-        if (!res.ok) throw new Error("Failed to fetch showtimes");
+			setLoading(true);
+			setError("");
 
-        const data: ShowtimeWithMovie[] = await res.json();
+			const today = new Date().toISOString().split("T")[0];
+			try {
+				const res = await fetch(`${API_ENDPOINTS.showtimesInCinema}?cinema_uid=${selectedCinema.uid}&date=${today}`);
 
-        const grouped: MovieWithShowtimes[] = groupShowtimesByMovie(data);
-        setMoviesToday(grouped);
+				if (!res.ok) throw new Error("Failed to fetch showtimes");
 
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message || t("movies.error"));
-      } finally {
-        setLoading(false);
-      }
-    };
+				const data: ShowtimeWithMovie[] = await res.json();
 
-    fetchMoviesToday();
-  }, [selectedCinema, t]);
+				const grouped: MovieWithShowtimes[] = groupShowtimesByMovie(data);
+				setMoviesToday(grouped);
+			} catch (err: any) {
+				console.error(err);
+				setError(err.message || t("movies.error"));
+			} finally {
+				setLoading(false);
+			}
+		};
 
-  const onSelectCinema = (cinema: Cinema) => {
-    setSelectedCinema(cinema);
-  };
+		fetchMoviesToday();
+	}, [selectedCinema, t]);
 
-   
-  return (
-    <div className ="container mt-4">
-      {loading && <p>{t("contact.loading")}</p>}
-      {error && <div className="alert alert-danger">{error}</div>}
-      {cinemas.length > 0 && selectedCinema && (
-        <CinemaSelectorDropdown
-          cinemas={cinemas}
-          cities={cities}
-          label={t("home.selectCinema")}
-          widthClass="mb-4"
-          selectedCinema={selectedCinema}
-          onSelectCinema={onSelectCinema}
-        />
-      )}
+	const onSelectCinema = (cinema: Cinema) => {
+		setSelectedCinema(cinema);
+	};
 
-    {/* Movies Today */}
-    {selectedCinema && (
-  <TodayMoviesSection movies={moviesToday} location={selectedCinema.name} />
-)}
+	return (
+		<div className="container mt-4">
+			{error && <div className="alert alert-danger">{error}</div>}
+			{cinemas.length > 0 && selectedCinema && (
+				<CinemaSelectorDropdown
+					cinemas={cinemas}
+					cities={cities}
+					label={t("home.selectCinema")}
+					widthClass="mb-4"
+					selectedCinema={selectedCinema}
+					onSelectCinema={onSelectCinema}
+				/>
+			)}
 
+			{/* Movies Today */}
+			<div style={{ minHeight: "400px" }}>
+				{selectedCinema &&
+					(loading && moviesToday.length === 0 ? (
+						<div className="text-center py-5">
+							<div className="spinner-border text-primary" role="status">
+								<span className="visually-hidden">{t("contact.loading")}</span>
+							</div>
+						</div>
+					) : (
+						<TodayMoviesSection movies={moviesToday} location={selectedCinema.name} />
+					))}
+			</div>
 
-      {/* Coming Soon */}
-      <ComingSoonSection movies={comingSoon} />
-
-    </div>
-  )
-}
+			{/* Coming Soon */}
+			<ComingSoonSection movies={comingSoon} />
+		</div>
+	);
+};
 // Helper to transform showtimes into Movie[] for display
 const groupShowtimesByMovie = (showtimes: ShowtimeWithMovie[]): MovieWithShowtimes[] => {
-  const map = new Map<string, MovieWithShowtimes>();
+	const map = new Map<string, MovieWithShowtimes>();
 
-  showtimes.forEach(st => {
-    if (!map.has(st.movie_uid)) {
-      map.set(st.movie_uid, {
-        id: st.movie_uid,
-        title: st.movie_title,
-        poster: st.poster_url,
-        showtimes: [{ id: st.uid, time: new Date(st.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) }],
-      });
-    } else {
-      map.get(st.movie_uid)!.showtimes.push({
-        id: st.uid,
-        time: new Date(st.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      });
-    }
-  });
+	showtimes.forEach((st) => {
+		if (!map.has(st.movie_uid)) {
+			map.set(st.movie_uid, {
+				id: st.movie_uid,
+				title: st.movie_title,
+				poster: st.poster_url,
+				showtimes: [
+					{ id: st.uid, time: new Date(st.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
+				],
+			});
+		} else {
+			map.get(st.movie_uid)!.showtimes.push({
+				id: st.uid,
+				time: new Date(st.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+			});
+		}
+	});
 
-  return Array.from(map.values());
+	return Array.from(map.values());
 };
-export default Home
+export default Home;
