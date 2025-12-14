@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import MovieBanner from "../components/MovieBanner";
-import type { Movie, Cinema } from "../types/cinemaTypes";
+import type { Movie } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useNavigate } from "react-router";
-// import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
 import { useTranslation } from "react-i18next";
 
 const Movies = () => {
@@ -15,54 +14,15 @@ const Movies = () => {
 
 	// Filters
 	const [searchTitle, setSearchTitle] = useState("");
-	// const [cities, setCities] = useState<City[]>([]);
-	// const [cinemas, setCinemas] = useState<Cinema[]>([]);
-	const [selectedCinema, setSelectedCinema] = useState<Cinema | null>(null);
-	// const [selectedDate, setSelectedDate] = useState("");
 	const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
-	useEffect(() => {
-		const fetchCinemasAndCities = async () => {
-			try {
-				setLoading(true);
-				const [citiesRes, cinemasRes] = await Promise.all([fetch(API_ENDPOINTS.cities), fetch(API_ENDPOINTS.cinemas)]);
-
-				if (!citiesRes.ok) throw new Error(t("contact.errorLoadCities"));
-				if (!cinemasRes.ok) throw new Error(t("contact.errorLoadCinemas"));
-
-				// const cityData: City[] = await citiesRes.json();
-				const cinemaData: Cinema[] = await cinemasRes.json();
-
-				// setCities(cityData);
-				// setCinemas(cinemaData.filter((c) => c.active));
-
-				if (!selectedCinema && cinemaData.length > 0) {
-					setSelectedCinema(cinemaData[0]);
-				}
-			} catch (err: any) {
-				console.error(err);
-				console.log(error);
-				setError(err.message || t("util.genericError"));
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchCinemasAndCities();
-	}, [error, selectedCinema, t]);
-
-	// Fetch movies from backend with filters
+	// Fetch all active movies without cinema filter
 	useEffect(() => {
 		const fetchMovies = async () => {
 			try {
 				setLoading(true);
 
-				const params = new URLSearchParams();
-				if (selectedCinema) params.append("cinema_uid", selectedCinema.uid);
-				// if (searchTitle) params.append("title", searchTitle);
-				// if (selectedDate) params.append("date", selectedDate);
-
-				const res = await fetch(`${API_ENDPOINTS.movies}?${params.toString()}`);
+				const res = await fetch(API_ENDPOINTS.movies);
 
 				if (!res.ok) throw new Error(t("movies.error"));
 
@@ -77,7 +37,7 @@ const Movies = () => {
 		};
 
 		fetchMovies();
-	}, [selectedCinema, /*selectedDate,*/ t]);
+	}, [t]);
 
 	useEffect(() => {
 		let result = [...movies];
