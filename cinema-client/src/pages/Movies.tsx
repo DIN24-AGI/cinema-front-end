@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MovieBanner from "../components/MovieBanner";
-import type { Movie, City, Cinema } from "../types/cinemaTypes";
+import type { Movie, Cinema } from "../types/cinemaTypes";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useNavigate } from "react-router";
 // import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";

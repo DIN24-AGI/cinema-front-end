@@ -13,7 +13,6 @@ interface CinemaSelectorProps {
 const CinemaSelectorDropdown: React.FC<CinemaSelectorProps> = ({
 	cinemas,
 	cities,
-	label,
 	widthClass = "",
 	selectedCinema,
 	onSelectCinema,
