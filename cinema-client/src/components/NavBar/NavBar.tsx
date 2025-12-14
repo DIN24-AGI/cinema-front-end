@@ -3,6 +3,7 @@ import { NavLink } from "react-router";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import styles from "./NavBar.module.css";
+import logoImg from "/north-star-logo.jpg";
 
 const Navbar = () => {
 	const { t } = useTranslation();
@@ -20,7 +21,7 @@ const Navbar = () => {
 		<nav className={`navbar navbar-expand-lg ${styles.navbar}`}>
 			<div className={`container-fluid ${styles["link-container"]}`}>
 				<NavLink className={`${styles.logo}`} to="/" onClick={closeNavbar}>
-					<img src="/north-star-logo.jpg" alt="North Star Logo" className={`${styles.logoImg}`} />
+					<img src={logoImg} alt="North Star Logo" className={`${styles.logoImg}`} />
 				</NavLink>
 
 				<button
