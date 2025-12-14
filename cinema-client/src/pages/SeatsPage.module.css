@@ -1,0 +1,43 @@
+/* Desktop: Sticky sidebar on the right */
+.selectedBar {
+	background: #ffffff;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Desktop - sticky positioning */
+@media (min-width: 992px) {
+	.selectedBar {
+		position: sticky;
+		top: 20px;
+		max-height: calc(100vh - 40px);
+		overflow-y: auto;
+	}
+}
+
+/* Mobile - fixed to bottom with slide-up animation */
+@media (max-width: 991px) {
+	.selectedBar {
+		position: fixed !important;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		max-height: 32vh;
+		overflow-y: auto;
+		border-radius: 12px 12px 0 0;
+		box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+		animation: slideUp 0.3s ease-out;
+		margin: 0;
+	}
+
+	@keyframes slideUp {
+		from {
+			transform: translateY(100%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+}

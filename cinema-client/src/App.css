@@ -20,12 +20,38 @@
 	flex-direction: column;
 	gap: 12px;
 	align-items: center;
+	padding-bottom: 20px;
+	width: 100%;
+}
+
+/* Mobile optimization - scrollable container */
+@media (max-width: 768px) {
+	.seat-layout {
+		gap: 8px;
+		padding-bottom: 10px;
+		align-items: flex-start;
+		overflow-x: auto;
+		overflow-y: visible;
+		-webkit-overflow-scrolling: touch;
+		max-width: 100vw;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
 }
 
 .seat-row {
 	display: flex;
 	align-items: center;
 	gap: 12px;
+	min-width: min-content;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+	.seat-row {
+		gap: 8px;
+		width: max-content;
+	}
 }
 
 .row-label {
@@ -33,16 +59,74 @@
 	text-align: right;
 	font-weight: bold;
 	opacity: 0.8;
+	flex-shrink: 0;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+	.row-label {
+		width: 45px;
+		font-size: 13px;
+	}
 }
 
 .seat-row-items {
 	display: flex;
 	gap: 6px;
+	flex-wrap: nowrap;
+	flex-shrink: 0;
+}
+
+/* Mobile - allow horizontal scroll if needed */
+@media (max-width: 768px) {
+	.seat-row-items {
+		gap: 4px;
+	}
 }
 
 .seat-placeholder {
 	width: 38px;
 	height: 38px;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+/* Mobile - larger touch targets */
+@media (max-width: 768px) {
+	.seat-btn {
+		width: 42px;
+		height: 42px;
+		font-size: 14px;
+	}
+
+	.seat-placeholder {
+		width: 42px;
+		height: 42px;
+	}
+
+	.seat-blocked {
+		width: 42px;
+		height: 42px;
+	}
+}
+
+/* Very small screens */
+@media (max-width: 400px) {
+	.seat-btn {
+		width: 36px;
+		height: 36px;
+		font-size: 12px;
+	}
+
+	.seat-placeholder {
+		width: 36px;
+		height: 36px;
+	}
+
+	.seat-blocked {
+		width: 36px;
+		height: 36px;
+	}
 }
 
 .seat-btn {
@@ -89,6 +173,38 @@
 
 /* USER-SELECTED SEATS (before payment) */
 .seat-selected {
+	/* Mobile - stack seat details vertically */
+	@media (max-width: 768px) {
+		.seat-detail-row {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+			padding: 12px;
+		}
+
+		.seat-info {
+			min-width: unset;
+			width: 100%;
+			margin-bottom: 0 !important;
+		}
+
+		.seat-pricing {
+			flex-direction: column;
+			align-items: flex-start !important;
+			gap: 8px !important;
+			width: 100%;
+		}
+
+		.price-label {
+			font-size: 14px !important;
+			width: 100%;
+		}
+
+		.seat-price {
+			text-align: left !important;
+			margin-top: 0 !important;
+		}
+	}
 	background: #4caf50 !important;
 	color: white !important;
 	border-color: #39843f !important;

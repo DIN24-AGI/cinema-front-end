@@ -192,10 +192,13 @@ function SeatsPage() {
 	// RENDER UI
 	// ----------------------------------------------------
 	return (
-		<div className="container-fluid mt-4 mb-5">
+		<div
+			className="container-fluid mt-4"
+			style={{ paddingBottom: selectedSeats.length > 0 ? "350px" : "20px", marginBottom: "20px" }}
+		>
 			<div className="row">
 				{/* Left side - Seat Selection */}
-				<div className="col-12 col-lg-8">
+				<div className="col-12 col-lg-8" style={{ overflowX: "auto", overflowY: "visible" }}>
 					<div className="seat-layout">
 						{Object.keys(rows).map((row) => (
 							<div key={row} className="seat-row">
@@ -231,7 +234,7 @@ function SeatsPage() {
 				{/* Right side - Selected Seats Summary */}
 				<div className="col-12 col-lg-4">
 					{selectedSeats.length > 0 && (
-						<div className={`${styles.selectedBar} p-3 sticky-top`} style={{ top: "20px" }}>
+						<div className={`${styles.selectedBar} p-3`}>
 							<h4 className="mb-3">{t("seats.selected", "Selected Seats")}</h4>
 							<div className="selected-seats-list">
 								<div className="seats-details">
