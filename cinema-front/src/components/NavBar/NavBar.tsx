@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import styles from "./NavBar.module.css";
+import logoImg from "/north-star-logo.jpg";
 
 interface NavbarProps {
 	onLogout?: () => void;
@@ -30,8 +31,8 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 	return (
 		<nav className={`navbar navbar-expand-lg ${styles.navbar}`}>
 			<div className="container-fluid">
-				<NavLink className={`navbar-brand ${styles.logo}`} to="/admin/dashboard" onClick={closeNavbar}>
-					🎞️ MovieAdmin
+				<NavLink className={`${styles.logo}`} to="/" onClick={closeNavbar}>
+					<img src={logoImg} alt="North Star Logo" className={`${styles.logoImg}`} />
 				</NavLink>
 
 				<button
@@ -101,7 +102,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 						<div className="me-3">
 							<LanguageSwitcher />
 						</div>
-						<button className={`btn ${styles.logoutBtn}`} onClick={handleLogout}>
+						<button className="btn btn-danger" onClick={handleLogout}>
 							{t("nav.logout")}
 						</button>
 					</div>

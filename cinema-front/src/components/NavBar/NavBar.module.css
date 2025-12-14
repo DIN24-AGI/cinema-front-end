@@ -2,24 +2,37 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	background-color: #465575;
-	color: white;
+	background: linear-gradient(to bottom, #0a112e, #0d2845, #13546c, #5ca5ac);
+	padding: 0 !important;
+	color: rgb(255, 255, 255);
 	font-family: system-ui, sans-serif;
-	padding: 0.5rem 2rem !important; /* Override Bootstrap's default padding */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.link-container {
+	height: 100%;
+	margin: 0 !important;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .logo {
+	height: 100%;
 	font-weight: bold;
 	font-size: 1.2rem;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
+	gap: 0.5rem;
 }
 
 .logo img {
 	height: 100%;
+	max-height: 80px;
 	width: auto;
-	object-fit: scale-down;
+	object-fit: contain;
+	margin-right: 15px;
 }
 
 .navLinks {
@@ -34,6 +47,8 @@
 	text-decoration: none;
 	color: #e5e7eb;
 	transition: color 0.2s;
+	border-bottom: 2px solid transparent;
+	padding-bottom: 2px;
 }
 
 .navLinks a:hover {
@@ -41,22 +56,6 @@
 }
 
 .active {
-	color: #facc15;
-	border-bottom: 2px solid #facc15;
-	padding-bottom: 2px;
-}
-
-.logoutBtn {
-	background: #ef4444;
-	border: none;
-	color: white;
-	padding: 0.5rem 1rem;
-	border-radius: 6px;
-	cursor: pointer;
-	font-weight: 500;
-	transition: background 0.2s;
-}
-
-.logoutBtn:hover {
-	background: #dc2626;
+	color: #facc15 !important;
+	border-bottom-color: #facc15 !important;
 }
