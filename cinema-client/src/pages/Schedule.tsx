@@ -5,6 +5,7 @@ import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
 import type { Showtime } from "../types/showtime";
 import CinemaSelectorDropdown from "../components/CinemaSelectorDropdown";
+import styles from "./Schedule.module.css";
 
 import { useNavigate } from "react-router";
 
@@ -18,6 +19,8 @@ function Schedule() {
 
 	const [date, setDate] = useState<string>(() => new Date().toISOString().split("T")[0]);
 	const [showtimes, setShowtimes] = useState<Showtime[]>([]);
+	const [filteredShowtimes, setFilteredShowtimes] = useState<Showtime[]>([]);
+	const [selectedMovie, setSelectedMovie] = useState<string>("");
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
@@ -84,11 +87,22 @@ function Schedule() {
 		loadShowtimes();
 	}, [selectedCinema, date, t]);
 
+	// Filter showtimes by selected movie
+	useEffect(() => {
+		if (!selectedMovie) {
+			setFilteredShowtimes(showtimes);
+		} else {
+			setFilteredShowtimes(showtimes.filter((show) => show.movie_title === selectedMovie));
+		}
+	}, [showtimes, selectedMovie]);
+
+	// Get unique movie titles for dropdown
+	const availableMovies = Array.from(new Set(showtimes.map((show) => show.movie_title))).sort();
+
 	return (
 		<div className="container mt-4">
 			{error && <div className="alert alert-danger">{error}</div>}
 			{/* <h2 className="mb-4">{t("schedule.pageTitle")}</h2> */}
-
 			{/* Cinema Selector */}
 			{/* <div className="cinema">
         <h5>{t("schedule.cinemaSelect")}</h5>
@@ -99,63 +113,93 @@ function Schedule() {
           onSelectCinema={setSelectedCinema}
         />
       </div> */}
-			<CinemaSelectorDropdown
-				cinemas={cinemas}
-				cities={cities}
-				widthClass="col-12 col-md-4"
-				label={t("schedule.location")}
-				selectedCinema={selectedCinema!}
-				onSelectCinema={onSelectCinema}
-			/>
-
-			{/* Date Picker */}
-			<div className="mb-4">
-				<label className="form-label">{t("schedule.dateSelect")}</label>
-				<input
-					type="date"
-					className="form-control"
-					value={date}
-					onChange={(e) => setDate(e.target.value)}
-					disabled={!selectedCinema}
+			{/* filters block */}
+			<div className="d-flex flex-row flex-wrap gap-3 mb-4">
+				<CinemaSelectorDropdown
+					cinemas={cinemas}
+					cities={cities}
+					widthClass="col-12 col-md-4"
+					label={t("schedule.location")}
+					selectedCinema={selectedCinema!}
+					onSelectCinema={onSelectCinema}
 				/>
+
+				{/* Date Picker */}
+				<div className="mb-4">
+					<input
+						type="date"
+						className="form-control"
+						value={date}
+						onChange={(e) => setDate(e.target.value)}
+						disabled={!selectedCinema}
+					/>
+				</div>
+
+				{/* Movie Filter */}
+				<div className="mb-4">
+					<select
+						className="form-select"
+						value={selectedMovie}
+						onChange={(e) => setSelectedMovie(e.target.value)}
+						disabled={!selectedCinema || showtimes.length === 0}
+					>
+						<option value="">{t("schedule.allMovies", "All Movies")}</option>
+						{availableMovies.map((movieTitle) => (
+							<option key={movieTitle} value={movieTitle}>
+								{movieTitle}
+							</option>
+						))}
+					</select>
+				</div>
 			</div>
-
 			{loading && <p>{t("util.loading")}</p>}
-
 			{!selectedCinema && <p className="text-muted">{t("schedule.require")}</p>}
-
 			{/* SHOWTIMES */}
 			{selectedCinema && !loading && (
 				<div className="row">
-					{showtimes.map((show) => (
-						<div key={show.uid} className="col-md-6 col-lg-4 mb-3">
-							<div className="card shadow-sm h-100">
-								<div className="card-body">
-									<h5 className="card-title">{show.movie_title}</h5>
-									<h6 className="card-subtitle mb-2 text-muted">{show.hall_name}</h6>
-
-									<p className="mt-3 mb-0">
-										<strong>{t("schedule.starts")}</strong>{" "}
-										{new Date(show.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-										<br />
-										<strong>{t("schedule.ends")}</strong>{" "}
-										{new Date(show.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-									</p>
-
-									<button
-										className="btn btn-primary btn-sm mt-3 w-100"
-										onClick={() => navigate(`/showtime/${show.uid}`)}
-									>
-										{t("schedule.book")}
-									</button>
-								</div>
+					{filteredShowtimes.map((show) => (
+						<div
+							key={show.uid}
+							className={`d-flex flex-row flex-wrap align-items-center ${styles["movie-line"]} justify-content-between border p-3`}
+						>
+							<div style={{ flex: "0 0 25%", textAlign: "left" }}>
+								<h5 className="card-title mb-0">{show.movie_title}</h5>
+							</div>
+							<div style={{ flex: "0 0 20%", textAlign: "left" }}>
+								<h6 className="card-subtitle mb-0 text-muted">{show.hall_name}</h6>
+							</div>
+							<div style={{ flex: "0 0 25%", textAlign: "left" }}>
+								<p className="mb-0">
+									<strong>{t("schedule.starts")}</strong>{" "}
+									{new Date(show.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+									<br />
+									<strong>{t("schedule.ends")}</strong>{" "}
+									{new Date(show.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+								</p>
+							</div>
+							<div className={styles.priceInfo}>
+								<p className="mb-0">
+									<strong>{t("schedule.adultPrice")}</strong> {(show.adult_price / 100).toFixed(2)}
+									<br />
+									<strong>{t("schedule.childPrice")}</strong>
+									{(show.child_price / 100).toFixed(2)}
+								</p>
+							</div>
+							<div className={styles.bookButton}>
+								<button
+									className="btn btn-outline-primary btn-sm w-100"
+									onClick={() => navigate(`/showtime/${show.uid}`)}
+								>
+									{t("schedule.book")}
+								</button>
 							</div>
 						</div>
 					))}
 
-					{showtimes.length === 0 && <p>{t("schedule.noShowings")}</p>}
+					{filteredShowtimes.length === 0 && <p>{t("schedule.noShowings")}</p>}
 				</div>
 			)}
+			;
 		</div>
 	);
 }

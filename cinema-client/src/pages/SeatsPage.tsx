@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "../util/baseURL";
 import { useTranslation } from "react-i18next";
+import styles from "./SeatsPage.module.css";
 
 type Seat = {
 	seat_uid: string;
@@ -191,92 +192,102 @@ function SeatsPage() {
 	// RENDER UI
 	// ----------------------------------------------------
 	return (
-		<div className="container mt-4 mb-5" style={{ paddingBottom: selectedSeats.length > 0 ? "500px" : "20px" }}>
-			<h2 className="text-center mb-5">{t("seats.select")}</h2>
+		<div className="container-fluid mt-4 mb-5">
+			<div className="row">
+				{/* Left side - Seat Selection */}
+				<div className="col-12 col-lg-8">
+					<div className="seat-layout">
+						{Object.keys(rows).map((row) => (
+							<div key={row} className="seat-row">
+								<div className="row-label">Row {row}</div>
 
-			<div className="seat-layout">
-				{Object.keys(rows).map((row) => (
-					<div key={row} className="seat-row">
-						<div className="row-label">Row {row}</div>
+								<div className="seat-row-items">
+									{seats
+										.filter((s) => s.row === parseInt(row))
+										.map((seat: Seat) => {
+											if (!isSeatActive(seat) || seat.seat_status === "blocked") {
+												return <div key={seat.seat_uid} className="seat-placeholder"></div>;
+											}
 
-						<div className="seat-row-items">
-							{seats
-								.filter((s) => s.row === parseInt(row))
-								.map((seat: Seat) => {
-									if (!isSeatActive(seat) || seat.seat_status === "blocked") {
-										return <div key={seat.seat_uid} className="seat-placeholder"></div>;
-									}
+											const isSelected = selectedSeats.includes(seat.seat_uid);
 
-									const isSelected = selectedSeats.includes(seat.seat_uid);
-
-									return (
-										<button
-											key={seat.seat_uid}
-											disabled={seat.seat_status !== "free"}
-											onClick={() => toggleSeat(seat.seat_uid)}
-											className={`seat-btn seat-${seat.seat_status} ${isSelected ? "seat-selected" : ""}`}
-										>
-											{seat.number}
-										</button>
-									);
-								})}
-						</div>
+											return (
+												<button
+													key={seat.seat_uid}
+													disabled={seat.seat_status !== "free"}
+													onClick={() => toggleSeat(seat.seat_uid)}
+													className={`seat-btn seat-${seat.seat_status} ${isSelected ? "seat-selected" : ""}`}
+												>
+													{seat.number}
+												</button>
+											);
+										})}
+								</div>
+							</div>
+						))}
 					</div>
-				))}
-			</div>
-
-			{selectedSeats.length > 0 && (
-				<div className="selected-bar">
-					<div className="selected-seats-list">
-						<h4>Selected Seats:</h4>
-						<div className="seats-details">
-							{selectedSeats.map((seat_uid) => {
-								const seat = getSeatDetails(seat_uid);
-								if (!seat) return null;
-								const isDiscounted = discountedSeats.has(seat_uid);
-								const price = getSeatPrice(seat_uid);
-
-								return (
-									<div key={seat_uid} className="seat-detail-row">
-										<div className="seat-info">
-											<span>
-												Row {seat.row}, Seat {seat.number}
-											</span>
-										</div>
-										<div className="seat-pricing">
-											<label className="price-label">
-												<input
-													type="radio"
-													name={`ticket-type-${seat_uid}`}
-													checked={!isDiscounted}
-													onChange={() => isDiscounted && toggleDiscount(seat_uid)}
-												/>
-												Adult: €{(showtime?.adult_price || 0) / 100}
-											</label>
-											<label className="price-label">
-												<input
-													type="radio"
-													name={`ticket-type-${seat_uid}`}
-													checked={isDiscounted}
-													onChange={() => !isDiscounted && toggleDiscount(seat_uid)}
-												/>
-												Child: €{(showtime?.child_price || 0) / 100}
-											</label>
-											<span className="seat-price">€{price / 100}</span>
-										</div>
-									</div>
-								);
-							})}
-						</div>
-						<div className="total-price">
-							<strong>Total: €{calculateTotal() / 100}</strong>
-						</div>
-					</div>
-					<button className="btn btn-primary" onClick={goToPayment}>
-						{t("seats.payment")}
-					</button>
 				</div>
-			)}
+
+				{/* Right side - Selected Seats Summary */}
+				<div className="col-12 col-lg-4">
+					{selectedSeats.length > 0 && (
+						<div className={`${styles.selectedBar} p-3 sticky-top`} style={{ top: "20px" }}>
+							<h4 className="mb-3">{t("seats.selected", "Selected Seats")}</h4>
+							<div className="selected-seats-list">
+								<div className="seats-details">
+									{selectedSeats.map((seat_uid) => {
+										const seat = getSeatDetails(seat_uid);
+										if (!seat) return null;
+										const isDiscounted = discountedSeats.has(seat_uid);
+										const price = getSeatPrice(seat_uid);
+
+										return (
+											<div key={seat_uid} className="seat-detail-row mb-3">
+												<div className="seat-info mb-2">
+													<span>
+														Row {seat.row}, Seat {seat.number}
+													</span>
+												</div>
+												<div className="seat-pricing">
+													<label className="price-label d-block">
+														<input
+															type="radio"
+															name={`ticket-type-${seat_uid}`}
+															checked={!isDiscounted}
+															onChange={() => isDiscounted && toggleDiscount(seat_uid)}
+														/>
+														Adult: €{(showtime?.adult_price || 0) / 100}
+													</label>
+													<label className="price-label d-block">
+														<input
+															type="radio"
+															name={`ticket-type-${seat_uid}`}
+															checked={isDiscounted}
+															onChange={() => !isDiscounted && toggleDiscount(seat_uid)}
+														/>
+														Child: €{(showtime?.child_price || 0) / 100}
+													</label>
+													<span className="seat-price d-block mt-2">
+														<strong>€{price / 100}</strong>
+													</span>
+												</div>
+											</div>
+										);
+									})}
+								</div>
+								<div className="total-price mt-3 pt-3 border-top">
+									<h5>
+										<strong>Total: €{calculateTotal() / 100}</strong>
+									</h5>
+								</div>
+							</div>
+							<button className="btn btn-primary w-100 mt-3" onClick={goToPayment}>
+								{t("seats.payment")}
+							</button>
+						</div>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 }

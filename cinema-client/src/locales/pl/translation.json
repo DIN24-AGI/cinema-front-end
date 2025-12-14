@@ -54,7 +54,9 @@
 		"ends": "Koniec: ",
 		"book": "Zarezerwuj bilet",
 		"noShowings": "Brak seansów na tę datę",
-		"hall": "Sala: "
+		"hall": "Sala: ",
+		"adultPrice": "Cena dla dorosłych: €",
+		"childPrice": "Cena dla dziecka: €"
 	},
 	"payment": {
 		"cancelled": "Płatność anulowana",
