@@ -45,11 +45,18 @@ const TodayMovieSection: React.FC<TodayMovieProps> = ({ movies, location }) => {
 							onClick={() => openMovieDetails(movie)}
 							style={{ cursor: "pointer" }}
 						>
-							<div style={{ width: "100%", height: 300, overflow: "hidden" }}>
+							<div style={{ width: "100%", paddingTop: "150%", position: "relative", overflow: "hidden" }}>
 								<img
 									src={movie.poster}
 									alt={movie.title}
-									style={{ width: "100%", height: "100%", objectFit: "cover" }}
+									style={{ 
+										position: "absolute", 
+										top: 0, 
+										left: 0, 
+										width: "100%", 
+										height: "100%", 
+										objectFit: "cover" 
+									}}
 								/>
 							</div>
 
